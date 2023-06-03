@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.TipoTourController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.TipoTourController">
     <stylesheets>
         <URL value="@/com/mariangel/administracion_tarea/styles/tipotour.css" />
     </stylesheets>

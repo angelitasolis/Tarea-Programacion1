@@ -29,7 +29,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r"),
     @NamedQuery(name = "Reserva.findByRsId", query = "SELECT r FROM Reserva r WHERE r.rsId = :rsId"),
     @NamedQuery(name = "Reserva.findByRsFechareserva", query = "SELECT r FROM Reserva r WHERE r.rsFechareserva = :rsFechareserva"),
-    @NamedQuery(name = "Reserva.findByRsMontoabonado", query = "SELECT r FROM Reserva r WHERE r.rsMontoabonado = :rsMontoabonado")})
+    @NamedQuery(name = "Reserva.findByRsMontoabonado", query = "SELECT r FROM Reserva r WHERE r.rsMontoabonado = :rsMontoabonado"),
+    @NamedQuery(name = "Reserva.findByRsTrscosto", query = "SELECT r FROM Reserva r WHERE r.rsTrscosto = :rsTrscosto")})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +45,9 @@ public class Reserva implements Serializable {
     @Basic(optional = false)
     @Column(name = "RS_MONTOABONADO")
     private Long rsMontoabonado;
+    @Basic(optional = false)
+    @Column(name = "RS_TRSCOSTO")
+    private Long rsTrscosto;
     @JoinColumn(name = "RS_CEDULACLIENTE", referencedColumnName = "CLT_CEDULA")
     @ManyToOne(optional = false)
     private Cliente rsCedulacliente;
@@ -58,13 +62,13 @@ public class Reserva implements Serializable {
         this.rsId = rsId;
     }
 
-    public Reserva(Long rsId, Date rsFechareserva, Long rsMontoabonado) {
+    public Reserva(Long rsId, Date rsFechareserva, Long rsMontoabonado, Long rsTrscosto) {
         this.rsId = rsId;
         this.rsFechareserva = rsFechareserva;
         this.rsMontoabonado = rsMontoabonado;
+        this.rsTrscosto = rsTrscosto;
     }
-
-    public Reserva(ReservaDto reservacionDto) {
+ public Reserva(ReservaDto reservacionDto) {
         this.rsId = reservacionDto.getReservaId();
         actualizar(reservacionDto);
     }
@@ -73,9 +77,8 @@ public class Reserva implements Serializable {
         this.rsId = reservacionDto.getReservaId();
         this.rsFechareserva = Date.from(reservacionDto.getReservaFecnac().atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.rsMontoabonado = reservacionDto.getReservaMontoabonado();
-
+        this.rsTrscosto = reservacionDto.getReservaId();
     }
-
     public Long getRsId() {
         return rsId;
     }
@@ -98,6 +101,14 @@ public class Reserva implements Serializable {
 
     public void setRsMontoabonado(Long rsMontoabonado) {
         this.rsMontoabonado = rsMontoabonado;
+    }
+
+    public Long getRsTrscosto() {
+        return rsTrscosto;
+    }
+
+    public void setRsTrscosto(Long rsTrscosto) {
+        this.rsTrscosto = rsTrscosto;
     }
 
     public Cliente getRsCedulacliente() {
@@ -140,5 +151,5 @@ public class Reserva implements Serializable {
     public String toString() {
         return "com.mariangel.administracion_tarea.Model.Reserva[ rsId=" + rsId + " ]";
     }
-
+    
 }

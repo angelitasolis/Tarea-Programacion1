@@ -19,21 +19,40 @@ public class ReservaDto {
     public SimpleStringProperty rsId;
     public SimpleStringProperty rsMontoabonado;
     public ObjectProperty<LocalDate> rsFechareserva;
+    public SimpleStringProperty rsTrscosto;
 
     public ReservaDto() {
         this.rsId = new SimpleStringProperty();
         this.rsMontoabonado = new SimpleStringProperty();
         this.rsFechareserva = new SimpleObjectProperty();
-
+        this.rsTrscosto = new SimpleStringProperty();
     }
 
-    public ReservaDto(Reserva reserva){
+    public ReservaDto(Reserva reserva) {
         this();
         this.rsId.set(reserva.getRsId().toString());
         this.rsMontoabonado.set(reserva.getRsMontoabonado().toString());
         this.rsFechareserva.set(reserva.getRsFechareserva().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.rsTrscosto.set(reserva.getRsMontoabonado().toString());
     }
-    
+
+    public Long getReservaTrscosto() {
+        String value = this.rsTrscosto.get();
+        if (value != null) {
+            try {
+                return Long.parseLong(value);
+            } catch (NumberFormatException e) {
+            }
+        }
+        return null;
+
+    }
+
+    public void setReservaTrscosto(Long prsTrscosto) {
+        if (rsTrscosto != null) {
+            this.rsTrscosto.set(Long.toString(prsTrscosto));
+        }
+    }
 
     public Long getReservaId() {
         String value = this.rsId.get();

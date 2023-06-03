@@ -1,5 +1,5 @@
 ﻿prompt PL/SQL Developer Export Tables for user MSOLIS@UNA
-prompt Created by Administrador on jueves, 1 de junio de 2023
+prompt Created by Administrador on sábado, 3 de junio de 2023
 set feedback off
 set define off
 
@@ -170,7 +170,8 @@ create table TBL_RESERVAS
   rs_cedulacliente VARCHAR2(30) not null,
   rs_codigotour    VARCHAR2(30) not null,
   rs_fechareserva  DATE not null,
-  rs_montoabonado  NUMBER(7) not null
+  rs_montoabonado  NUMBER(7) not null,
+  rs_trscosto      NUMBER(7) not null
 )
 tablespace UNA
   pctfree 10

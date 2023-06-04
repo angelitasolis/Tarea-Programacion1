@@ -18,29 +18,31 @@
    <children>
       <Label layoutX="453.0" layoutY="27.0" text="CLIENTE" />
       <Button fx:id="btn_retroceder" layoutX="855.0" layoutY="602.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
-      <TabPane layoutY="51.0" prefHeight="514.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutY="71.0" prefHeight="494.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab fx:id="tabPaneGuardar" onSelectionChanged="#onSelectionGuardarTabPane" text="Guardar Cliente">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
                      <children>
-                        <Label layoutX="81.0" layoutY="137.0" text="EMPRESA CÉDULA" />
-                        <Label layoutX="76.0" layoutY="80.0" text="EMPRESA NOMBRE " />
-                        <Label layoutX="76.0" layoutY="198.0" text="EMPRESA CORREO" />
-                        <Label layoutX="70.0" layoutY="255.0" text="EMPRESA TELÉFONO" />
-                        <Label layoutX="73.0" layoutY="312.0" text="AÑO DE FUNDACIÓN" />
-                        <Label layoutX="92.0" layoutY="373.0" text="CALIFICACIÓN" />
-                        <TextField fx:id="txtTelefono" layoutX="197.0" layoutY="251.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el teléfono" />
-                        <DatePicker fx:id="datePickerFecFunda" layoutX="197.0" layoutY="308.0" promptText="Seleccione una fecha" />
-                        <TextField fx:id="txtCorreo" layoutX="197.0" layoutY="194.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el correo" />
-                        <TextField fx:id="txtNombreEmpresa" layoutX="197.0" layoutY="76.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el nombre " />
-                        <TextField fx:id="txtCedulaJuridica" layoutX="197.0" layoutY="133.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula jurídica" />
-                        <Button fx:id="btnBuscarEmpresa" layoutX="400.0" layoutY="76.0" mnemonicParsing="false" onAction="#onActionBuscarEmpresa" text="BUSCAR" />
+                        <Label layoutX="83.0" layoutY="24.0" text="CLIENTE  CÉDULA" />
+                        <Label layoutX="78.0" layoutY="80.0" text="CLIENTE NOMBRE " />
+                        <Label layoutX="74.0" layoutY="247.0" text="CLIENTE  CORREO" />
+                        <Label layoutX="72.0" layoutY="304.0" text="CLIENTE TELÉFONO" />
+                        <Label layoutX="58.0" layoutY="370.0" text="FECHA DE NACIMIENTO" />
+                        <TextField fx:id="txtTelefono" layoutX="198.0" layoutY="300.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el teléfono" />
+                        <DatePicker fx:id="datePickerFecNac" layoutX="197.0" layoutY="366.0" promptText="Seleccione una fecha" />
+                        <TextField fx:id="txtCorreo" layoutX="197.0" layoutY="243.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el correo" />
+                        <TextField fx:id="txtNombreCliente" layoutX="196.0" layoutY="76.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el nombre " />
+                        <TextField fx:id="txtCedula" layoutX="197.0" layoutY="20.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula " />
+                        <Button fx:id="btnBuscarCliente" layoutX="386.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBuscarCliente" text="BUSCAR" />
                         <Button fx:id="btnGuardar" layoutX="424.0" layoutY="434.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
                         <Button fx:id="btnEliminar" layoutX="302.0" layoutY="434.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
-                        <Button fx:id="btnCancelar" layoutX="493.0" layoutY="76.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
+                        <Button fx:id="btnCancelar" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
                         <Button fx:id="btnModificar" layoutX="157.0" layoutY="434.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" />
-                        <TextField fx:id="txtCalificacion" layoutX="197.0" layoutY="368.0" prefHeight="26.0" prefWidth="175.0" promptText="Digite una calificación" />
+                        <Label layoutX="73.0" layoutY="131.0" text="PRIMER APELLIDO" />
+                        <TextField fx:id="txtPApellido" layoutX="197.0" layoutY="127.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el primer apellido" />
+                        <Label layoutX="72.0" layoutY="191.0" text="SEGUNDO APELLIDO" />
+                        <TextField fx:id="txtSApellido" layoutX="196.0" layoutY="187.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el segundo apellido" />
                      </children>
                   </AnchorPane>
                </content>
@@ -49,16 +51,20 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblvInformacionPacientes" prefHeight="634.0" prefWidth="1109.0">
+                        <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1110.0">
                            <columns>
-                              <TableColumn fx:id="tblvCedulaEmpresa" prefWidth="122.39999085664749" text="CÉDULA JURIDICA" />
-                              <TableColumn fx:id="tblvNombreEmpresa" prefWidth="84.0" text="NOMBRE" />
-                              <TableColumn fx:id="tblvTelefono" prefWidth="151.2000274658203" text="TELÉFONO" />
-                              <TableColumn fx:id="tblvCalificacion" prefWidth="171.0" text="CALIFICACIÓN" />
-                              <TableColumn fx:id="tblvAnnoFundacion" prefWidth="115.199951171875" text="AÑO FUNDACIÓN" />
-                              <TableColumn fx:id="tblvCorreo" prefWidth="312.00006103515625" text="CORREO" />
+                              <TableColumn fx:id="tblvCedula" prefWidth="116.79998779296875" text="CÉDULA " />
+                              <TableColumn fx:id="tblvNombre" prefWidth="116.800048828125" text="NOMBRE" />
+                              <TableColumn fx:id="tblvPApellido" prefWidth="95.19998168945312" text="P APELLIDO" />
+                              <TableColumn fx:id="tblvSApellido" prefWidth="116.0" text="S APELLIDO" />
+                              <TableColumn fx:id="tblvTelefono" prefWidth="116.7999267578125" text="TELÉFONO" />
+                              <TableColumn fx:id="tblvCorreo" prefWidth="240.00006103515625" text="CORREO" />
+                              <TableColumn fx:id="tblvFecNac" prefWidth="151.20001220703125" text="FECHA NACIMIENTO" />
                            </columns>
                         </TableView>
+                        <TextField fx:id="txtNombreClienteInformacion" layoutX="143.0" layoutY="33.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />
+                        <Label layoutX="26.0" layoutY="37.0" prefHeight="18.0" prefWidth="110.0" text="NOMBRE CLIENTE" />
+                        <Button fx:id="btnBuscarInformacion" layoutX="364.0" layoutY="33.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorNombre" text="Buscar" />
                      </children>
                   </AnchorPane>
                </content>

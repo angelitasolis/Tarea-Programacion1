@@ -6,6 +6,8 @@ package com.mariangel.administracion_tarea.Service;
 
 import com.mariangel.administracion_tarea.Model.Cliente;
 import com.mariangel.administracion_tarea.Model.ClienteDto;
+import com.mariangel.administracion_tarea.Model.Empresa;
+import com.mariangel.administracion_tarea.Model.EmpresaDto;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -71,15 +73,39 @@ public class ClienteService {
             return new Respuesta(false, "Ocurrio un error al eliminar el cliente.", "eliminarCliente " + ex.getMessage());
         }
     }
-}
-/*
+
+    public Respuesta guardarCliente(ClienteDto clienteDto) {
+        try {
+            et = em.getTransaction();
+            et.begin();
+            Cliente cliente = em.find(Cliente.class, clienteDto.getClienteCedula());
+
+            if (cliente != null) {
+                // La cliente ya existe, se debe actualizar
+                cliente.actualizar(clienteDto);
+                cliente = em.merge(cliente);
+            } else {
+                // La cliente no existe, se debe crear
+                cliente = new Cliente(clienteDto);
+                em.persist(cliente);
+            }
+
+            et.commit();
+            return new Respuesta(true, "", "", "Empresa", new ClienteDto(cliente));
+        } catch (Exception ex) {
+            et.rollback();
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar la cliente.", ex);
+            return new Respuesta(false, "Ocurrió un error al guardar la cliente.", "guardarEmpresa " + ex.getMessage());
+        }
+    }
+
     public Respuesta modificarCliente(ClienteDto clienteDto) {
         try {
             et = em.getTransaction();
             et.begin();
             Cliente cliente;
-            if (clienteDto.getCltCedula() != null) {
-                cliente = em.find(Cliente.class, clienteDto.getCltCedula());
+            if (clienteDto.getClienteCedula() != null) {
+                cliente = em.find(Cliente.class, clienteDto.getClienteCedula());
                 if (cliente == null) {
                     et.rollback();
                     return new Respuesta(false, "No se encrontró el cliente a modificar.", "guardarCliente NoResultException");
@@ -97,4 +123,5 @@ public class ClienteService {
             Logger.getLogger(ClienteService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar el cliente.", ex);
             return new Respuesta(false, "Ocurrio un error al guardar el cliente.", "guardarCliente " + ex.getMessage());
         }
-    }*/
+    }
+}

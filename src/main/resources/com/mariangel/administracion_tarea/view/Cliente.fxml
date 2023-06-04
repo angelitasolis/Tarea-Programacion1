@@ -18,7 +18,7 @@
    <children>
       <Label layoutX="453.0" layoutY="27.0" text="CLIENTE" />
       <Button fx:id="btn_retroceder" layoutX="855.0" layoutY="602.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
-      <TabPane layoutY="51.0" prefHeight="514.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutY="71.0" prefHeight="494.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
             <Tab fx:id="tabPaneGuardar" onSelectionChanged="#onSelectionGuardarTabPane" text="Guardar Cliente">
                <content>
@@ -34,7 +34,7 @@
                         <TextField fx:id="txtCorreo" layoutX="197.0" layoutY="243.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el correo" />
                         <TextField fx:id="txtNombreCliente" layoutX="196.0" layoutY="76.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el nombre " />
                         <TextField fx:id="txtCedula" layoutX="197.0" layoutY="20.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula " />
-                        <Button fx:id="btnBuscarCliente" layoutX="386.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBuscarEmpresa" text="BUSCAR" />
+                        <Button fx:id="btnBuscarCliente" layoutX="386.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBuscarCliente" text="BUSCAR" />
                         <Button fx:id="btnGuardar" layoutX="424.0" layoutY="434.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
                         <Button fx:id="btnEliminar" layoutX="302.0" layoutY="434.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
                         <Button fx:id="btnCancelar" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
@@ -51,7 +51,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblvInformacionPacientes" prefHeight="634.0" prefWidth="1109.0">
+                        <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1110.0">
                            <columns>
                               <TableColumn fx:id="tblvCedula" prefWidth="116.79998779296875" text="CÉDULA " />
                               <TableColumn fx:id="tblvNombre" prefWidth="116.800048828125" text="NOMBRE" />
@@ -62,6 +62,9 @@
                               <TableColumn fx:id="tblvFecNac" prefWidth="151.20001220703125" text="FECHA NACIMIENTO" />
                            </columns>
                         </TableView>
+                        <TextField fx:id="txtNombreClienteInformacion" layoutX="143.0" layoutY="33.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />
+                        <Label layoutX="26.0" layoutY="37.0" prefHeight="18.0" prefWidth="110.0" text="NOMBRE CLIENTE" />
+                        <Button fx:id="btnBuscarInformacion" layoutX="364.0" layoutY="33.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorNombre" text="Buscar" />
                      </children>
                   </AnchorPane>
                </content>

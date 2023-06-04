@@ -16,7 +16,7 @@
         <URL value="@/com/mariangel/administracion_tarea/styles/mantenimientoempresa.css" />
     </stylesheets>
    <children>
-      <TabPane layoutY="65.0" prefHeight="530.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tblv" layoutY="65.0" prefHeight="530.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab fx:id="tabPaneGuardar" onSelectionChanged="#onSelectionGuardarTabPane" text="Guardar Empresa">
             <content>
@@ -31,13 +31,13 @@
                         <TextField fx:id="txtTelefono" layoutX="197.0" layoutY="251.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el teléfono" />
                         <DatePicker fx:id="datePickerFecFunda" layoutX="197.0" layoutY="308.0" promptText="Seleccione una fecha" />
                         <TextField fx:id="txtCorreo" layoutX="197.0" layoutY="194.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el correo" />
-                        <TextField fx:id="txtNombreEmpresa" layoutX="197.0" layoutY="76.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el nombre " />
-                        <TextField fx:id="txtCedulaJuridica" layoutX="197.0" layoutY="133.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula jurídica" />
+                        <TextField fx:id="txtNombreEmpresa" layoutX="197.0" layoutY="142.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el nombre " />
+                        <TextField fx:id="txtCedulaJuridica" layoutX="197.0" layoutY="85.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula jurídica" />
                         <Button fx:id="btnBuscarEmpresa" layoutX="400.0" layoutY="76.0" mnemonicParsing="false" onAction="#onActionBuscarEmpresa" text="BUSCAR" />
                         <Button fx:id="btnGuardar" layoutX="372.0" layoutY="435.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
                         <Button fx:id="btnEliminar" layoutX="237.0" layoutY="435.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
                         <Button fx:id="btnCancelar" layoutX="493.0" layoutY="76.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
-                        <Button fx:id="btnModificar" layoutX="108.0" layoutY="435.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" />
+                        <Button fx:id="btnModificar" layoutX="108.0" layoutY="435.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" visible="false" />
                         <TextField fx:id="txtCalificacion" layoutX="197.0" layoutY="368.0" prefHeight="26.0" prefWidth="175.0" promptText="Digite una calificación" />
                      </children>
                   </AnchorPane>
@@ -47,7 +47,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblvInformacionEmpresa" layoutY="47.0" prefHeight="587.0" prefWidth="1110.0">
+                        <TableView fx:id="tblvInformacionEmpresas" layoutY="47.0" prefHeight="587.0" prefWidth="1110.0">
                            <columns>
                               <TableColumn fx:id="tblvCedulaEmpresa" prefWidth="122.39999085664749" text="CÉDULA JURIDICA" />
                               <TableColumn fx:id="tblvNombreEmpresa" prefWidth="84.0" text="NOMBRE" />

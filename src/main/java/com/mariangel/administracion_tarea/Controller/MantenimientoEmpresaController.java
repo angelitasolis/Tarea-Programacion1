@@ -8,19 +8,27 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.mariangel.administracion_tarea.Model.Empresa;
 import com.mariangel.administracion_tarea.Model.EmpresaDto;
 import com.mariangel.administracion_tarea.Service.EmpresaService;
+import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
 import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -30,10 +38,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  * FXML Controller class
@@ -71,25 +83,27 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     @FXML
     private Tab tabPaneInformacion;
     @FXML
-    private TableView<?> tblvInformacionEmpresas;
+    private TableView<Empresa> tblvInformacionEmpresas;
     @FXML
-    private TableColumn<?, ?> tblvCedulaEmpresa;
+    private TableColumn<Empresa, String> tblvCedulaEmpresa;
     @FXML
-    private TableColumn<?, ?> tblvNombreEmpresa;
+    private TableColumn<Empresa, String> tblvNombreEmpresa;
     @FXML
-    private TableColumn<?, ?> tblvTelefono;
+    private TableColumn<Empresa, Long> tblvTelefono;
     @FXML
-    private TableColumn<?, ?> tblvCalificacion;
+    private TableColumn<Empresa, Long> tblvCalificacion;
     @FXML
-    private TableColumn<?, ?> tblvAnnoFundacion;
+    private TableColumn<Empresa, Date> tblvAnnoFundacion;
     @FXML
-    private TableColumn<?, ?> tblvCorreo;
+    private TableColumn<Empresa, String> tblvCorreo;
     @FXML
     private TextField txtNombreEmpresaInformacion;
     @FXML
     private Button btnBuscarInformacion;
-    EmpresaDto empresa;
+    private EmpresaDto empresa;
     List<Node> requeridos = new ArrayList<>();
+    @FXML
+    private TabPane tblv;
 
     /**
      * Initializes the controller class.
@@ -99,15 +113,17 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         // TODO
         empresa = new EmpresaDto();
 
-        txtTelefono.setTextFormatter(Formato.getInstance().letrasFormat(30));
-        txtCorreo.setTextFormatter(Formato.getInstance().letrasFormat(30));
+        txtTelefono.setTextFormatter(Formato.getInstance().integerFormat());
+        txtCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(100));
         txtNombreEmpresa.setTextFormatter(Formato.getInstance().letrasFormat(30));
-        txtCedulaJuridica.setTextFormatter(Formato.getInstance().integerFormat());
+        txtCedulaJuridica.setTextFormatter(Formato.getInstance().cedulaFormat(30));
         txtCalificacion.setTextFormatter(Formato.getInstance().integerFormat());
-
+        nuevaEmpresa();
+        indicarRequeridos();
     }
 
     private void bindEmpresa(Boolean nuevo) {
+        System.out.println(empresa);
         if (!nuevo) {
             txtCedulaJuridica.textProperty().bindBidirectional(empresa.emCedulajuridica);
         }
@@ -120,7 +136,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     }
 
     private void unbindEmpresa() {
-
+        System.out.println(empresa);
         txtCedulaJuridica.textProperty().unbindBidirectional(empresa.emCedulajuridica);
         txtTelefono.textProperty().unbindBidirectional(empresa.emTelefono);
         txtCorreo.textProperty().unbindBidirectional(empresa.emCorreo);
@@ -135,7 +151,6 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     }
 
     private void nuevaEmpresa() {
-        System.out.println(" ENTRO AL Nuevo empresa  de cargar empresa");
         unbindEmpresa();
         empresa = new EmpresaDto();
         bindEmpresa(true);
@@ -149,12 +164,13 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         Respuesta respuesta = service.getEmpresa(pcedula);
         if (respuesta.getEstado()) {
             unbindEmpresa();
+            btnModificar.setVisible(true);
             System.out.println("despues del unbind");
-            empresa = (EmpresaDto) respuesta.getResultado("Empresas");
+            empresa = (EmpresaDto) respuesta.getResultado("Empresa");
 
             bindEmpresa(false);
             System.out.println("METODO CARGAR Empresa Empresa despues del bind" + pcedula);
-            validarRequeridos();
+
             System.out.println("valida requeridos" + pcedula);
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar empresa", getStage(), respuesta.getMensaje());
@@ -164,72 +180,64 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
     @FXML
     private void onAnctionBtnGuardar(ActionEvent event) {
+
         try {
-            String invalidos = validarRequeridos();
 
-            if (!invalidos.isEmpty()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), invalidos);
+            EmpresaService empresaService = new EmpresaService();
+            Respuesta respuesta = empresaService.guardarEmpresa(empresa);
+
+            if (!respuesta.getEstado()) {
+                System.out.println("else" + empresa.toString());
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Empresa", getStage(), respuesta.getMensaje());
             } else {
-                EmpresaService empresaService = new EmpresaService();
-                System.out.println(empresa);
-                Respuesta respuesta = empresaService.guardarEmpresa(empresa);
-
-                if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), respuesta.getMensaje());
-                } else {
-                    unbindEmpresa();
-                    empresa = (EmpresaDto) respuesta.getResultado("Empresas");
-                    System.out.println("aqui estoy" + empresa.toString());
-                    bindEmpresa(false);
-
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar empresa", getStage(), "Empresa guardo con éxito.");
-                    //Sonido
-
-                }
+                System.out.println("else" + empresa.toString());
+                unbindEmpresa();
+                empresa = (EmpresaDto) respuesta.getResultado("Empresa");
+                bindEmpresa(false);
+                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Empresa", getStage(), "Empresa guardada correctamente.");
             }
         } catch (Exception ex) {
+            System.out.println(empresa.toString());
+            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error guardando la empresa.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), "Ocurrio un error guardando la empresa.");
+        }
+         
+    }
 
-            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error guardando el empresa.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), "Ocurrio un error guardando el empresa.");
+    private void Guardar() {
+        try {
+
+            EmpresaService empresaService = new EmpresaService();
+            Respuesta respuesta = empresaService.guardarEmpresa(empresa);
+
+            if (!respuesta.getEstado()) {
+                System.out.println("else" + empresa.toString());
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Empresa", getStage(), respuesta.getMensaje());
+            } else {
+                System.out.println("else" + empresa.toString());
+                unbindEmpresa();
+                empresa = (EmpresaDto) respuesta.getResultado("Empresa");
+                bindEmpresa(false);
+                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Empresa", getStage(), "Empresa guardada correctamente.");
+            }
+        } catch (Exception ex) {
+            System.out.println(empresa.toString());
+            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error guardando la empresa.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), "Ocurrio un error guardando la empresa.");
         }
     }
 
     @FXML
     private void onActionBtnModificar(ActionEvent event) {
-        try {
-            unbindEmpresa();
-            txtCedulaJuridica.textProperty().bindBidirectional(empresa.emCedulajuridica);
-            txtTelefono.textProperty().bindBidirectional(empresa.emTelefono);
-            txtCorreo.textProperty().bindBidirectional(empresa.emCorreo);
-            txtNombreEmpresa.textProperty().bindBidirectional(empresa.emNombre);
-            txtCalificacion.textProperty().bindBidirectional(empresa.emCalificacion);
-            datePickerFecFunda.valueProperty().bindBidirectional(empresa.emFechafundacion);
-            
-            String cedulaText = txtCedulaJuridica.getText();
-            //long extranno
-            long cedula = Long.parseLong(cedulaText);
-            EmpresaDto empresaDto = new EmpresaDto();
-            empresaDto.setEmpresaCedJuridica((txtCedulaJuridica.getText()));
-            empresaDto.setEmpresaNombre(txtTelefono.getText());
-            empresaDto.setEmpresaCorreo(txtCorreo.getText());
-            empresaDto.setEmpresaNombre(txtNombreEmpresa.getText());
-            empresaDto.setEmpresCalificacion(Long.parseLong(txtCalificacion.getText()));
-            empresaDto.setEmpresaFechafundacion(datePickerFecFunda.getValue());
+        Guardar();
 
-            EmpresaService empresasService = new EmpresaService();
-            Respuesta respuesta = empresasService.modificarPaciente(empresaDto, cedula);
-            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar empresa", getStage(), "Empresa actualizado correctamente.");
-            // mediaPlayer.play();
-        } catch (Exception ex) {
-            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error actualizando el Empresa.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Empresa", getStage(), "Ocurrio un error al actualizar el Empresa.");
-        }
     }
 
     @FXML
     private void onActionBuscarEmpresa(ActionEvent event) {
         String cedulaText = txtCedulaJuridica.getText();
         cargarEmpresa(cedulaText);
+      
     }
 
     @FXML
@@ -246,7 +254,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
                 } else {
                     new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar Empresa", getStage(), "Empresa eliminado correctamente.");
                     nuevaEmpresa();
-                   // mediaPlayer.play();
+                    // mediaPlayer.play();
                 }
             }
         } catch (Exception ex) {
@@ -257,10 +265,19 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
     @FXML
     private void onActionBtnCancelar(ActionEvent event) {
+
+        txtCedulaJuridica.clear();
+        txtTelefono.clear();
+        txtCorreo.clear();
+        txtNombreEmpresa.clear();
+        txtCalificacion.clear();
+        datePickerFecFunda.setValue(null);
+
     }
 
     @FXML
     private void onSelectionGuardarTabPane(Event event) {
+
     }
 
     @FXML
@@ -269,11 +286,69 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
     @FXML
     private void onSelectionInfoTabPane(Event event) {
+        if (tabPaneInformacion.isSelected()) {
+            tblvNombreEmpresa.setCellValueFactory(new PropertyValueFactory<>("emNombre"));
+            tblvCedulaEmpresa.setCellValueFactory(new PropertyValueFactory<>("emCedulajuridica"));
+            tblvTelefono.setCellValueFactory(new PropertyValueFactory<>("emTelefono"));
+            tblvCalificacion.setCellValueFactory(new PropertyValueFactory<>("emCalificacion"));
+            tblvAnnoFundacion.setCellValueFactory(new PropertyValueFactory<>("emFechafundacion"));
+            tblvCorreo.setCellValueFactory(new PropertyValueFactory<>("emCorreo"));
+
+            List<Empresa> list = obtenerEmpresaBD();
+            ObservableList<Empresa> observableList = FXCollections.observableArrayList(list);
+
+            // Asigna los nuevos datos a la TableView
+            tblvInformacionEmpresas.setItems(observableList);
+        }
+
+        txtNombreEmpresaInformacion.textProperty().addListener((observable, oldValue, newValue) -> {
+            String filtroNombre = newValue;
+            List<Empresa> list = obtenerEmpresaBD(filtroNombre);
+            ObservableList<Empresa> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionEmpresas.setItems(observableList);
+        });
     }
 
     @Override
     public void initialize() {
+    }
 
+    public static List<Empresa> obtenerEmpresaBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Empresa> empresasList = new ArrayList<>();
+        try {
+            empresasList = em.createQuery("SELECT e FROM Empresa e", Empresa.class).getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos las empresas de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return empresasList;
+
+    }
+
+    public static List<Empresa> obtenerEmpresaBD(String filtroNombre) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Empresa> empresasList = new ArrayList<>();
+        try {
+            String consulta = "SELECT p FROM Empresa p";
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                consulta += " WHERE p.emNombre LIKE :filtroNombre";
+            }
+            TypedQuery<Empresa> query = em.createQuery(consulta, Empresa.class);
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                query.setParameter("filtroNombre", "%" + filtroNombre + "%");
+            }
+            empresasList = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todas las empresas de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return empresasList;
     }
 
     public String validarRequeridos() {

@@ -34,6 +34,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Empresa.findByEmCorreo", query = "SELECT e FROM Empresa e WHERE e.emCorreo = :emCorreo"),
     @NamedQuery(name = "Empresa.findByEmFechafundacion", query = "SELECT e FROM Empresa e WHERE e.emFechafundacion = :emFechafundacion"),
     @NamedQuery(name = "Empresa.findByEmCalificacion", query = "SELECT e FROM Empresa e WHERE e.emCalificacion = :emCalificacion")})
+    
 public class Empresa implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -85,7 +86,7 @@ public class Empresa implements Serializable {
         this.emCorreo = empresaDto.getEmpresaCorreo();
         this.emCedulajuridica = empresaDto.getEmpresaCedJuridica();
         this.emFechafundacion = Date.from(empresaDto.getEmpresaFechafundacion().atStartOfDay(ZoneId.systemDefault()).toInstant());
-    
+        this.emCalificacion = empresaDto.getEmpresCalificacion();
     }
 
     public String getEmNombre() {

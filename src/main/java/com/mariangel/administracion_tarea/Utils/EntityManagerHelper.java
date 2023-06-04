@@ -35,7 +35,7 @@ public class EntityManagerHelper {
 
     public static EntityManager getManager() {
         if (em == null || !em.isOpen()) {
-            emf = Persistence.createEntityManagerFactory("com.jumaikel_Lab3_PU");
+            emf = Persistence.createEntityManagerFactory("com.mariangel_Administracion_Tarea_PU");
             em = emf.createEntityManager();
         }
         return em;

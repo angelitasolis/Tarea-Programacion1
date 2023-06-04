@@ -32,7 +32,7 @@
                         <Button fx:id="btnGuardar" layoutX="409.0" layoutY="330.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
                         <Button fx:id="btnEliminar" layoutX="299.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
                         <Button fx:id="btnCancelar" layoutX="509.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
-                        <Button fx:id="btnModificar" layoutX="182.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" />
+                        <Button fx:id="btnModificar" layoutX="182.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" visible="false" />
                         <Label layoutX="132.0" layoutY="215.0" text="NOMBRE" />
                         <TextField fx:id="ttNombre" layoutX="196.0" layoutY="215.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el nombre del tour" />
                         <Label layoutX="145.0" layoutY="275.0" text="PAÍS" />

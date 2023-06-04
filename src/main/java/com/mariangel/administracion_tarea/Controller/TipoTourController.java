@@ -9,10 +9,12 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import static com.mariangel.administracion_Tarea.controller.MantenimientoEmpresaController.obtenerEmpresaBD;
+import com.mariangel.administracion_tarea.Model.ClienteDto;
 import com.mariangel.administracion_tarea.Model.Empresa;
 
 import com.mariangel.administracion_tarea.Model.TipoTourDto;
 import com.mariangel.administracion_tarea.Model.Tipotour;
+import com.mariangel.administracion_tarea.Service.ClienteService;
 
 import com.mariangel.administracion_tarea.Service.TipotourService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
@@ -152,24 +154,21 @@ public class TipoTourController extends Controller implements Initializable {
         txtCodigo.requestFocus();
     }
 
-    private void cargarCodigo(Long pcedula) {
+    private void cargarCodigo(Long pcodigo) {
         TipotourService service = new TipotourService();
+        Respuesta respuesta = service.getTipotour(pcodigo);
 
-        Respuesta respuesta = service.getTipotour(pcedula);
         if (respuesta.getEstado()) {
             unbindTipoTour();
             btnModificar.setVisible(true);
-            System.out.println("despues del unbind");
+            
             tipotour = (TipoTourDto) respuesta.getResultado("Tipotour");
 
             bindTipoTour(false);
-            System.out.println("METODO CARGAR Tipotour Tipotour despues del bind" + pcedula);
-
-            System.out.println("valida requeridos" + pcedula);
+     
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar tipotour", getStage(), respuesta.getMensaje());
         }
-
     }
 
     @FXML
@@ -212,17 +211,13 @@ public class TipoTourController extends Controller implements Initializable {
                 unbindTipoTour();
                 tipotour = (TipoTourDto) respuesta.getResultado("Tipotour");
                 bindTipoTour(false);
-                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Tipotour", getStage(), "Tipotour guardada correctamente.");
+                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Tipotour", getStage(), "Tipotour modificado correctamente.");
             }
         } catch (Exception ex) {
             System.out.println(tipotour.toString());
             Logger.getLogger(TipoTourController.class.getName()).log(Level.SEVERE, "Error guardando la tipotour.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar tipotour", getStage(), "Ocurrio un error guardando la tipotour.");
         }
-    }
-
-    @FXML
-    private void onActionBuscarCodigo(ActionEvent event) {
     }
 
     @FXML
@@ -249,12 +244,14 @@ public class TipoTourController extends Controller implements Initializable {
     }
 
     @FXML
-    private void onActionBtnCancelar(ActionEvent event) {
-        txtCodigo.clear();
-        ttNombre.clear();
-        txtPais.clear();
-        menuBtn.setText(null);
-
+    private void onActionBuscarCodigo(ActionEvent event) {
+        String codigoText = txtCodigo.getText();
+        try {
+            Long codigoLong = Long.parseLong(codigoText);
+            cargarCodigo(codigoLong);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalido formato.");
+        }
     }
 
     @FXML
@@ -270,17 +267,6 @@ public class TipoTourController extends Controller implements Initializable {
     @FXML
     private void onActionmenuBtnInternacional(ActionEvent event) {
         menuBtn.setText("INTERNACIONAL");
-    }
-
-    @FXML
-    private void onActionBtnBuscarPorCodigo(ActionEvent event) {
-        String codigoText = txtCodigo.getText();
-        try {
-            Long codigoLong = Long.parseLong(codigoText);
-            cargarCodigo(codigoLong);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalido formato.");
-        }
     }
 
     @FXML
@@ -345,6 +331,18 @@ public class TipoTourController extends Controller implements Initializable {
         return tipoTourList;
     }
 
+    @FXML
+    private void onActionretroceder(ActionEvent event) {
+
+        Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();
+        currentStage.close();
+        FlowController.getInstance().goMain();
+    }
+
+    @FXML
+    private void onSelectionGuardarTabPane(Event event) {
+    }
+
     public String validarRequeridos() {
         Boolean validos = true;
         String invalidos = "";
@@ -387,14 +385,15 @@ public class TipoTourController extends Controller implements Initializable {
     }
 
     @FXML
-    private void onActionretroceder(ActionEvent event) {
+    private void onActionBtnCancelar(ActionEvent event) {
+        txtCodigo.clear();
+        ttNombre.clear();
+        txtPais.clear();
+        menuBtn.setText(null);
 
-        Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();
-        currentStage.close();
-        FlowController.getInstance().goMain();
     }
 
     @FXML
-    private void onSelectionGuardarTabPane(Event event) {
+    private void onActionBtnBuscarPorCodigo(ActionEvent event) {
     }
 }

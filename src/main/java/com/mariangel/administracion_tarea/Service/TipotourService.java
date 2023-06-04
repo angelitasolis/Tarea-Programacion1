@@ -41,6 +41,7 @@ public class TipotourService {
             Logger.getLogger(TipotourService.class.getName()).log(Level.SEVERE, "Ocurrio un error al consultar el tipo tour.", ex);
             return new Respuesta(false, "Ocurrio un error al consultar la tipoTour.", "getTipotour" + ex.getMessage());
         }
+        
     }
  
     public Respuesta guardarTipotour(TipoTourDto tipoToursDto) {

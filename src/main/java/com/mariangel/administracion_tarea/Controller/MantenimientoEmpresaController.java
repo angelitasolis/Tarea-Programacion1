@@ -165,13 +165,11 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         if (respuesta.getEstado()) {
             unbindEmpresa();
             btnModificar.setVisible(true);
-            System.out.println("despues del unbind");
+       
             empresa = (EmpresaDto) respuesta.getResultado("Empresa");
 
             bindEmpresa(false);
-            System.out.println("METODO CARGAR Empresa Empresa despues del bind" + pcedula);
-
-            System.out.println("valida requeridos" + pcedula);
+        
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar empresa", getStage(), respuesta.getMensaje());
         }
@@ -201,7 +199,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
             Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error guardando la empresa.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empresa", getStage(), "Ocurrio un error guardando la empresa.");
         }
-         
+
     }
 
     private void Guardar() {
@@ -228,19 +226,6 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     }
 
     @FXML
-    private void onActionBtnModificar(ActionEvent event) {
-        Guardar();
-
-    }
-
-    @FXML
-    private void onActionBuscarEmpresa(ActionEvent event) {
-        String cedulaText = txtCedulaJuridica.getText();
-        cargarEmpresa(cedulaText);
-      
-    }
-
-    @FXML
     private void onActionBtnEliminar(ActionEvent event) {
         try {
             if (empresa.getEmpresaCedJuridica() == null) {
@@ -261,18 +246,6 @@ public class MantenimientoEmpresaController extends Controller implements Initia
             Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error eliminando el Empresa.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Empresa", getStage(), "Ocurrio un error eliminando el Empresa.");
         }
-    }
-
-    @FXML
-    private void onActionBtnCancelar(ActionEvent event) {
-
-        txtCedulaJuridica.clear();
-        txtTelefono.clear();
-        txtCorreo.clear();
-        txtNombreEmpresa.clear();
-        txtCalificacion.clear();
-        datePickerFecFunda.setValue(null);
-
     }
 
     @FXML
@@ -329,6 +302,29 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
     }
 
+    @FXML
+    private void onActionBtnModificar(ActionEvent event) {
+        Guardar();
+
+    }
+
+    @FXML
+    private void onActionBuscarEmpresa(ActionEvent event) {
+        String cedulaText = txtCedulaJuridica.getText();
+        cargarEmpresa(cedulaText);
+
+    }
+     @FXML
+    private void onActionBtnCancelar(ActionEvent event) {
+
+        txtCedulaJuridica.clear();
+        txtTelefono.clear();
+        txtCorreo.clear();
+        txtNombreEmpresa.clear();
+        txtCalificacion.clear();
+        datePickerFecFunda.setValue(null);
+
+    }
     public static List<Empresa> obtenerEmpresaBD(String filtroNombre) {
         EntityManager em = EntityManagerHelper.getManager();
         List<Empresa> empresasList = new ArrayList<>();

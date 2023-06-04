@@ -3,14 +3,22 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ReservacionController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ReservacionController">
     <stylesheets>
         <URL value="@/com/mariangel/administracion_tarea/styles/reservacion.css" />
     </stylesheets>
    <children>
-      <Label layoutX="255.0" layoutY="44.0" text="RESERVACIONES" />
-      <Button fx:id="btn_retroceder" layoutX="508.0" layoutY="346.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
+      <Label layoutX="417.0" layoutY="14.0" text="RESERVACIONES" />
+      <Button fx:id="btn_retroceder" layoutX="858.0" layoutY="599.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
+      <TabPane layoutY="33.0" prefHeight="565.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Incribir" />
+          <Tab fx:id="tabPaneReservaciones" onSelectionChanged="#onSelectionReservaciones" text="Mostrar" />
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

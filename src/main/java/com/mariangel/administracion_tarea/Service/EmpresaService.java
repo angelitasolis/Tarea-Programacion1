@@ -98,4 +98,34 @@ public class EmpresaService {
             return new Respuesta(false, "Ocurrio un error al eliminar la empresa.", "eliminarEmpresa " + ex.getMessage());
         }
     }
+    public Respuesta modificarPaciente(EmpresaDto empresaDto, Long id) {
+        try {
+            et = em.getTransaction();
+            et.begin();
+            if (empresaDto!= null) {
+                Query query = em.createNamedQuery("Empresa.findByPkPacCedula");
+                query.setParameter("pkPacCedula", id);
+                Empresa empresa = (Empresa) query.getSingleResult();
+                System.out.println("Cédula del empresa a buscar: " + empresaDto.getEmpresaCedJuridica());
+                if (empresa == null) {
+                    et.rollback();
+                    return new Respuesta(false, "No se encontró el empresa a actualizar.", "actualizarPaciente NoResultException");
+                }
+
+                empresa.actualizar(empresaDto);
+                empresa = em.merge(empresa);
+                et.commit();
+                em.refresh(empresa);
+                empresa = em.find(Empresa.class, empresa.getEmCedulajuridica());
+                return new Respuesta(true, "", "", "Paciente", new EmpresaDto(empresa));
+            } else {
+                et.rollback();
+                return new Respuesta(false, "No se proporcionó una cédula válida para actualizar el empresa.", "actualizarPaciente InvalidParameterException");
+            }
+        } catch (NoResultException ex) {
+            et.rollback();
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al actualizar el empresa.", ex);
+            return new Respuesta(false, "Ocurrió un error al actualizar el empresa.", "actualizarPaciente " + ex.getMessage());
+        }
+    }
 }

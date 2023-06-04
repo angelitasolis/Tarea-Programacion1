@@ -71,7 +71,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     @FXML
     private Tab tabPaneInformacion;
     @FXML
-    private TableView<?> tblvInformacionPacientes;
+    private TableView<?> tblvInformacionEmpresas;
     @FXML
     private TableColumn<?, ?> tblvCedulaEmpresa;
     @FXML
@@ -153,7 +153,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
             empresa = (EmpresaDto) respuesta.getResultado("Empresas");
 
             bindEmpresa(false);
-            System.out.println("METODO CARGAR Empresa Paciente despues del bind" + pcedula);
+            System.out.println("METODO CARGAR Empresa Empresa despues del bind" + pcedula);
             validarRequeridos();
             System.out.println("valida requeridos" + pcedula);
         } else {
@@ -182,7 +182,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
                     System.out.println("aqui estoy" + empresa.toString());
                     bindEmpresa(false);
 
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar empresa", getStage(), "Paciente guardo con éxito.");
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar empresa", getStage(), "Empresa guardo con éxito.");
                     //Sonido
 
                 }
@@ -198,13 +198,15 @@ public class MantenimientoEmpresaController extends Controller implements Initia
     private void onActionBtnModificar(ActionEvent event) {
         try {
             unbindEmpresa();
-             txtCedulaJuridica.textProperty().bindBidirectional(empresa.emCedulajuridica);
-        txtTelefono.textProperty().bindBidirectional(empresa.emTelefono);
-        txtCorreo.textProperty().bindBidirectional(empresa.emCorreo);
-        txtNombreEmpresa.textProperty().bindBidirectional(empresa.emNombre);
-        txtCalificacion.textProperty().bindBidirectional(empresa.emCalificacion);
-        datePickerFecFunda.valueProperty().bindBidirectional(empresa.emFechafundacion);
+            txtCedulaJuridica.textProperty().bindBidirectional(empresa.emCedulajuridica);
+            txtTelefono.textProperty().bindBidirectional(empresa.emTelefono);
+            txtCorreo.textProperty().bindBidirectional(empresa.emCorreo);
+            txtNombreEmpresa.textProperty().bindBidirectional(empresa.emNombre);
+            txtCalificacion.textProperty().bindBidirectional(empresa.emCalificacion);
+            datePickerFecFunda.valueProperty().bindBidirectional(empresa.emFechafundacion);
+            
             String cedulaText = txtCedulaJuridica.getText();
+            //long extranno
             long cedula = Long.parseLong(cedulaText);
             EmpresaDto empresaDto = new EmpresaDto();
             empresaDto.setEmpresaCedJuridica((txtCedulaJuridica.getText()));
@@ -216,11 +218,11 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
             EmpresaService empresasService = new EmpresaService();
             Respuesta respuesta = empresasService.modificarPaciente(empresaDto, cedula);
-            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar empresa", getStage(), "Paciente actualizado correctamente.");
-           // mediaPlayer.play();
+            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar empresa", getStage(), "Empresa actualizado correctamente.");
+            // mediaPlayer.play();
         } catch (Exception ex) {
-            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error actualizando el Paciente.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Paciente", getStage(), "Ocurrio un error al actualizar el Paciente.");
+            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error actualizando el Empresa.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Empresa", getStage(), "Ocurrio un error al actualizar el Empresa.");
         }
     }
 
@@ -232,6 +234,25 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
     @FXML
     private void onActionBtnEliminar(ActionEvent event) {
+        try {
+            if (empresa.getEmpresaCedJuridica() == null) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Empresa", getStage(), "Debe cargar el tipo de Empresa que desea eliminar.");
+            } else {
+
+                EmpresaService service = new EmpresaService();
+                Respuesta respuesta = service.eliminarEmpresa(empresa.getEmpresaCedJuridica());
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Empresa", getStage(), respuesta.getMensaje());
+                } else {
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar Empresa", getStage(), "Empresa eliminado correctamente.");
+                    nuevaEmpresa();
+                   // mediaPlayer.play();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MantenimientoEmpresaController.class.getName()).log(Level.SEVERE, "Error eliminando el Empresa.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Empresa", getStage(), "Ocurrio un error eliminando el Empresa.");
+        }
     }
 
     @FXML

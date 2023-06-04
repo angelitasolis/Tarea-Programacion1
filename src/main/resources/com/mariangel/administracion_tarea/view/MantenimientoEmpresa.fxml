@@ -47,7 +47,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblvInformacionPacientes" layoutY="47.0" prefHeight="587.0" prefWidth="1110.0">
+                        <TableView fx:id="tblvInformacionEmpresa" layoutY="47.0" prefHeight="587.0" prefWidth="1110.0">
                            <columns>
                               <TableColumn fx:id="tblvCedulaEmpresa" prefWidth="122.39999085664749" text="CÉDULA JURIDICA" />
                               <TableColumn fx:id="tblvNombreEmpresa" prefWidth="84.0" text="NOMBRE" />

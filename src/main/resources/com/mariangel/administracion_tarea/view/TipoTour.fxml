@@ -3,6 +3,13 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.TipoTourController">
@@ -10,7 +17,56 @@
         <URL value="@/com/mariangel/administracion_tarea/styles/tipotour.css" />
     </stylesheets>
    <children>
-      <Label layoutX="255.0" layoutY="36.0" text="TIPOS DE TOURS" />
-      <Button fx:id="btn_retroceder" layoutX="508.0" layoutY="346.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
+      <Label layoutX="430.0" layoutY="23.0" text="TIPOS DE TOURS" />
+      <Button fx:id="btn_retroceder" layoutX="883.0" layoutY="601.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
+      <TabPane layoutY="49.0" prefHeight="535.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tabPaneGuardar" onSelectionChanged="#onSelectionGuardarTabPane" text="Guardar Tipo Tour">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
+                     <children>
+                        <Label layoutX="78.0" layoutY="102.0" text="TIPO TOUR CÓDIGO" />
+                        <Label layoutX="127.0" layoutY="155.0" text="TIPO TOUR" />
+                        <TextField fx:id="txtCodigo" layoutX="197.0" layoutY="98.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el código" />
+                        <Button fx:id="btnBuscarTipoTour" layoutX="415.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionBuscarCodigo" text="BUSCAR" />
+                        <Button fx:id="btnGuardar" layoutX="409.0" layoutY="330.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
+                        <Button fx:id="btnEliminar" layoutX="299.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
+                        <Button fx:id="btnCancelar" layoutX="509.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
+                        <Button fx:id="btnModificar" layoutX="182.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" />
+                        <Label layoutX="132.0" layoutY="215.0" text="NOMBRE" />
+                        <TextField fx:id="ttNombre" layoutX="196.0" layoutY="215.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el nombre del tour" />
+                        <Label layoutX="145.0" layoutY="275.0" text="PAÍS" />
+                        <TextField fx:id="txtPais" layoutX="196.0" layoutY="271.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el país a visitar" />
+                        <MenuButton fx:id="menuBtn" layoutX="197.0" layoutY="151.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="169.0">
+                          <items>
+                            <MenuItem id="NACIONAL" fx:id="menuBtnNacional" mnemonicParsing="false" onAction="#onActionmenuBtnNacional" text="NACIONAL" />
+                            <MenuItem id="INTERNACIONAL" fx:id="menuBtnInternacional" mnemonicParsing="false" onAction="#onActionmenuBtnInternacional" text="INTERNACIONAL" />
+                          </items>
+                        </MenuButton>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="tabPaneInformacion" onSelectionChanged="#onSelectionInfoTabPane" text="Información">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tblvInformacionTipoTour" layoutY="83.0" prefHeight="551.0" prefWidth="1110.0">
+                           <columns>
+                              <TableColumn fx:id="tblvCodigo" prefWidth="243.20000916719437" text="CÓDIGO" />
+                              <TableColumn fx:id="tblvTipoTour" prefWidth="233.6000518798828" text="TIPO TOUR" />
+                              <TableColumn fx:id="tblvNombre" prefWidth="257.60003662109375" text="NOMBRE" />
+                              <TableColumn fx:id="tblvPais" prefWidth="215.99993896484375" text="PAÍS" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="txtCodigoInformacion" layoutX="143.0" layoutY="33.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />
+                        <Label layoutX="73.0" layoutY="37.0" prefHeight="18.0" prefWidth="58.0" text="NOMBRE" />
+                        <Button fx:id="btnBuscarInformacion" layoutX="364.0" layoutY="33.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorCodigo" text="Buscar" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

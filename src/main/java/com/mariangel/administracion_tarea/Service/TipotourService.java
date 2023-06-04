@@ -44,28 +44,27 @@ public class TipotourService {
     }
  
     public Respuesta guardarTipotour(TipoTourDto tipoToursDto) {
-        try {
+      try {
             et = em.getTransaction();
             et.begin();
-            Tipotour tipoTour;
-            if (tipoToursDto.getTptCodigo() != null && tipoToursDto.getTptCodigo() > 0) {
-                tipoTour = em.find(Tipotour.class, tipoToursDto.getTptCodigo());
-                if (tipoTour == null) {
-                    et.rollback();
-                    return new Respuesta(false, "No se encrontró el tipo tour a modificar.", "guardarEmpleado NoResultException");
-                }
-                tipoTour.actualizar(tipoToursDto);
-                tipoTour = em.merge(tipoTour);
+             Tipotour tipotour = em.find(Tipotour.class, tipoToursDto.getTptCodigo());
+
+            if (tipotour != null) {
+                // La tipotour ya existe, se debe actualizar
+                tipotour.actualizar(tipoToursDto);
+                tipotour = em.merge(tipotour);
             } else {
-                tipoTour = new Tipotour(tipoToursDto);
-                em.persist(tipoTour);
+                // La tipotour no existe, se debe crear
+                tipotour = new Tipotour(tipoToursDto);
+                em.persist(tipotour);
             }
+
             et.commit();
-            return new Respuesta(true, "", "", "Tipotour", new TipoTourDto(tipoTour));
+            return new Respuesta(true, "", "", "Tipotour", new TipoTourDto(tipotour));
         } catch (Exception ex) {
             et.rollback();
-            Logger.getLogger(TipotourService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el tipoTour.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar el tipoTour.", "guardar tipoTour " + ex.getMessage());
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar la tipotour.", ex);
+            return new Respuesta(false, "Ocurrió un error al guardar la tipotour.", "guardarEmpresa " + ex.getMessage());
         }
     }
     

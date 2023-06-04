@@ -4,6 +4,7 @@ com\mariangel\administracion_tarea\Service\EmpresaService.class
 com\mariangel\administracion_tarea\Utils\BindingUtils.class
 com\mariangel\administracion_tarea\Utils\Mensaje.class
 com\mariangel\administracion_tarea\controller\Controller.class
+com\mariangel\administracion_tarea\controller\ClienteController.class
 com\mariangel\administracion_tarea\Utils\EntityManagerHelper.class
 com\mariangel\administracion_tarea\Model\Tipotour_.class
 com\mariangel\administracion_tarea\controller\TourController.class

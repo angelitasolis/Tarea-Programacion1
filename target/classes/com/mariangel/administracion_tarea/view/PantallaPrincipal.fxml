@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.PantallaPrincipalController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.PantallaPrincipalController">
     <stylesheets>
         <URL value="@/com/mariangel/administracion_tarea/styles/pantallaprincipal.css" />
     </stylesheets>
@@ -16,5 +13,6 @@
       <Button fx:id="btnPReservaciones" layoutX="248.0" layoutY="146.0" mnemonicParsing="false" onAction="#mostrarPReservaciones" text="RESERVACIONES" />
       <Button fx:id="btnPTiposTours" layoutX="248.0" layoutY="181.0" mnemonicParsing="false" onAction="#mostrarPTiposDeTours" text="TIPOS DE TOURS" />
       <Button fx:id="btnPTours" layoutX="274.0" layoutY="224.0" mnemonicParsing="false" onAction="#mostrarPTours" text="TOURS" />
+      <Button fx:id="btnPClientes" layoutX="268.0" layoutY="260.0" mnemonicParsing="false" onAction="#mostrarPClientes" text="CLIENTES" />
    </children>
 </AnchorPane>

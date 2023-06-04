@@ -91,7 +91,7 @@ public class ClienteService {
             }
 
             et.commit();
-            return new Respuesta(true, "", "", "Empresa", new ClienteDto(cliente));
+            return new Respuesta(true, "", "", "Cliente", new ClienteDto(cliente));
         } catch (Exception ex) {
             et.rollback();
             Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar la cliente.", ex);

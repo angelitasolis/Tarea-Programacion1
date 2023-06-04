@@ -8,12 +8,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import static com.mariangel.administracion_Tarea.controller.MantenimientoClienteController.obtenerClienteBD;
-import com.mariangel.administracion_tarea.Model.Cliente;
-import com.mariangel.administracion_tarea.Model.ClienteDto;
 import com.mariangel.administracion_tarea.Model.ClienteDto;
 import com.mariangel.administracion_tarea.Model.Cliente;
-import com.mariangel.administracion_tarea.Service.ClienteService;
 import com.mariangel.administracion_tarea.Service.ClienteService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -21,9 +17,6 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -53,7 +46,7 @@ import javax.persistence.TypedQuery;
 /**
  * FXML Controller class
  *
- * @author jumac
+ * @author Mari
  */
 public class ClienteController extends Controller implements Initializable {
 
@@ -87,7 +80,6 @@ public class ClienteController extends Controller implements Initializable {
     private TextField txtSApellido;
     @FXML
     private Tab tabPaneInformacion;
-    private TableView<Cliente> tblvInformacionClientes;
     @FXML
     private TableColumn<Cliente, String> tblvCedula;
     @FXML
@@ -106,7 +98,7 @@ public class ClienteController extends Controller implements Initializable {
     ClienteDto cliente;
     List<Node> requeridos = new ArrayList<>();
     @FXML
-    private TableView<?> tblvInformacionCliente;
+    private TableView<Cliente> tblvInformacionCliente;
     @FXML
     private TextField txtNombreClienteInformacion;
     @FXML
@@ -173,6 +165,12 @@ public class ClienteController extends Controller implements Initializable {
         txtCedula.requestFocus();
     }
 
+    @FXML
+    private void onActionBuscarCliente(ActionEvent event) {
+        String cedulaText = txtCedula.getText();
+        cargarCliente(cedulaText);
+    }
+
     private void cargarCliente(String pcedula) {
         ClienteService service = new ClienteService();
         Respuesta respuesta = service.getCliente(pcedula);
@@ -193,7 +191,7 @@ public class ClienteController extends Controller implements Initializable {
         List<Cliente> clientesList = new ArrayList<>();
         try {
             clientesList = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
-           
+
         } catch (Exception e) {
             System.out.println("Error al obtener todos los clientes de la base de datos");
             e.printStackTrace();
@@ -202,13 +200,14 @@ public class ClienteController extends Controller implements Initializable {
         }
         return clientesList;
     }
-       public static List<Cliente> obtenerClienteBD(String filtroNombre) {
+
+    public static List<Cliente> obtenerClientesBD(String filtroNombre) {
         EntityManager em = EntityManagerHelper.getManager();
         List<Cliente> clientesList = new ArrayList<>();
         try {
             String consulta = "SELECT c FROM Cliente c";
             if (filtroNombre != null && !filtroNombre.isEmpty()) {
-                consulta += " WHERE p.Nombre LIKE :filtroNombre";
+                consulta += " WHERE c.cltNombre LIKE :filtroNombre";
             }
             TypedQuery<Cliente> query = em.createQuery(consulta, Cliente.class);
             if (filtroNombre != null && !filtroNombre.isEmpty()) {
@@ -222,17 +221,6 @@ public class ClienteController extends Controller implements Initializable {
             em.close();
         }
         return clientesList;
-    }
-
-    @FXML
-    private void onActionretroceder(ActionEvent event) {
-        Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();
-        currentStage.close();
-        FlowController.getInstance().goMain();
-    }
-
-    @FXML
-    private void onActionBuscarCliente(ActionEvent event) {
     }
 
     @FXML
@@ -284,19 +272,25 @@ public class ClienteController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnEliminar(ActionEvent event) {
-    }
+        try {
+            if (cliente.getClienteCedula() == null) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Cliente", getStage(), "Debe cargar el tipo de Cliente que desea eliminar.");
+            } else {
 
-    @FXML
-    private void onActionBtnCancelar(ActionEvent event) {
-        datePickerFecNac.setValue(null);
-        txtCorreo.clear();
-        txtCedula.clear();
-        txtSApellido.setText(null);
-        txtNombreCliente.setText(null);
-        txtPApellido.setText(null);
-        txtTelefono.setText(null);
-        tblvInformacionClientes.getItems().clear();
-
+                ClienteService service = new ClienteService();
+                Respuesta respuesta = service.eliminarCliente(cliente.getClienteCedula());
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Cliente", getStage(), respuesta.getMensaje());
+                } else {
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar Cliente", getStage(), "Cliente eliminado correctamente.");
+                    nuevoCliente();
+                    // mediaPlayer.play();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteController.class.getName()).log(Level.SEVERE, "Error eliminando el Cliente.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Cliente", getStage(), "Ocurrio un error eliminando el Cliente.");
+        }
     }
 
     @FXML
@@ -304,11 +298,6 @@ public class ClienteController extends Controller implements Initializable {
         Guardar();
     }
 
-    @FXML
-    private void onSelectionGuardarTabPane(Event event) {
-    
-    }
-    
     @FXML
     private void onSelectionInfoTabPane(Event event) {
         if (tabPaneInformacion.isSelected()) {
@@ -333,11 +322,8 @@ public class ClienteController extends Controller implements Initializable {
             ObservableList<Cliente> observableList = FXCollections.observableArrayList(list);
             tblvInformacionCliente.setItems(observableList);
         });
-        
-        
     }
-   
-    
+
     public String validarRequeridos() {
         Boolean validos = true;
         String invalidos = "";
@@ -381,7 +367,31 @@ public class ClienteController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnBuscarPorNombre(ActionEvent event) {
-        
+
     }
 
+    @FXML
+    private void onActionBtnCancelar(ActionEvent event) {
+        datePickerFecNac.setValue(null);
+        txtCorreo.clear();
+        txtCedula.clear();
+        txtSApellido.setText(null);
+        txtNombreCliente.setText(null);
+        txtPApellido.setText(null);
+        txtTelefono.setText(null);
+        tblvInformacionCliente.getItems().clear();
+
+    }
+
+    @FXML
+    private void onSelectionGuardarTabPane(Event event) {
+
+    }
+
+    @FXML
+    private void onActionretroceder(ActionEvent event) {
+        Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();
+        currentStage.close();
+        FlowController.getInstance().goMain();
+    }
 }

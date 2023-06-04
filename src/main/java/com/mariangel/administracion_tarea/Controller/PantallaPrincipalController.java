@@ -28,6 +28,8 @@ public class PantallaPrincipalController extends Controller implements Initializ
     private Button btnPTiposTours;
     @FXML
     private Button btnPTours;
+    @FXML
+    private Button btnPClientes;
 
     /**
      * Initializes the controller class.
@@ -40,33 +42,41 @@ public class PantallaPrincipalController extends Controller implements Initializ
     @FXML
     private void mostrarPMantenimientoDeEmpresas(ActionEvent event) {
         Stage currentStage = (Stage) btnPEmpMantenimiento.getScene().getWindow();
-        currentStage.close(); 
+        currentStage.close();
         FlowController.getInstance().goViewInWindow("MantenimientoEmpresa");
     }
 
     @FXML
     private void mostrarPReservaciones(ActionEvent event) {
         Stage currentStage = (Stage) btnPEmpMantenimiento.getScene().getWindow();
-        currentStage.close(); 
+        currentStage.close();
         FlowController.getInstance().goViewInWindow("Reservacion");
     }
 
     @FXML
     private void mostrarPTiposDeTours(ActionEvent event) {
         Stage currentStage = (Stage) btnPEmpMantenimiento.getScene().getWindow();
-        currentStage.close(); 
+        currentStage.close();
         FlowController.getInstance().goViewInWindow("TipoTour");
     }
 
     @FXML
     private void mostrarPTours(ActionEvent event) {
-       Stage currentStage = (Stage) btnPEmpMantenimiento.getScene().getWindow();
-        currentStage.close(); 
-        FlowController.getInstance().goViewInWindow("Tour");}
+        Stage currentStage = (Stage) btnPEmpMantenimiento.getScene().getWindow();
+        currentStage.close();
+        FlowController.getInstance().goViewInWindow("Tour");
+    }
 
     @Override
     public void initialize() {
-        
+
+    }
+
+    @FXML
+    private void mostrarPClientes(ActionEvent event) {
+        Stage currentStage = (Stage) btnPClientes.getScene().getWindow();
+        currentStage.close();
+        FlowController.getInstance().goViewInWindow("Cliente");
     }
 
 }

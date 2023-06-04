@@ -18,12 +18,12 @@ import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,16 +165,18 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         if (respuesta.getEstado()) {
             unbindEmpresa();
             btnModificar.setVisible(true);
-       
+
             empresa = (EmpresaDto) respuesta.getResultado("Empresa");
 
             bindEmpresa(false);
-        
+
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar empresa", getStage(), respuesta.getMensaje());
         }
 
     }
+
+  
 
     @FXML
     private void onAnctionBtnGuardar(ActionEvent event) {
@@ -314,7 +316,8 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         cargarEmpresa(cedulaText);
 
     }
-     @FXML
+
+    @FXML
     private void onActionBtnCancelar(ActionEvent event) {
 
         txtCedulaJuridica.clear();
@@ -325,6 +328,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
         datePickerFecFunda.setValue(null);
 
     }
+
     public static List<Empresa> obtenerEmpresaBD(String filtroNombre) {
         EntityManager em = EntityManagerHelper.getManager();
         List<Empresa> empresasList = new ArrayList<>();

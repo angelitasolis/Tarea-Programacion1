@@ -164,7 +164,7 @@ public class ClienteController extends Controller implements Initializable {
         txtCedula.clear();
         txtCedula.requestFocus();
     }
-
+    
     @FXML
     private void onActionBuscarCliente(ActionEvent event) {
         String cedulaText = txtCedula.getText();

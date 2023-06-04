@@ -23,12 +23,17 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -113,6 +118,10 @@ public class TipoTourController extends Controller implements Initializable {
 
         nuevoTipoTour();
         indicarRequeridos();
+        activarListenerGenerarCodigo();
+        
+        
+        
     }
 
     @Override
@@ -154,6 +163,41 @@ public class TipoTourController extends Controller implements Initializable {
         txtCodigo.requestFocus();
     }
 
+    private Long generarCodigoTipoTour() {
+        // Obtener el día actual en el formato deseado
+        LocalDate fechaActual = LocalDate.now();
+        String diaActual = fechaActual.format(DateTimeFormatter.ofPattern("dd"));
+
+        // Generar un número aleatorio entre 100 y 999
+        Random random = new Random();
+        int numeroAleatorio = random.nextInt(900) + 100;
+
+        // Combinar las partes para formar el código
+        String codigo = diaActual + String.valueOf(numeroAleatorio);
+
+        return Long.valueOf(codigo);
+    }
+
+    private void desactivarListenerGenerarCodigo() {
+        ttNombre.textProperty().removeListener(generarCodigoListener);
+        txtPais.textProperty().removeListener(generarCodigoListener);
+        menuBtn.textProperty().removeListener(generarCodigoListener);
+
+    }
+
+    private void activarListenerGenerarCodigo() {
+        ttNombre.textProperty().addListener(generarCodigoListener);
+        txtPais.textProperty().addListener(generarCodigoListener);
+        menuBtn.textProperty().addListener(generarCodigoListener);
+    }
+     private final ChangeListener<String> generarCodigoListener = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            Long nuevoCodigo = generarCodigoTipoTour();
+            txtCodigo.setText(nuevoCodigo.toString());
+        }
+    };
+
     private void cargarCodigo(Long pcodigo) {
         TipotourService service = new TipotourService();
         Respuesta respuesta = service.getTipotour(pcodigo);
@@ -161,11 +205,11 @@ public class TipoTourController extends Controller implements Initializable {
         if (respuesta.getEstado()) {
             unbindTipoTour();
             btnModificar.setVisible(true);
-            
+
             tipotour = (TipoTourDto) respuesta.getResultado("Tipotour");
 
             bindTipoTour(false);
-     
+            desactivarListenerGenerarCodigo();
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar tipotour", getStage(), respuesta.getMensaje());
         }

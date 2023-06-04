@@ -101,8 +101,6 @@ public class TipoTourController extends Controller implements Initializable {
     private TableColumn<Tipotour, String> tblvPais;
     @FXML
     private TextField txtCodigoInformacion;
-    @FXML
-    private Button btnBuscarInformacion;
     private TipoTourDto tipotour;
     List<Node> requeridos = new ArrayList<>();
 
@@ -119,9 +117,7 @@ public class TipoTourController extends Controller implements Initializable {
         nuevoTipoTour();
         indicarRequeridos();
         activarListenerGenerarCodigo();
-        
-        
-        
+
     }
 
     @Override
@@ -190,7 +186,7 @@ public class TipoTourController extends Controller implements Initializable {
         txtPais.textProperty().addListener(generarCodigoListener);
         menuBtn.textProperty().addListener(generarCodigoListener);
     }
-     private final ChangeListener<String> generarCodigoListener = new ChangeListener<String>() {
+    private final ChangeListener<String> generarCodigoListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
             Long nuevoCodigo = generarCodigoTipoTour();
@@ -203,13 +199,15 @@ public class TipoTourController extends Controller implements Initializable {
         Respuesta respuesta = service.getTipotour(pcodigo);
 
         if (respuesta.getEstado()) {
+            desactivarListenerGenerarCodigo();
             unbindTipoTour();
             btnModificar.setVisible(true);
 
             tipotour = (TipoTourDto) respuesta.getResultado("Tipotour");
 
             bindTipoTour(false);
-            desactivarListenerGenerarCodigo();
+            
+            
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar tipotour", getStage(), respuesta.getMensaje());
         }
@@ -233,6 +231,7 @@ public class TipoTourController extends Controller implements Initializable {
                 bindTipoTour(false);
                 new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Tipotour", getStage(), "Tipotour guardada correctamente.");
             }
+            activarListenerGenerarCodigo();
         } catch (Exception ex) {
             System.out.println(tipotour.toString());
             Logger.getLogger(TipoTourController.class.getName()).log(Level.SEVERE, "Error guardando la tipotour.", ex);
@@ -281,6 +280,7 @@ public class TipoTourController extends Controller implements Initializable {
                     // mediaPlayer.play();
                 }
             }
+            activarListenerGenerarCodigo();
         } catch (Exception ex) {
             Logger.getLogger(TipoTourController.class.getName()).log(Level.SEVERE, "Error eliminando el Tipo Tour.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Tipo Tour", getStage(), "Ocurrio un error eliminando el Tipo Tour.");
@@ -430,14 +430,14 @@ public class TipoTourController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnCancelar(ActionEvent event) {
-        txtCodigo.clear();
+        desactivarListenerGenerarCodigo();
+       
         ttNombre.clear();
         txtPais.clear();
         menuBtn.setText(null);
+        activarListenerGenerarCodigo();
+        txtCodigo.clear();
 
     }
 
-    @FXML
-    private void onActionBtnBuscarPorCodigo(ActionEvent event) {
-    }
 }

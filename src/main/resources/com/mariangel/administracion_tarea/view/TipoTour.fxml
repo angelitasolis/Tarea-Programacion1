@@ -27,7 +27,7 @@
                      <children>
                         <Label layoutX="78.0" layoutY="102.0" text="TIPO TOUR CÓDIGO" />
                         <Label layoutX="127.0" layoutY="155.0" text="TIPO TOUR" />
-                        <TextField fx:id="txtCodigo" layoutX="197.0" layoutY="98.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el código" />
+                        <TextField fx:id="txtCodigo" layoutX="197.0" layoutY="98.0" prefHeight="26.0" prefWidth="207.0" promptText="Código generado automáticamente" />
                         <Button fx:id="btnBuscarTipoTour" layoutX="415.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionBuscarCodigo" text="BUSCAR" />
                         <Button fx:id="btnGuardar" layoutX="409.0" layoutY="330.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
                         <Button fx:id="btnEliminar" layoutX="299.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
@@ -61,7 +61,6 @@
                         </TableView>
                         <TextField fx:id="txtCodigoInformacion" layoutX="143.0" layoutY="33.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />
                         <Label layoutX="73.0" layoutY="37.0" prefHeight="18.0" prefWidth="58.0" text="NOMBRE" />
-                        <Button fx:id="btnBuscarInformacion" layoutX="364.0" layoutY="33.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorCodigo" text="Buscar" />
                      </children>
                   </AnchorPane>
                </content>

@@ -86,7 +86,7 @@ public class Tour implements Serializable {
         this.trsCodigotour = trsCodigotour;
     }
 
-    public Tour(String trsCodigotour, String trsNombre, Date trsFechasalida, Date trsFechallegada, Long trsCostotour, Long trsCantidadclientes, short trsHorasalida, short trsHorallegada, Tipotour trsTipotourcodigo) {
+    public Tour(String trsCodigotour, String trsNombre, Date trsFechasalida, Date trsFechallegada, Long trsCostotour, Long trsCantidadclientes, short trsHorasalida, short trsHorallegada, Tipotour trsTipotourcodigo, Empresa trsEmpresacedjur) {
         this.trsCodigotour = trsCodigotour;
         this.trsNombre = trsNombre;
         this.trsFechasalida = trsFechasalida;
@@ -96,6 +96,7 @@ public class Tour implements Serializable {
         this.trsHorasalida = trsHorasalida;
         this.trsHorallegada = trsHorallegada;
         this.trsTipotourcodigo = trsTipotourcodigo;
+        this.trsEmpresacedjur = trsEmpresacedjur;
     }
 
     public Tour(TourDto tourDto) {
@@ -113,8 +114,18 @@ public class Tour implements Serializable {
         this.trsHorasalida = tourDto.getTrsHorallegada();
         this.trsHorallegada = tourDto.getTrsHorallegada();
         this.trsTipotourcodigo = tourDto.getTipoToursCodigo();
+        this.trsEmpresacedjur = tourDto.getTEmpresaCedJur();
     }
 
+     public Empresa getTEmpresacedjur() {
+        return trsEmpresacedjur;
+    }
+   
+    public void setTEmpresacedjur(Empresa trsEmpresacedjur) {
+        this.trsEmpresacedjur = trsEmpresacedjur;
+    }
+    
+    
     public String getTrsNombre() {
         return trsNombre;
     }
@@ -125,8 +136,7 @@ public class Tour implements Serializable {
     public Tipotour getTrsTipoTourCodigo() {
         return trsTipotourcodigo;
     }
-    
-    
+   
     public void setTrsTipoTourCodigo(Tipotour trsTipotourcodigo) {
         this.trsTipotourcodigo = trsTipotourcodigo;
     }

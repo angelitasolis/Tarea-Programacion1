@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
@@ -31,14 +32,12 @@
                         <Label layoutX="78.0" layoutY="313.0" text="FECHA DE SALIDA" />
                         <DatePicker fx:id="datePickerFecSalidaGuardarTour" layoutX="195.0" layoutY="309.0" promptText="Seleccione una fecha" />
                         <TextField fx:id="txtCodigoTourGuardarTour" layoutX="195.0" layoutY="24.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el código" />
-                        <TextField fx:id="txtNombreEmpresaGuardarTour" layoutX="195.0" layoutY="71.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite la cédula " />
                         <Button fx:id="btnBuscarTour" layoutX="386.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBuscarTour" text="BUSCAR" />
-                        <Button fx:id="btnGuardarTour" layoutX="424.0" layoutY="434.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarTour" text="GUARDAR" />
-                        <Button fx:id="btnEliminarTour" layoutX="302.0" layoutY="434.0" mnemonicParsing="false" onAction="#onActionBtnEliminarTour" text="ELIMINAR" />
+                        <Button fx:id="btnGuardarTour" layoutX="423.0" layoutY="460.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarTour" text="GUARDAR" />
+                        <Button fx:id="btnEliminarTour" layoutX="301.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnEliminarTour" text="ELIMINAR" />
                         <Button fx:id="btnCancelarTour" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBtnCancelarTour" text="CANCELAR" />
-                        <Button fx:id="btnModificarTour" layoutX="157.0" layoutY="434.0" mnemonicParsing="false" onAction="#onActionBtnModificarTour" text="MODIFICAR" />
+                        <Button fx:id="btnModificarTour" layoutX="157.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnModificarTour" text="MODIFICAR" />
                         <Label layoutX="107.0" layoutY="123.0" text="TIPO TOUR" />
-                        <TextField fx:id="txtTipoTourGuardarTour" layoutX="197.0" layoutY="119.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el Tipo Tour" />
                         <Label layoutX="73.0" layoutY="219.0" text="FECHA DE LLEGADA" />
                         <DatePicker fx:id="datePickerFecLlegadaGuardarTour" layoutX="197.0" layoutY="219.0" promptText="Seleccione una fecha" />
                         <Label layoutX="58.0" layoutY="174.0" text="COSTOS POR PERSONA" />
@@ -47,8 +46,12 @@
                         <Label layoutX="94.0" layoutY="270.0" text="HORA LLEGADA" />
                         <TextField fx:id="txtHoraLlegadaGuardarTour" layoutX="197.0" layoutY="266.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite hora llegada" />
                         <Label layoutX="99.0" layoutY="351.0" text="HORA SALIDA" />
-                        <TextField fx:id="txtCantidadMaxGuardarTour" layoutX="197.0" layoutY="381.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite cantidad max clientes" />
-                        <Label layoutX="70.0" layoutY="385.0" text="CANTIDAD CLIENTES" />
+                        <TextField fx:id="txtCantidadMaxGuardarTour" layoutX="195.0" layoutY="390.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite cantidad max clientes" />
+                        <Label layoutX="70.0" layoutY="394.0" text="CANTIDAD CLIENTES" />
+                        <ChoiceBox fx:id="choiceBTipoTourGuardarTour" layoutX="197.0" layoutY="119.0" prefHeight="26.0" prefWidth="170.0" />
+                        <ChoiceBox fx:id="choiceBCodigoEmpresaGuardarTour" layoutX="198.0" layoutY="70.0" prefHeight="26.0" prefWidth="168.0" />
+                        <Label layoutX="95.0" layoutY="430.0" text="NOMBRE TOUR" />
+                        <TextField fx:id="txtNombreTourGuardar" layoutX="195.0" layoutY="426.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite nombre tour" />
                      </children>
                   </AnchorPane>
                </content>
@@ -59,21 +62,21 @@
                      <children>
                         <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1110.0">
                            <columns>
-                              <TableColumn fx:id="tblvEmpresa" prefWidth="101.59997254610062" text="EMPRESA" />
-                              <TableColumn fx:id="tblvNombre" prefWidth="130.4000244140625" text="NOMBRE" />
-                              <TableColumn fx:id="tblvTipoTour" prefWidth="100.80000305175781" text="TIPO TOUR" />
-                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="138.39996337890625" text="COSTO PERSONA" />
-                              <TableColumn fx:id="tblvDuracion" minWidth="0.0" prefWidth="116.79998779296875" text="DURACIÓN" />
-                              <TableColumn fx:id="tblvFechaLlegada" prefWidth="38.39996337890625" text="FECHA LLEGADA">
+                              <TableColumn fx:id="tblvCodigoTour" prefWidth="119.199951171875" text="CÓDIGO" />
+                              <TableColumn fx:id="tblvEmpresa" prefWidth="115.99999696016312" text="EMPRESA" />
+                              <TableColumn fx:id="tblvNombre" prefWidth="146.40000915527344" text="NOMBRE" />
+                              <TableColumn fx:id="tblvTipoTour" prefWidth="104.79998779296875" text="TIPO TOUR" />
+                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="120.0" text="COSTO PERSONA" />
+                              <TableColumn fx:id="tblvFechaLlegada" prefWidth="62.4000244140625" text="FECHA LLEGADA">
                                  <columns>
                                     <TableColumn fx:id="tblvHoraLlegada" minWidth="0.0" prefWidth="77.60003662109375" text="HORA L" />
                                  </columns></TableColumn>
-                              <TableColumn fx:id="tblvFecSalida" minWidth="0.0" prefWidth="103.199951171875" text="FECHA SALIDA">
+                              <TableColumn fx:id="tblvFecSalida" minWidth="0.0" prefWidth="79.199951171875" text="FECHA SALIDA">
                                  <columns>
                                     <TableColumn fx:id="tblvHoraSalida" minWidth="0.0" prefWidth="141.5999755859375" text="HORA S" />
                                  </columns>
                               </TableColumn>
-                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="144.800048828125" text="CANT CLIENTES" />
+                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="119.2000732421875" text="CANT CLIENTES" />
                            </columns>
                         </TableView>
                         <TextField fx:id="txtFiltroBusqueda" layoutX="106.0" layoutY="44.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />

@@ -26,6 +26,7 @@ public class TourDto {
     public SimpleStringProperty trsHorasalida;
     public SimpleStringProperty trsHorallegada;
     public ObjectProperty<Tipotour> trsTipotourcodigo;
+    public ObjectProperty<Empresa> trsEmpresacedjur;
 
     public TourDto() {
         this.trsCodigotour = new SimpleStringProperty();
@@ -37,6 +38,8 @@ public class TourDto {
         this.trsHorasalida = new SimpleStringProperty();
         this.trsHorallegada = new SimpleStringProperty();
         this.trsTipotourcodigo = new SimpleObjectProperty();
+        this.trsEmpresacedjur = new SimpleObjectProperty();
+
     }
 
     public TourDto(Tour tour) {
@@ -49,19 +52,26 @@ public class TourDto {
         this.trsCantidadclientes.set(tour.getTrsCantidadclientes().toString());
         this.trsHorasalida.set(Short.toString(tour.getTrsHorasalida()));
         this.trsHorallegada.set(Short.toString(tour.getTrsHorallegada()));
-         this.trsTipotourcodigo.set(tour.getTrsTipotourcodigo());
+        this.trsTipotourcodigo.set(tour.getTrsTipotourcodigo());
+        this.trsEmpresacedjur.set(tour.getTrsEmpresacedjur());
     }
 
-     public Tipotour getTipoToursCodigo() {
+    public Empresa getTEmpresaCedJur() {
+        return trsEmpresacedjur.get();
+    }
+
+    public void setTEmpresaCedJur(Empresa pTrsEmpresacedjur) {
+        this.trsEmpresacedjur.set(pTrsEmpresacedjur);
+    }
+
+    public Tipotour getTipoToursCodigo() {
         return trsTipotourcodigo.get();
     }
 
     public void setTipoToursCodigo(Tipotour tipotrsCodigo) {
         this.trsTipotourcodigo.set(tipotrsCodigo);
     }
-    
-    
-    
+
     public String getTrsCodigo() {
         return trsCodigotour.get();
     }

@@ -8,17 +8,11 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import static com.mariangel.administracion_Tarea.controller.ClienteController.obtenerClientesBD;
-import com.mariangel.administracion_tarea.Model.Cliente;
-import com.mariangel.administracion_tarea.Model.ClienteDto;
 import com.mariangel.administracion_tarea.Model.Empresa;
 import com.mariangel.administracion_tarea.Model.ItinerarioDto;
-import com.mariangel.administracion_tarea.Model.TipoTourDto;
 import com.mariangel.administracion_tarea.Model.Tipotour;
 import com.mariangel.administracion_tarea.Model.Tour;
 import com.mariangel.administracion_tarea.Model.TourDto;
-import com.mariangel.administracion_tarea.Service.ClienteService;
-import com.mariangel.administracion_tarea.Service.TipotourService;
 import com.mariangel.administracion_tarea.Service.TourService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -26,8 +20,6 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -258,10 +250,10 @@ public class TourController extends Controller implements Initializable {
         txtCantidadMaxGuardarTour.textProperty().bindBidirectional(tour.trsCantidadclientes);
         choiceBTipoTourGuardarTour.valueProperty().bindBidirectional(tour.trsTipotourcodigo);
         choiceBCodigoEmpresaGuardarTour.valueProperty().bindBidirectional(tour.trsEmpresacedjur);
-        
+
         //MenuButton.textProperty().bindBidirectional(tour.);
-         //txtFiltroBusqueda.textProperty().bindBidirectional(tour.);
-         // txtTipoTourGuardarTour.textProperty().bindBidirectional(tour.trsTipotourcodigo);
+        //txtFiltroBusqueda.textProperty().bindBidirectional(tour.);
+        // txtTipoTourGuardarTour.textProperty().bindBidirectional(tour.trsTipotourcodigo);
     }
 
     private void unbindTour() {
@@ -280,56 +272,39 @@ public class TourController extends Controller implements Initializable {
     //TOURS
 
     private void desactivarListenerGenerarCodigo() {
-        txtCodigoTourGuardarTour.textProperty().removeListener(generarCodigoListener);
-        txtCostosGuardarTour.textProperty().removeListener(generarCodigoListener);
-        txtHoraLlegadaGuardarTour.textProperty().removeListener(generarCodigoListener);
-        txtHoraSalidaGuardarTour.textProperty().removeListener(generarCodigoListener);
-        datePickerFecLlegadaGuardarTour.textProperty().removeListener(generarCodigoListener);
-        datePickerFecSalidaGuardarTour.textProperty().removeListener(generarCodigoListener);
-
+        txtNombreTourGuardar.textProperty().removeListener(generarCodigoListener);
     }
 
     private void activarListenerGenerarCodigo() {
-        txtCodigoTourGuardarTour.textProperty().addListener(generarCodigoListener);
-        txtNombreEmpresaGuardarTour.textProperty().addListener(generarCodigoListener);
-        txtCostosGuardarTour.textProperty().addListener(generarCodigoListener);
-        txtHoraLlegadaGuardarTour.textProperty().addListener(generarCodigoListener);
-        txtHoraSalidaGuardarTour.textProperty().addListener(generarCodigoListener);
-        datePickerFecLlegadaGuardarTour.textProperty().addListener(generarCodigoListener);
-        datePickerFecSalidaGuardarTour.textProperty().addListener(generarCodigoListener);
-        ;
+        txtNombreTourGuardar.textProperty().addListener(generarCodigoListener);
     }
+
     private final ChangeListener<String> generarCodigoListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            Long nuevoCodigo = generarCodigoTipoTour();
+            String nuevoCodigo = generarCodigoTipoTour();
             txtCodigoTourGuardarTour.setText(nuevoCodigo.toString());
         }
     };
 
-    private Long generarCodigoTipoTour() {
-        // Obtener el día actual en el formato deseado
-        LocalDate fechaActual = LocalDate.now();
-        String diaActual = fechaActual.format(DateTimeFormatter.ofPattern("dd"));
-
-        // Generar un número aleatorio entre 100 y 999
+    private String generarCodigoTipoTour() {
         Random random = new Random();
         int numeroAleatorio = random.nextInt(900) + 100;
+        String nombre = "TOUR";
+        String primerasCuatroLetras = nombre.substring(0, Math.min(nombre.length(), 4));
+        String codigo = primerasCuatroLetras + "-" + String.valueOf(numeroAleatorio);
+        return codigo;
 
-        // Combinar las partes para formar el código
-        String codigo = diaActual + String.valueOf(numeroAleatorio);
-
-        return Long.valueOf(codigo);
     }
 
     public void indicarRequeridosTour() {
         System.out.println(" ENTRO AL indicar requeridos de cargar paciente");
         requeridos.clear();
         requeridos.addAll(Arrays.asList(txtCodigoTourGuardarTour,
-        choiceBTipoTourGuardarTour, choiceBCodigoEmpresaGuardarTour, 
-        txtCostosGuardarTour, txtHoraLlegadaGuardarTour, txtHoraSalidaGuardarTour, 
-        datePickerFecLlegadaGuardarTour, datePickerFecSalidaGuardarTour, 
-        txtNombreTourGuardar,  txtCantidadMaxGuardarTour));
+                choiceBTipoTourGuardarTour, choiceBCodigoEmpresaGuardarTour,
+                txtCostosGuardarTour, txtHoraLlegadaGuardarTour, txtHoraSalidaGuardarTour,
+                datePickerFecLlegadaGuardarTour, datePickerFecSalidaGuardarTour,
+                txtNombreTourGuardar, txtCantidadMaxGuardarTour));
     }
 
     private void nuevoTour() {
@@ -344,6 +319,7 @@ public class TourController extends Controller implements Initializable {
         TourService service = new TourService();
         Respuesta respuesta = service.getTour(pcodigo);
         if (respuesta.getEstado()) {
+            desactivarListenerGenerarCodigo();
             unbindTour();
             tour = (TourDto) respuesta.getResultado("Tour");
             btnModificarTour.setVisible(true);
@@ -465,24 +441,29 @@ public class TourController extends Controller implements Initializable {
             }
             activarListenerGenerarCodigo();
         } catch (Exception ex) {
-            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Cliente.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Cliente", getStage(), "Ocurrio un error eliminando el Cliente.");
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Tour.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Tour", getStage(), "Ocurrio un error eliminando el Tour.");
         }
     }
 
     @FXML
     private void onActionBtnCancelarTour(ActionEvent event) {
+        desactivarListenerGenerarCodigo();
+
         datePickerFecLlegadaGuardarTour.setValue(null);
         datePickerFecSalidaGuardarTour.setValue(null);
-        txtCodigoTourGuardarTour.clear();
-        txtNombreEmpresaGuardarTour.clear();
+        choiceBCodigoEmpresaGuardarTour.setValue(null);
+        choiceBTipoTourGuardarTour.setValue(null);
         txtCostosGuardarTour.setText(null);
         txtHoraLlegadaGuardarTour.setText(null);
         txtHoraSalidaGuardarTour.setText(null);
         txtHoraLlegadaGuardarTour.setText(null);
+        txtCantidadMaxGuardarTour.setText(null);
+        txtNombreTourGuardar.setText(null);
+        
         tblvInformacionCliente.getItems().clear();
-
-        // txtTipoTourGuardarTour.
+        activarListenerGenerarCodigo();
+        txtCodigoTourGuardarTour.clear();
     }
 
     @FXML

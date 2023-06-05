@@ -27,7 +27,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
                      <children>
-                        <Label layoutX="83.0" layoutY="75.0" text="TOUR EMPRESA" />
+                        <Label layoutX="83.0" layoutY="97.0" text="TOUR EMPRESA" />
                         <Label layoutX="97.0" layoutY="28.0" text="TOUR CODIGO" />
                         <Label layoutX="78.0" layoutY="313.0" text="FECHA DE SALIDA" />
                         <DatePicker fx:id="datePickerFecSalidaGuardarTour" layoutX="195.0" layoutY="309.0" promptText="Seleccione una fecha" />
@@ -37,7 +37,7 @@
                         <Button fx:id="btnEliminarTour" layoutX="301.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnEliminarTour" text="ELIMINAR" />
                         <Button fx:id="btnCancelarTour" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBtnCancelarTour" text="CANCELAR" />
                         <Button fx:id="btnModificarTour" layoutX="157.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnModificarTour" text="MODIFICAR" />
-                        <Label layoutX="107.0" layoutY="123.0" text="TIPO TOUR" />
+                        <Label layoutX="107.0" layoutY="136.0" text="TIPO TOUR" />
                         <Label layoutX="73.0" layoutY="219.0" text="FECHA DE LLEGADA" />
                         <DatePicker fx:id="datePickerFecLlegadaGuardarTour" layoutX="197.0" layoutY="219.0" promptText="Seleccione una fecha" />
                         <Label layoutX="58.0" layoutY="174.0" text="COSTOS POR PERSONA" />
@@ -48,10 +48,10 @@
                         <Label layoutX="99.0" layoutY="351.0" text="HORA SALIDA" />
                         <TextField fx:id="txtCantidadMaxGuardarTour" layoutX="195.0" layoutY="390.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite cantidad max clientes" />
                         <Label layoutX="70.0" layoutY="394.0" text="CANTIDAD CLIENTES" />
-                        <ChoiceBox fx:id="choiceBTipoTourGuardarTour" layoutX="197.0" layoutY="119.0" prefHeight="26.0" prefWidth="170.0" />
-                        <ChoiceBox fx:id="choiceBCodigoEmpresaGuardarTour" layoutX="198.0" layoutY="70.0" prefHeight="26.0" prefWidth="168.0" />
-                        <Label layoutX="95.0" layoutY="430.0" text="NOMBRE TOUR" />
-                        <TextField fx:id="txtNombreTourGuardar" layoutX="195.0" layoutY="426.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite nombre tour" />
+                        <ChoiceBox fx:id="choiceBTipoTourGuardarTour" layoutX="197.0" layoutY="132.0" prefHeight="26.0" prefWidth="170.0" />
+                        <ChoiceBox fx:id="choiceBCodigoEmpresaGuardarTour" layoutX="198.0" layoutY="93.0" prefHeight="26.0" prefWidth="168.0" />
+                        <Label layoutX="95.0" layoutY="64.0" text="NOMBRE TOUR" />
+                        <TextField fx:id="txtNombreTourGuardar" layoutX="198.0" layoutY="60.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite nombre tour" />
                      </children>
                   </AnchorPane>
                </content>

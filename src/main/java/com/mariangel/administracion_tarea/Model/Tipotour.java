@@ -139,8 +139,7 @@ public class Tipotour implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "Tipotour{" + "ttCodigo=" + ttCodigo + ", ttTipo=" + ttTipo + ", ttNombretour=" + ttNombretour + ", ttPais=" + ttPais + ", tourCollection=" + tourCollection + '}';
+     public String toString() {
+        return  "Tipo: " + ttTipo + ",  Tour Nombre: " + ttNombretour + ", País: " + ttPais;
     }
-
 }

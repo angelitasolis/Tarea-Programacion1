@@ -98,31 +98,36 @@ public class TourService {
             return new Respuesta(false, "Ocurrio un error al eliminar el tour.", "eliminarTour " + ex.getMessage());
         }
     }
-    /*
-    public Respuesta modificarTour(TourDto tourDto) {
+    
+    public Respuesta modificarTour(TourDto tourDto, String id) {
         try {
             et = em.getTransaction();
             et.begin();
-            Tour tour;
-            if (tourDto.getCltCedula() != null) {
-                tour = em.find(Tour.class, tourDto.getCltCedula());
+            if (tourDto!= null) {
+                Query query = em.createNamedQuery("Tour.findByTrsCodigotour");
+                query.setParameter("trsCodigotour", id);
+                Tour tour = (Tour) query.getSingleResult();
+                System.out.println("Cédula del tour a buscar: " + tourDto.getTrsCodigo());
                 if (tour == null) {
                     et.rollback();
-                    return new Respuesta(false, "No se encrontró el tour a modificar.", "guardarTour NoResultException");
+                    return new Respuesta(false, "No se encontró el tour a actualizar.", "actualizarPaciente NoResultException");
                 }
+
                 tour.actualizar(tourDto);
                 tour = em.merge(tour);
+                et.commit();
+                em.refresh(tour);
+                tour = em.find(Tour.class, tour.getTrsCodigotour());
+                return new Respuesta(true, "", "", "Tour", new TourDto(tour));
             } else {
-                tour = new Tour(tourDto);
-                em.persist(tour);
+                et.rollback();
+                return new Respuesta(false, "No se proporcionó un codigo válida para actualizar el tour.", "actualizarPaciente InvalidParameterException");
             }
-            et.commit();
-            return new Respuesta(true, "", "", "Tours", new TourDto(tour));
-        } catch (Exception ex) {
+        } catch (NoResultException ex) {
             et.rollback();
-            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar el tour.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar el tour.", "guardarTour " + ex.getMessage());
+            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al actualizar el tour.", ex);
+            return new Respuesta(false, "Ocurrió un error al actualizar el tour.", "actualizarPaciente " + ex.getMessage());
         }
-    }*/
+    }
 
 }

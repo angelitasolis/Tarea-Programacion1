@@ -7,10 +7,12 @@ com\mariangel\administracion_tarea\controller\Controller.class
 com\mariangel\administracion_tarea\controller\ClienteController.class
 com\mariangel\administracion_tarea\Utils\EntityManagerHelper.class
 com\mariangel\administracion_tarea\Model\Tipotour_.class
+com\mariangel\administracion_tarea\controller\TourController.class
 com\mariangel\administracion_tarea\Service\TourService.class
 com\mariangel\administracion_tarea\Model\ClienteDto.class
 com\mariangel\administracion_tarea\Model\Empresa_.class
 com\mariangel\administracion_tarea\controller\PantallaPrincipalController.class
+com\mariangel\administracion_tarea\Model\Tour_.class
 com\mariangel\administracion_tarea\Service\TipotourService.class
 com\mariangel\administracion_tarea\Utils\AppContext.class
 com\mariangel\administracion_tarea\controller\ReservacionController.class
@@ -26,6 +28,7 @@ com\mariangel\administracion_tarea\Model\ItinerarioDto.class
 com\mariangel\administracion_tarea\Model\EmpresaDto.class
 com\mariangel\administracion_tarea\Service\ClienteService.class
 com\mariangel\administracion_tarea\controller\TipoTourController.class
+com\mariangel\administracion_tarea\controller\TourController$1.class
 com\mariangel\administracion_tarea\Model\Tipotour.class
 com\mariangel\administracion_tarea\Model\Itinerario_.class
 com\mariangel\administracion_tarea\controller\TipoTourController$1.class

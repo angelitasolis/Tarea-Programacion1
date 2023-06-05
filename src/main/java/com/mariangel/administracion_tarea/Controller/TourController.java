@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -49,6 +50,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -117,7 +119,7 @@ public class TourController extends Controller implements Initializable {
     @FXML
     private TableColumn<Tour, String> tblvCantMaxClientes;
     @FXML
-    private TableColumn<Tour, Long> tblvCodigoTour;
+    private TableColumn<Tour, String> tblvCodigoTour;
 
     @FXML
     private MenuButton MenuButton;
@@ -166,11 +168,14 @@ public class TourController extends Controller implements Initializable {
      * Initializes the controller class.
      */
     @Override
+
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         itinerario = new ItinerarioDto();
         tour = new TourDto();
-
+        mostrarNombreDelTipo();
+        mostrarNombreDeEmpresa();
+        
         List<Empresa> empresasList = obtenerEmpresaBD();
         // Asignar la lista de empresas al ChoiceBox
         ObservableList<Empresa> empresaObservableList = FXCollections.observableArrayList(empresasList);
@@ -179,17 +184,15 @@ public class TourController extends Controller implements Initializable {
         List<Tipotour> tiposlist = obtenerTipoTourBD();
         ObservableList<Tipotour> tiposObservableList = FXCollections.observableArrayList(tiposlist);
         choiceBTipoTourGuardarTour.setItems(tiposObservableList);
-
+        activarListenerGenerarCodigo();
         //tour
-        txtCodigoTourGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
+        txtCodigoTourGuardarTour.setTextFormatter(Formato.getInstance().cedulaFormat(30));
         txtCostosGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtHoraLlegadaGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtHoraSalidaGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtFiltroBusqueda.setTextFormatter(Formato.getInstance().integerFormat());
         txtCantidadMaxGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtNombreTourGuardar.setTextFormatter(Formato.getInstance().letrasFormat(30));
-
-        activarListenerGenerarCodigo();
 
         //itinerario
 //        txtNombreEmpresaGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
@@ -201,34 +204,6 @@ public class TourController extends Controller implements Initializable {
         indicarRequeridosTour();
         nuevoTour();
 
-    }
-
-    public static List<Empresa> obtenerEmpresaBD() {
-        EntityManager em = EntityManagerHelper.getManager();
-        List<Empresa> empresasList = new ArrayList<>();
-        try {
-            empresasList = em.createQuery("SELECT e FROM Empresa e", Empresa.class).getResultList();
-        } catch (Exception e) {
-            System.out.println("Error al obtener todos las empresas de la base de datos");
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-        return empresasList;
-    }
-
-    public static List<Tipotour> obtenerTipoTourBD() {
-        EntityManager em = EntityManagerHelper.getManager();
-        List<Tipotour> tipoToursList = new ArrayList<>();
-        try {
-            tipoToursList = em.createQuery("SELECT t FROM Tipotour t", Tipotour.class).getResultList();
-        } catch (Exception e) {
-            System.out.println("Error al obtener todos los tipoTours de la base de datos");
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-        return tipoToursList;
     }
 
     @Override
@@ -273,21 +248,24 @@ public class TourController extends Controller implements Initializable {
 
     private void desactivarListenerGenerarCodigo() {
         txtNombreTourGuardar.textProperty().removeListener(generarCodigoListener);
+
     }
 
     private void activarListenerGenerarCodigo() {
         txtNombreTourGuardar.textProperty().addListener(generarCodigoListener);
+
     }
 
     private final ChangeListener<String> generarCodigoListener = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-            String nuevoCodigo = generarCodigoTipoTour();
-            txtCodigoTourGuardarTour.setText(nuevoCodigo.toString());
+            String nuevoCodigo = generarCodigoTour();
+
+            txtCodigoTourGuardarTour.setText(nuevoCodigo);
         }
     };
 
-    private String generarCodigoTipoTour() {
+    private String generarCodigoTour() {
         Random random = new Random();
         int numeroAleatorio = random.nextInt(900) + 100;
         String nombre = "TOUR";
@@ -320,16 +298,46 @@ public class TourController extends Controller implements Initializable {
         Respuesta respuesta = service.getTour(pcodigo);
         if (respuesta.getEstado()) {
             desactivarListenerGenerarCodigo();
+
             unbindTour();
-            tour = (TourDto) respuesta.getResultado("Tour");
             btnModificarTour.setVisible(true);
+
+            tour = (TourDto) respuesta.getResultado("Tour");
+
             bindTour(false);
+
             validarRequeridos();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar paciente", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar tour", getStage(), respuesta.getMensaje());
         }
     }
 
+    void mostrarNombreDeEmpresa() {
+        choiceBCodigoEmpresaGuardarTour.setConverter(new StringConverter<Empresa>() {
+            @Override
+            public String toString(Empresa empresa) {
+                return empresa != null ? empresa.getEmCedulajuridica() : "";
+            }
+
+            @Override
+            public Empresa fromString(String string) {
+                return null;
+            }
+        });
+    }
+       void mostrarNombreDelTipo() {
+        choiceBTipoTourGuardarTour.setConverter(new StringConverter<Tipotour>() {
+            @Override
+            public String toString(Tipotour tipotour) {
+                return tipotour != null ? tipotour.toString() : "";
+            }
+
+            @Override
+            public Tipotour fromString(String string) {
+                return null;
+            }
+        });
+    }
     public static List<Tour> obtenerToursBD() {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> tourList = new ArrayList<>();
@@ -365,6 +373,34 @@ public class TourController extends Controller implements Initializable {
             em.close();
         }
         return tourList;
+    }
+
+    public static List<Empresa> obtenerEmpresaBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Empresa> empresasList = new ArrayList<>();
+        try {
+            empresasList = em.createQuery("SELECT e FROM Empresa e", Empresa.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos las empresas de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return empresasList;
+    }
+
+    public static List<Tipotour> obtenerTipoTourBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tipotour> tipoToursList = new ArrayList<>();
+        try {
+            tipoToursList = em.createQuery("SELECT t FROM Tipotour t", Tipotour.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los tipoTours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tipoToursList;
     }
 
     @FXML
@@ -460,7 +496,7 @@ public class TourController extends Controller implements Initializable {
         txtHoraLlegadaGuardarTour.setText(null);
         txtCantidadMaxGuardarTour.setText(null);
         txtNombreTourGuardar.setText(null);
-        
+
         tblvInformacionCliente.getItems().clear();
         activarListenerGenerarCodigo();
         txtCodigoTourGuardarTour.clear();
@@ -468,7 +504,29 @@ public class TourController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnModificarTour(ActionEvent event) {
-        Guardar();
+        try {
+            unbindTour();
+            String cedulaText = txtCodigoTourGuardarTour.getText();
+            TourDto tourDto = new TourDto();
+            tourDto.setTrsNombre(txtNombreTourGuardar.getText());
+            tourDto.setTrsClientes(Long.parseLong(txtCantidadMaxGuardarTour.getText()));
+            tourDto.setTrsFechallegada(datePickerFecLlegadaGuardarTour.getValue());
+            tourDto.setTrsFechasalida(datePickerFecSalidaGuardarTour.getValue());
+            tourDto.setTrsHorallegada(Short.parseShort(txtHoraLlegadaGuardarTour.getText()));
+            tourDto.setTrsHorasalida(Short.parseShort(txtHoraSalidaGuardarTour.getText()));
+            tourDto.setTrsCosto(Long.parseLong(txtCostosGuardarTour.getText()));
+            tourDto.setTrsCodigo(txtCodigoTourGuardarTour.getText());
+            tourDto.setTEmpresaCedJur(choiceBCodigoEmpresaGuardarTour.getValue());
+            tourDto.setTipoToursCodigo(choiceBTipoTourGuardarTour.getValue());
+
+            TourService pacientesService = new TourService();
+            Respuesta respuesta = pacientesService.modificarTour(tourDto, cedulaText);
+            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar paciente", getStage(), "Tour actualizado correctamente.");
+            //  mediaPlayer.play();
+        } catch (Exception ex) {
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error actualizando el Tour.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Tour", getStage(), "Ocurrio un error al actualizar el Tour.");
+        }
     }
 
     @FXML

@@ -33,10 +33,10 @@
                         <DatePicker fx:id="datePickerFecSalidaGuardarTour" layoutX="195.0" layoutY="309.0" promptText="Seleccione una fecha" />
                         <TextField fx:id="txtCodigoTourGuardarTour" layoutX="195.0" layoutY="24.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el código" />
                         <Button fx:id="btnBuscarTour" layoutX="386.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBuscarTour" text="BUSCAR" />
-                        <Button fx:id="btnGuardarTour" layoutX="423.0" layoutY="460.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarTour" text="GUARDAR" />
+                        <Button fx:id="btnGuardarTour" layoutX="423.0" layoutY="460.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarTour" text="GUARDAR/MODIFICAR" />
                         <Button fx:id="btnEliminarTour" layoutX="301.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnEliminarTour" text="ELIMINAR" />
                         <Button fx:id="btnCancelarTour" layoutX="495.0" layoutY="20.0" mnemonicParsing="false" onAction="#onActionBtnCancelarTour" text="CANCELAR" />
-                        <Button fx:id="btnModificarTour" layoutX="157.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnModificarTour" text="MODIFICAR" />
+                        <Button fx:id="btnModificarTour" layoutX="157.0" layoutY="460.0" mnemonicParsing="false" onAction="#onActionBtnModificarTour" text="MODIFICAR" visible="false" />
                         <Label layoutX="107.0" layoutY="136.0" text="TIPO TOUR" />
                         <Label layoutX="73.0" layoutY="219.0" text="FECHA DE LLEGADA" />
                         <DatePicker fx:id="datePickerFecLlegadaGuardarTour" layoutX="197.0" layoutY="219.0" promptText="Seleccione una fecha" />

@@ -167,7 +167,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mariangel.administracion_tarea.Model.Empresa[ emCedulajuridica=" + emCedulajuridica + " ]";
+        return  "" + emNombre +  "Cédula jurídica: " + emCedulajuridica ;
     }
 
 }

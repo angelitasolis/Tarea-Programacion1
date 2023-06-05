@@ -175,7 +175,7 @@ public class TourController extends Controller implements Initializable {
         tour = new TourDto();
         mostrarNombreDelTipo();
         mostrarNombreDeEmpresa();
-        
+
         List<Empresa> empresasList = obtenerEmpresaBD();
         // Asignar la lista de empresas al ChoiceBox
         ObservableList<Empresa> empresaObservableList = FXCollections.observableArrayList(empresasList);
@@ -190,7 +190,6 @@ public class TourController extends Controller implements Initializable {
         txtCostosGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtHoraLlegadaGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtHoraSalidaGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
-        txtFiltroBusqueda.setTextFormatter(Formato.getInstance().integerFormat());
         txtCantidadMaxGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtNombreTourGuardar.setTextFormatter(Formato.getInstance().letrasFormat(30));
 
@@ -316,7 +315,7 @@ public class TourController extends Controller implements Initializable {
         choiceBCodigoEmpresaGuardarTour.setConverter(new StringConverter<Empresa>() {
             @Override
             public String toString(Empresa empresa) {
-                return empresa != null ? empresa.getEmCedulajuridica() : "";
+                return empresa != null ? empresa.toString() : "";
             }
 
             @Override
@@ -325,7 +324,8 @@ public class TourController extends Controller implements Initializable {
             }
         });
     }
-       void mostrarNombreDelTipo() {
+
+    void mostrarNombreDelTipo() {
         choiceBTipoTourGuardarTour.setConverter(new StringConverter<Tipotour>() {
             @Override
             public String toString(Tipotour tipotour) {
@@ -338,6 +338,7 @@ public class TourController extends Controller implements Initializable {
             }
         });
     }
+
     public static List<Tour> obtenerToursBD() {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> tourList = new ArrayList<>();
@@ -408,6 +409,61 @@ public class TourController extends Controller implements Initializable {
         String cedulaText = txtCodigoTourGuardarTour.getText();
         cargarTour(cedulaText);
         // mediaPlayer.play();
+    }
+
+    //filtros
+    public static List<Tour> obtenerTourBD(String filtroNombre) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> tourList = new ArrayList<>();
+        try {
+            String consulta = "SELECT t FROM Tour t";
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                consulta += " WHERE t.trsNombre LIKE :filtroNombre";
+            }
+            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                query.setParameter("filtroNombre", "%" + filtroNombre + "%");
+            }
+
+            tourList = query.getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tourList;
+    }
+
+    public List<Tour> obtenerToursPorNombreEmpresa(String nombreEmpresa) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> tourList = new ArrayList<>();
+        try {
+            String consulta = "SELECT t FROM Tour t";
+            if (nombreEmpresa != null && !nombreEmpresa.isEmpty()) {
+                consulta += " WHERE t.trsEmpresacedjur.emNombre LIKE :nombreEmpresa";
+            }
+            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
+            if (nombreEmpresa != null && !nombreEmpresa.isEmpty()) {
+                query.setParameter("nombreEmpresa", "%" + nombreEmpresa + "%");
+            }
+
+            tourList = query.getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tourList;
+    }
+
+    void listarTours() {
+        List<Tour> list = obtenerToursBD();
+        ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
+        tblvInformacionCliente.setItems(observableList);
     }
 
     @FXML
@@ -549,13 +605,6 @@ public class TourController extends Controller implements Initializable {
             // Asigna los nuevos datos a la TableView
             tblvInformacionCliente.setItems(observableList);
         }
-
-        txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
-            String filtroNombre = newValue;
-            List<Tour> list = obtenerToursBD(filtroNombre);
-            ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
-            tblvInformacionCliente.setItems(observableList);
-        });
     }
 
     @FXML
@@ -564,22 +613,33 @@ public class TourController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnBuscarPorFiltro(ActionEvent event) {
+
     }
 
     @FXML
     private void onActionFiltroNombreTour(ActionEvent event) {
+
+        txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            String filtroEmpresa = newValue;
+            List<Tour> list = obtenerTourBD(filtroEmpresa);
+            ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionCliente.setItems(observableList);
+        });
     }
 
     @FXML
     private void onActionFiltroEmpresa(ActionEvent event) {
+
+        txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            String filtroEmpresa = newValue;
+            List<Tour> list = obtenerToursPorNombreEmpresa(filtroEmpresa);
+            ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionCliente.setItems(observableList);
+        });
     }
 
     @FXML
     private void onActionFiltroLugar(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionMenuButton(ActionEvent event) {
     }
 
     //ITINERARIOS

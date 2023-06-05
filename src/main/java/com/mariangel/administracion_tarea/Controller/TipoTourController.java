@@ -8,14 +8,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import static com.mariangel.administracion_Tarea.controller.MantenimientoEmpresaController.obtenerEmpresaBD;
-import com.mariangel.administracion_tarea.Model.ClienteDto;
-import com.mariangel.administracion_tarea.Model.Empresa;
-
 import com.mariangel.administracion_tarea.Model.TipoTourDto;
 import com.mariangel.administracion_tarea.Model.Tipotour;
-import com.mariangel.administracion_tarea.Service.ClienteService;
-
 import com.mariangel.administracion_tarea.Service.TipotourService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;

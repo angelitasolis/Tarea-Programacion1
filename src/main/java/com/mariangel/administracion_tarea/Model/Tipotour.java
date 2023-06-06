@@ -140,6 +140,6 @@ public class Tipotour implements Serializable {
 
     @Override
      public String toString() {
-        return  "Tipo: " + ttTipo + ",  Tour Nombre: " + ttNombretour + ", País: " + ttPais;
+        return  "Tipo: " + ttTipo + ", Nombre: " + ttNombretour + ", País: " + ttPais;
     }
 }

@@ -62,16 +62,16 @@
                      <children>
                         <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1150.0">
                            <columns>
-                              <TableColumn fx:id="tblvCodigoTour" prefWidth="119.199951171875" text="CÓDIGO" />
-                              <TableColumn fx:id="tblvEmpresa" prefWidth="106.4000244140625" text="EMPRESA" />
-                              <TableColumn fx:id="tblvNombre" prefWidth="116.00001525878906" text="NOMBRE" />
-                              <TableColumn fx:id="tblvTipoTour" prefWidth="104.79998779296875" text="TIPO TOUR" />
-                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="116.800048828125" text="CANT CLIENTES" />
-                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="150.4000244140625" text="COSTO PERSONA" />
-                              <TableColumn fx:id="tblvFechaLlegada" prefWidth="116.79998779296875" text="FECHA LLEGADA" />
-                              <TableColumn fx:id="tblvHoraLlegada" minWidth="0.0" prefWidth="100.800048828125" text="HORA L" />
-                              <TableColumn fx:id="tblvFecSalida" minWidth="0.0" prefWidth="132.0" text="FECHA SALIDA" />
-                              <TableColumn fx:id="tblvHoraSalida" minWidth="0.0" prefWidth="89.5999755859375" text="HORA S" />
+                              <TableColumn fx:id="tblvCodigoTour" prefWidth="62.39996415376663" text="CÓDIGO" />
+                              <TableColumn fx:id="tblvEmpresa" prefWidth="181.60000228881836" text="EMPRESA" />
+                              <TableColumn fx:id="tblvNombre" prefWidth="64.80000305175781" text="NOMBRE" />
+                              <TableColumn fx:id="tblvTipoTour" prefWidth="339.20001220703125" text="TIPO TOUR" />
+                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="71.199951171875" text="# CLIENTES" />
+                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="109.5999755859375" text="COSTO PERSONA" />
+                              <TableColumn fx:id="tblvFechaLlegada" prefWidth="112.0" text="FECHA LLEGADA" />
+                              <TableColumn fx:id="tblvHoraLlegada" minWidth="0.0" prefWidth="52.0" text="HORA L" />
+                              <TableColumn fx:id="tblvFecSalida" minWidth="0.0" prefWidth="112.7999267578125" text="FECHA SALIDA" />
+                              <TableColumn fx:id="tblvHoraSalida" minWidth="0.0" prefWidth="52.0" text="HORA S" />
                            </columns>
                         </TableView>
                         <TextField fx:id="txtFiltroBusqueda" layoutX="106.0" layoutY="44.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />

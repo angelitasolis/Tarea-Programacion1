@@ -251,7 +251,7 @@ public class Tour implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mariangel.administracion_tarea.Model.Tour[ trsCodigotour=" + trsCodigotour + " ]";
+        return "" + trsCodigotour + "";
     }
 
 }

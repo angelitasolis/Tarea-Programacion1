@@ -22,6 +22,7 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,6 +48,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -202,6 +204,7 @@ public class TourController extends Controller implements Initializable {
         txtHoraSalidaGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtCantidadMaxGuardarTour.setTextFormatter(Formato.getInstance().integerFormat());
         txtNombreTourGuardar.setTextFormatter(Formato.getInstance().letrasFormat(30));
+
         indicarRequeridosTour();
         nuevoTour();
         //itinerario
@@ -415,7 +418,8 @@ public class TourController extends Controller implements Initializable {
             tblvFecSalida.setCellValueFactory(new PropertyValueFactory<>("trsFechasalida"));
             tblvHoraSalida.setCellValueFactory(new PropertyValueFactory<>("trsHorasalida"));
             tblvCantMaxClientes.setCellValueFactory(new PropertyValueFactory<>("trsCantidadclientes"));
-
+            obtenerFechaLlegada();
+            obtenerFechaSalida();
             List<Tour> list = obtenerToursBD();
             ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
 
@@ -466,8 +470,8 @@ public class TourController extends Controller implements Initializable {
     private void onActionFiltroNombreTour(ActionEvent event) {
 
         txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
-            String filtroEmpresa = newValue;
-            List<Tour> list = obtenerTourBD(filtroEmpresa);
+            String filtroTour = newValue;
+            List<Tour> list = obtenerTourBD(filtroTour);
             ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
             tblvInformacionCliente.setItems(observableList);
         });
@@ -479,6 +483,16 @@ public class TourController extends Controller implements Initializable {
         txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
             String filtroEmpresa = newValue;
             List<Tour> list = obtenerToursPorNombreEmpresa(filtroEmpresa);
+            ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionCliente.setItems(observableList);
+        });
+    }
+
+    @FXML
+    private void onActionFiltroLugar(ActionEvent event) {
+        txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            String filtroLugar = newValue;
+            List<Tour> list = obtenerToursPorPais(filtroLugar);
             ObservableList<Tour> observableList = FXCollections.observableArrayList(list);
             tblvInformacionCliente.setItems(observableList);
         });
@@ -530,6 +544,31 @@ public class TourController extends Controller implements Initializable {
             em.close();
         }
         return tourList;
+    }
+
+    public List<Tour> obtenerToursPorPais(String nombrePais) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> tourList = new ArrayList<>();
+        try {
+            String consulta = "SELECT t FROM Tour t";
+            if (nombrePais != null && !nombrePais.isEmpty()) {
+                consulta += " WHERE t.trsTipotourcodigo.ttPais LIKE :nombreEmpresa";
+            }
+            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
+            if (nombrePais != null && !nombrePais.isEmpty()) {
+                query.setParameter("nombreEmpresa", "%" + nombrePais + "%");
+            }
+
+            tourList = query.getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tourList;
+
     }
 
     public static List<Tour> obtenerToursBD() {
@@ -624,10 +663,6 @@ public class TourController extends Controller implements Initializable {
         String codigo = primerasCuatroLetras + "-" + String.valueOf(numeroAleatorio);
         return codigo;
 
-    }
-
-    @FXML
-    private void onActionFiltroLugar(ActionEvent event) {
     }
 
     //ITINERARIOS
@@ -882,5 +917,48 @@ public class TourController extends Controller implements Initializable {
             return "Campos requeridos o con problemas de formato [" + invalidos + "].";
         }
     }
+
+      void obtenerFechaSalida() {
+        tblvFecSalida.setCellFactory(column -> {
+            return new TableCell<Tour, Date>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Establecer el formato de fecha medio
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(item);
+
+                        setText(formattedDate);
+                    }
+                }
+            };
+        });
+    }
+
+    void obtenerFechaLlegada() {
+        tblvFechaLlegada.setCellFactory(column -> {
+            return new TableCell<Tour, Date>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Establecer el formato de fecha medio
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(item);
+
+                        setText(formattedDate);
+                    }
+                }
+            };
+        });
+    }
+
 
 }

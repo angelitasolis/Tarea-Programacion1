@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.mariangel.administracion_tarea.Model.ClienteDto;
 import com.mariangel.administracion_tarea.Model.Cliente;
+import com.mariangel.administracion_tarea.Model.Tour;
 import com.mariangel.administracion_tarea.Service.ClienteService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -17,6 +18,7 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,6 +37,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -308,6 +311,7 @@ public class ClienteController extends Controller implements Initializable {
             tblvSApellido.setCellValueFactory(new PropertyValueFactory<>("cltSapellido"));
             tblvCorreo.setCellValueFactory(new PropertyValueFactory<>("cltCorreo"));
             tblvFecNac.setCellValueFactory(new PropertyValueFactory<>("cltFechanac"));
+            obtenerFechaNacimiento();
 
             List<Cliente> list = obtenerClientesBD();
             ObservableList<Cliente> observableList = FXCollections.observableArrayList(list);
@@ -393,5 +397,25 @@ public class ClienteController extends Controller implements Initializable {
         Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();
         currentStage.close();
         FlowController.getInstance().goMain();
+    }
+     void obtenerFechaNacimiento() {
+        tblvFecNac.setCellFactory(column -> {
+            return new TableCell<Cliente, Date>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Establecer el formato de fecha medio
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(item);
+
+                        setText(formattedDate);
+                    }
+                }
+            };
+        });
     }
 }

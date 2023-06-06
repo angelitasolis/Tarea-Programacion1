@@ -211,8 +211,8 @@ public class TourController extends Controller implements Initializable {
         txtDuracionGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
         txtActividadesGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(150));
 
-        List<Tour> tiposlist = obtenerTourCodigoBD();
-        ObservableList<Tour> tiposObservableList = FXCollections.observableArrayList(tiposlist);
+        List<Tour> Codigoslist = obtenerTourCodigoBD();
+        ObservableList<Tour> tiposObservableList = FXCollections.observableArrayList(Codigoslist);
         choiceBCodigoTour.setItems(tiposObservableList);
         nuevoItinerario();
         indicarRequeridosItinerario();
@@ -692,7 +692,7 @@ public class TourController extends Controller implements Initializable {
                 bindTour(false);
                 new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar itinerario", getStage(), "Itinerario guardado correctamente.");
             }
-            activarListenerGenerarCodigo();
+           // activarListenerGenerarCodigo();
         } catch (Exception ex) {
             System.out.println(itinerario.toString());
             Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error guardando el itinerario.", ex);
@@ -716,7 +716,7 @@ public class TourController extends Controller implements Initializable {
                     // mediaPlayer.play();
                 }
             }
-            activarListenerGenerarCodigo();
+           // activarListenerGenerarCodigo();
         } catch (Exception ex) {
             Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Tour.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Tour", getStage(), "Ocurrio un error eliminando el Tour.");
@@ -748,7 +748,8 @@ public class TourController extends Controller implements Initializable {
             itinerarioDto.setItinerarioDuracion(Short.parseShort(txtDuracionGuardarItinerarios.getText()));
             itinerarioDto.setItinerarioLugar(txtLugarGuardarItinerarios.getText());
             itinerarioDto.setItinerarioId(Long.parseLong(txtIdGuardarItinerarios.getText()));
-            itinerarioDto.setTourCodigo(txtCodigoGuardarItinerarios.getText());
+            itinerarioDto.setTourCodigo(choiceBCodigoTour.getValue());
+            ;
 
             ItinerarioService itinerarioService = new ItinerarioService();
             Respuesta respuesta = itinerarioService.modificarTour(itinerarioDto, idText);
@@ -759,6 +760,20 @@ public class TourController extends Controller implements Initializable {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Itinerario", getStage(), "Ocurrio un error al actualizar el Itinerario.");
         }
 
+    }
+    
+     public static List<Tour> obtenerTourCodigoBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> tipoToursList = new ArrayList<>();
+        try {
+            tipoToursList = em.createQuery("SELECT t FROM Tour t", Tour.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tipoToursList;
     }
     
     @FXML

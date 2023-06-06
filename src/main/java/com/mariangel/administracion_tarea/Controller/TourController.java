@@ -134,13 +134,13 @@ public class TourController extends Controller implements Initializable {
     @FXML
     private Tab tabPaneGuardarItinerarios;
     @FXML
-    private DatePicker datePickerFecSalidaGuardarItinerarios;
-    @FXML
     private TextField txtDuracionGuardarItinerarios;
     @FXML
     private TextField txtLugarGuardarItinerarios;
       @FXML
     private TextField txtIdGuardarItinerarios;
+          @FXML
+    private TextField txtCodigoGuardarItinerarios;
 
     @FXML
     private TextField txtActividadesGuardarItinerarios;
@@ -171,13 +171,11 @@ public class TourController extends Controller implements Initializable {
     @FXML
     private TableColumn<Itinerario, ?> tblvActividades;
 
-    @FXML
-    private DatePicker datePickerFecLlegadaGuardarItinerarios;
-
     ItinerarioDto itinerario;
     TourDto tour;
 
     List<Node> requeridos = new ArrayList<>();
+
   
 
     /**
@@ -215,6 +213,7 @@ public class TourController extends Controller implements Initializable {
         txtLugarGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(30));
         txtDuracionGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
         txtActividadesGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(150));
+        txtCodigoGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(30));
         nuevoItinerario();
         indicarRequeridosItinerario();
 
@@ -318,29 +317,6 @@ public class TourController extends Controller implements Initializable {
                 new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar tour", getStage(), "Tour guardado correctamente.");
             }
             activarListenerGenerarCodigo();
-        } catch (Exception ex) {
-            System.out.println(tour.toString());
-            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error guardando el tour.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar tour", getStage(), "Ocurrio un error guardando la tour.");
-        }
-    }
-
-    private void Guardar() {
-        try {
-
-            TourService tourService = new TourService();
-            Respuesta respuesta = tourService.guardarTour(tour);
-
-            if (!respuesta.getEstado()) {
-                System.out.println("else" + tour.toString());
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar tour", getStage(), respuesta.getMensaje());
-            } else {
-                System.out.println("else" + tour.toString());
-                unbindTour();
-                tour = (TourDto) respuesta.getResultado("Tour");
-                bindTour(false);
-                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar tour", getStage(), "Tour guardado correctamente.");
-            }
         } catch (Exception ex) {
             System.out.println(tour.toString());
             Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error guardando el tour.", ex);
@@ -661,29 +637,26 @@ public class TourController extends Controller implements Initializable {
     
        private void bindItinerarios(Boolean nuevo) {
         if (!nuevo) {
-            txtIdGuardarItinerarios.textProperty().bindBidirectional(tour.trsCodigotour);
+            txtIdGuardarItinerarios.textProperty().bindBidirectional(itinerario.intId);
         }
-        txtIdGuardarItinerarios.textProperty().bindBidirectional(tour.trsCodigotour);
-        txtLugarGuardarItinerarios.textProperty().bindBidirectional(tour.trsNombre);
-        datePickerFecLlegadaGuardarItinerarios.valueProperty().bindBidirectional(tour.trsFechallegada);
-        datePickerFecSalidaGuardarItinerarios.valueProperty().bindBidirectional(tour.trsFechasalida);
-        txtDuracionGuardarItinerarios.textProperty().bindBidirectional(tour.trsCantidadclientes);
-        txtActividadesGuardarItinerarios.textProperty().bindBidirectional(tour.trsCantidadclientes);
+        txtIdGuardarItinerarios.textProperty().bindBidirectional(itinerario.intId);
+        txtLugarGuardarItinerarios.textProperty().bindBidirectional(itinerario.intLugar);
+        txtCodigoGuardarItinerarios.textProperty().bindBidirectional(itinerario.intCodigotour);
+        txtDuracionGuardarItinerarios.textProperty().bindBidirectional(itinerario.intDuracion);
+        txtActividadesGuardarItinerarios.textProperty().bindBidirectional(itinerario.intActividades);
     }
 
     private void unbindItinerarios() {
-        txtIdGuardarItinerarios.textProperty().unbindBidirectional(tour.trsCodigotour);
-        txtLugarGuardarItinerarios.textProperty().unbindBidirectional(tour.trsNombre);
-        datePickerFecLlegadaGuardarItinerarios.valueProperty().unbindBidirectional(tour.trsFechallegada);
-        datePickerFecSalidaGuardarItinerarios.valueProperty().unbindBidirectional(tour.trsFechasalida);
-        txtDuracionGuardarItinerarios.textProperty().unbindBidirectional(tour.trsCantidadclientes);
-        txtActividadesGuardarItinerarios.textProperty().unbindBidirectional(tour.trsCantidadclientes);
+        txtIdGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intId);
+        txtLugarGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intLugar);
+        txtCodigoGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intCodigotour);
+        txtDuracionGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intDuracion);
+        txtActividadesGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intActividades);
     }
     
       public void indicarRequeridosItinerario() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios, 
-                datePickerFecLlegadaGuardarItinerarios, datePickerFecSalidaGuardarItinerarios, 
+        requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios, txtCodigoGuardarItinerarios,
                 txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
     }
 
@@ -741,14 +714,62 @@ public class TourController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnEliminarItinerario(ActionEvent event) {
+        try {
+            if (itinerario.intId == null) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar tour", getStage(), "Debe cargar el tipo de tour que desea eliminar.");
+            } else {
+                ItinerarioService service = new ItinerarioService();
+                Respuesta respuesta = service.eliminarItinerario(itinerario.getItinerarioId());
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar itinerario", getStage(), respuesta.getMensaje());
+                } else {
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar itinerario", getStage(), "itinerario eliminado correctamente.");
+                    nuevoTour();
+                    // mediaPlayer.play();
+                }
+            }
+            activarListenerGenerarCodigo();
+        } catch (Exception ex) {
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Tour.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Tour", getStage(), "Ocurrio un error eliminando el Tour.");
+        }
     }
 
     @FXML
     private void onActionBtnCancelarItinerario(ActionEvent event) {
+         // desactivarListenerGenerarCodigo();
+
+        txtCodigoGuardarItinerarios.setText(null);
+        txtLugarGuardarItinerarios.setText(null);
+        txtDuracionGuardarItinerarios.setText(null);
+        txtActividadesGuardarItinerarios.setText(null);
+
+        tblvInformacionItinerarios.getItems().clear();
+       // activarListenerGenerarCodigo();
+         txtIdGuardarItinerarios.setText(null);
     }
 
     @FXML
     private void onActionBtnModificarItinerario(ActionEvent event) {
+         try {
+            unbindItinerarios();
+            String idText = txtIdGuardarItinerarios.getText();
+            ItinerarioDto itinerarioDto = new ItinerarioDto();
+            
+            itinerarioDto.setItinerarioActividades(txtActividadesGuardarItinerarios.getText());
+            itinerarioDto.setItinerarioDuracion(Short.parseShort(txtDuracionGuardarItinerarios.getText()));
+            itinerarioDto.setItinerarioLugar(txtLugarGuardarItinerarios.getText());
+            itinerarioDto.setItinerarioId(Long.parseLong(txtIdGuardarItinerarios.getText()));
+
+            TourService pacientesService = new TourService();
+            Respuesta respuesta = pacientesService.modificarTour(tourDto, idText);
+            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar paciente", getStage(), "Tour actualizado correctamente.");
+            //  mediaPlayer.play();
+        } catch (Exception ex) {
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error actualizando el Tour.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Tour", getStage(), "Ocurrio un error al actualizar el Tour.");
+        }
+        
     }
 
     @FXML

@@ -20,7 +20,7 @@ public class ItinerarioDto {
     public SimpleStringProperty intLugar;
     public SimpleStringProperty intDuracion;
     public SimpleStringProperty intActividades;
-    public SimpleStringProperty intCodigotour;
+    public ObjectProperty<Tour> intCodigotour;
 
     public ItinerarioDto() {
 
@@ -28,7 +28,7 @@ public class ItinerarioDto {
         this.intLugar = new SimpleStringProperty();
         this.intDuracion = new SimpleStringProperty();
         this.intActividades = new SimpleStringProperty();
-
+        this.intCodigotour = new SimpleObjectProperty();
     }
 
     public ItinerarioDto(Itinerario itinerario) {
@@ -37,9 +37,18 @@ public class ItinerarioDto {
         this.intLugar.set(itinerario.getIntLugar());
         this.intDuracion.set(Short.toString(itinerario.getIntDuracion()));
         this.intActividades.set(itinerario.getIntActividades());
-
+        this.intCodigotour.set(itinerario.getTourCodigo());
     }
 
+     public Tour getTourCodigo() {
+        return intCodigotour.get();
+    }
+
+    public void setTourCodigo(Tour pintCodigotour) {
+        this.intCodigotour.set(pintCodigotour);
+    }
+  
+    
     public void setItinerarioId(Long pacNombre) {
         if (pacNombre != null) {
             this.intId.set(Long.toString(pacNombre));

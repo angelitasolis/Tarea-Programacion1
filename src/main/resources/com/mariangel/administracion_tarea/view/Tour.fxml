@@ -93,22 +93,18 @@
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
                      <children>
                         <Label layoutX="85.0" layoutY="53.0" text="TOUR " />
-                        <Label layoutX="82.0" layoutY="113.0" text="LUGAR " />
-                        <Label layoutX="70.0" layoutY="274.0" text=" DURACIÓN" />
-                        <Label layoutX="54.0" layoutY="218.0" text="FECHA DE SALIDA" />
-                        <DatePicker fx:id="datePickerFecSalidaGuardarItinerarios" layoutX="193.0" layoutY="214.0" prefHeight="26.0" prefWidth="198.0" promptText="Seleccione fecha salida" />
-                        <TextField fx:id="txtLugarGuardarItinerarios" layoutX="195.0" layoutY="109.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el lugar" />
-                        <TextField fx:id="txtIdGuardarItinerarios" layoutX="195.0" layoutY="49.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el código del tour" />
+                        <Label layoutX="99.0" layoutY="163.0" text="LUGAR " />
+                        <Label layoutX="87.0" layoutY="283.0" text=" DURACIÓN" />
+                        <TextField fx:id="txtLugarGuardarItinerarios" layoutX="195.0" layoutY="159.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el lugar" />
+                        <TextField fx:id="txtIdGuardarItinerarios" layoutX="195.0" layoutY="49.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el id" />
                         <Button fx:id="btnBuscarClienteItinerarios" layoutX="398.0" layoutY="49.0" mnemonicParsing="false" onAction="#onActionBuscarItinerario" text="BUSCAR" />
-                        <Button fx:id="btnGuardarItinerarios" layoutX="292.0" layoutY="409.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarItinerario" text="GUARDAR" />
-                        <Button fx:id="btnEliminarItinerarios" layoutX="182.0" layoutY="409.0" mnemonicParsing="false" onAction="#onActionBtnEliminarItinerario" text="ELIMINAR" />
+                        <Button fx:id="btnGuardarItinerarios" layoutX="334.0" layoutY="337.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarItinerario" text="GUARDAR" />
+                        <Button fx:id="btnEliminarItinerarios" layoutX="231.0" layoutY="337.0" mnemonicParsing="false" onAction="#onActionBtnEliminarItinerario" text="ELIMINAR" />
                         <Button fx:id="btnCancelarItinerarios" layoutX="391.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionBtnCancelarItinerario" text="CANCELAR" />
-                        <Button fx:id="btnModificarItinerarios" layoutX="62.0" layoutY="409.0" mnemonicParsing="false" onAction="#onActionBtnModificarItinerario" text="MODIFICAR" />
-                        <TextField fx:id="txtActividadesGuardarItinerarios" layoutX="194.0" layoutY="340.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite las actividades" />
-                        <Label layoutX="10.0" layoutY="344.0" text="DESCRIPCIÓN ACTIVIDADES" />
-                        <Label layoutX="49.0" layoutY="165.0" text="FECHA DE LLEGADA" />
-                        <DatePicker fx:id="datePickerFecLlegadaGuardarItinerarios" layoutX="193.0" layoutY="161.0" prefHeight="26.0" prefWidth="198.0" promptText="Seleccione una fecha llegada" />
-                        <TextField fx:id="txtDuracionGuardarItinerarios" layoutX="194.0" layoutY="270.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite duración" />
+                        <Button fx:id="btnModificarItinerarios" layoutX="123.0" layoutY="337.0" mnemonicParsing="false" onAction="#onActionBtnModificarItinerario" text="MODIFICAR" />
+                        <TextField fx:id="txtActividadesGuardarItinerarios" layoutX="194.0" layoutY="222.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite las actividades" />
+                        <Label layoutX="27.0" layoutY="227.0" text="DESCRIPCIÓN ACTIVIDADES" />
+                        <TextField fx:id="txtDuracionGuardarItinerarios" layoutX="194.0" layoutY="279.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite duración" />
                         <TableView fx:id="tblvInformacionItinerarios" layoutX="524.0" layoutY="28.0" prefHeight="444.0" prefWidth="566.0">
                            <columns>
                               <TableColumn fx:id="tblvID" prefWidth="116.79998779296875" text="ID" />
@@ -118,6 +114,8 @@
                               <TableColumn fx:id="tblvActividades" prefWidth="116.7999267578125" text="ACTIVIDADES" />
                            </columns>
                         </TableView>
+                        <Label layoutX="83.0" layoutY="113.0" text="CÓDIGO TOUR" />
+                        <TextField fx:id="txtCodigoGuardarItinerarios" layoutX="195.0" layoutY="109.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el codigo" />
                      </children>
                   </AnchorPane>
                </content>

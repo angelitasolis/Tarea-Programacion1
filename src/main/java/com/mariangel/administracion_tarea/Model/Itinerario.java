@@ -69,8 +69,19 @@ public class Itinerario implements Serializable {
         this.intLugar = itinerarioDto.getItinerarioLugar();
         this.intDuracion = itinerarioDto.getItinerarioDuracion();
         this.intActividades = itinerarioDto.getItinerarioActividades();
+        this.intCodigotour = itinerarioDto.getTourCodigo();
         
     }
+    
+     public Tour getTourCodigo() {
+        return intCodigotour;
+    }
+   
+    public void setTourCodigo(Tour intCodigotour) {
+        this.intCodigotour = intCodigotour;
+    }
+    
+    
     public Long getIntId() {
         return intId;
     }

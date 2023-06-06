@@ -100,4 +100,38 @@ public class ItinerarioService {
             return new Respuesta(false, "Ocurrio un error al eliminar el itinerario.", "eliminarItinerario " + ex.getMessage());
         }
     }
+    
+     public Respuesta modificarTour(ItinerarioDto itinerarioDto, String id) {
+        try {
+            et = em.getTransaction();
+            et.begin();
+            if (itinerarioDto!= null) {
+                Query query = em.createNamedQuery("Itinerario.findByIntId");
+                query.setParameter("intId", id);
+                Itinerario itinerario = (Itinerario) query.getSingleResult();
+                System.out.println("Cédula del itinerario a buscar: " + itinerarioDto.getItinerarioId());
+                if (itinerario == null) {
+                    et.rollback();
+                    return new Respuesta(false, "No se encontró el itinerario a actualizar.", "actualizarPaciente NoResultException");
+                }
+
+                itinerario.actualizar(itinerarioDto);
+                itinerario = em.merge(itinerario);
+                et.commit();
+                em.refresh(itinerario);
+                itinerario = em.find(Itinerario.class, itinerario.getIntId());
+                return new Respuesta(true, "", "", "Itinerario", new ItinerarioDto(itinerario));
+            } else {
+                et.rollback();
+                return new Respuesta(false, "No se proporcionó un codigo válida para actualizar el itinerario.", "actualizarPaciente InvalidParameterException");
+            }
+        } catch (NoResultException ex) {
+            et.rollback();
+            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al actualizar el itinerario.", ex);
+            return new Respuesta(false, "Ocurrió un error al actualizar el itinerario.", "actualizarPaciente " + ex.getMessage());
+        }
+    }
+    
+    
+    
 }

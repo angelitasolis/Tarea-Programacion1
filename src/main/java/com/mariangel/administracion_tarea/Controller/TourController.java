@@ -137,13 +137,12 @@ public class TourController extends Controller implements Initializable {
     private TextField txtDuracionGuardarItinerarios;
     @FXML
     private TextField txtLugarGuardarItinerarios;
-      @FXML
+    @FXML
     private TextField txtIdGuardarItinerarios;
-          @FXML
-    private TextField txtCodigoGuardarItinerarios;
-
     @FXML
     private TextField txtActividadesGuardarItinerarios;
+    @FXML
+    private ChoiceBox<Tour> choiceBCodigoTour;
     @FXML
     private Button btnBuscarClienteItinerarios;
     @FXML
@@ -175,8 +174,6 @@ public class TourController extends Controller implements Initializable {
     TourDto tour;
 
     List<Node> requeridos = new ArrayList<>();
-
-  
 
     /**
      * Initializes the controller class.
@@ -213,7 +210,10 @@ public class TourController extends Controller implements Initializable {
         txtLugarGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(30));
         txtDuracionGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
         txtActividadesGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(150));
-        txtCodigoGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(30));
+
+        List<Tour> tiposlist = obtenerTourCodigoBD();
+        ObservableList<Tour> tiposObservableList = FXCollections.observableArrayList(tiposlist);
+        choiceBCodigoTour.setItems(tiposObservableList);
         nuevoItinerario();
         indicarRequeridosItinerario();
 
@@ -623,25 +623,14 @@ public class TourController extends Controller implements Initializable {
     private void onActionFiltroLugar(ActionEvent event) {
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
     //ITINERARIOS
-    
-    
-       private void bindItinerarios(Boolean nuevo) {
+    private void bindItinerarios(Boolean nuevo) {
         if (!nuevo) {
             txtIdGuardarItinerarios.textProperty().bindBidirectional(itinerario.intId);
         }
         txtIdGuardarItinerarios.textProperty().bindBidirectional(itinerario.intId);
         txtLugarGuardarItinerarios.textProperty().bindBidirectional(itinerario.intLugar);
-        txtCodigoGuardarItinerarios.textProperty().bindBidirectional(itinerario.intCodigotour);
+        choiceBCodigoTour.valueProperty().bindBidirectional(itinerario.intCodigotour);
         txtDuracionGuardarItinerarios.textProperty().bindBidirectional(itinerario.intDuracion);
         txtActividadesGuardarItinerarios.textProperty().bindBidirectional(itinerario.intActividades);
     }
@@ -649,15 +638,15 @@ public class TourController extends Controller implements Initializable {
     private void unbindItinerarios() {
         txtIdGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intId);
         txtLugarGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intLugar);
-        txtCodigoGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intCodigotour);
+        choiceBCodigoTour.valueProperty().unbindBidirectional(itinerario.intCodigotour);
         txtDuracionGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intDuracion);
         txtActividadesGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intActividades);
     }
-    
-      public void indicarRequeridosItinerario() {
+
+    public void indicarRequeridosItinerario() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios, txtCodigoGuardarItinerarios,
-                txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
+        requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios,
+                choiceBCodigoTour,txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
     }
 
     private void nuevoItinerario() {
@@ -668,8 +657,7 @@ public class TourController extends Controller implements Initializable {
         txtIdGuardarItinerarios.clear();
         txtIdGuardarItinerarios.requestFocus();
     }
-    
-    
+
     private void cargarItinerario(Long pcedula) {
         ItinerarioService service = new ItinerarioService();
         Respuesta respuesta = service.getItinerario(pcedula);
@@ -682,14 +670,14 @@ public class TourController extends Controller implements Initializable {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Itinerario", getStage(), respuesta.getMensaje());
         }
     }
-    
+
     @FXML
     private void onActionBuscarItinerario(ActionEvent event) {
     }
 
     @FXML
     private void onAnctionBtnGuardarItinerario(ActionEvent event) {
-         try {
+        try {
 
             ItinerarioService itinerarioService = new ItinerarioService();
             Respuesta respuesta = itinerarioService.guardarItinerario(itinerario);
@@ -737,41 +725,42 @@ public class TourController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnCancelarItinerario(ActionEvent event) {
-         // desactivarListenerGenerarCodigo();
+        // desactivarListenerGenerarCodigo();
 
-        txtCodigoGuardarItinerarios.setText(null);
+        choiceBCodigoTour.setValue(null);
         txtLugarGuardarItinerarios.setText(null);
         txtDuracionGuardarItinerarios.setText(null);
         txtActividadesGuardarItinerarios.setText(null);
 
         tblvInformacionItinerarios.getItems().clear();
-       // activarListenerGenerarCodigo();
-         txtIdGuardarItinerarios.setText(null);
+        // activarListenerGenerarCodigo();
+        txtIdGuardarItinerarios.setText(null);
     }
 
     @FXML
     private void onActionBtnModificarItinerario(ActionEvent event) {
-         try {
+        try {
             unbindItinerarios();
             String idText = txtIdGuardarItinerarios.getText();
             ItinerarioDto itinerarioDto = new ItinerarioDto();
-            
+
             itinerarioDto.setItinerarioActividades(txtActividadesGuardarItinerarios.getText());
             itinerarioDto.setItinerarioDuracion(Short.parseShort(txtDuracionGuardarItinerarios.getText()));
             itinerarioDto.setItinerarioLugar(txtLugarGuardarItinerarios.getText());
             itinerarioDto.setItinerarioId(Long.parseLong(txtIdGuardarItinerarios.getText()));
+            itinerarioDto.setTourCodigo(txtCodigoGuardarItinerarios.getText());
 
-            TourService pacientesService = new TourService();
-            Respuesta respuesta = pacientesService.modificarTour(tourDto, idText);
-            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar paciente", getStage(), "Tour actualizado correctamente.");
+            ItinerarioService itinerarioService = new ItinerarioService();
+            Respuesta respuesta = itinerarioService.modificarTour(itinerarioDto, idText);
+            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar Itinerario", getStage(), "Itinerario actualizado correctamente.");
             //  mediaPlayer.play();
         } catch (Exception ex) {
-            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error actualizando el Tour.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Tour", getStage(), "Ocurrio un error al actualizar el Tour.");
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error actualizando el Itinerario.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar Itinerario", getStage(), "Ocurrio un error al actualizar el Itinerario.");
         }
-        
-    }
 
+    }
+    
     @FXML
     private void onSelectionGuardarItinerariosTabPane(Event event) {
     }

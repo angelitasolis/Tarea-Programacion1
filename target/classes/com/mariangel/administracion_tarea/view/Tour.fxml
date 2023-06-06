@@ -115,7 +115,7 @@
                            </columns>
                         </TableView>
                         <Label layoutX="83.0" layoutY="113.0" text="CÓDIGO TOUR" />
-                        <TextField fx:id="txtCodigoGuardarItinerarios" layoutX="195.0" layoutY="109.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el codigo" />
+                        <ChoiceBox fx:id="choiceBCodigoTour" layoutX="198.0" layoutY="108.0" prefHeight="26.0" prefWidth="168.0" />
                      </children>
                   </AnchorPane>
                </content>

@@ -160,15 +160,15 @@ public class TourController extends Controller implements Initializable {
     @FXML
     private TableView<Itinerario> tblvInformacionItinerarios;
     @FXML
-    private TableColumn<Itinerario, ?> tblvID;
+    private TableColumn<Itinerario, String> tblvID;
     @FXML
-    private TableColumn<Itinerario, ?> tblvCodigoTourItinerarios;
+    private TableColumn<Itinerario, Tour> tblvCodigoTourItinerarios;
     @FXML
-    private TableColumn<Itinerario, ?> tblvLugar;
+    private TableColumn<Itinerario, String> tblvLugar;
     @FXML
-    private TableColumn<Itinerario, ?> tblvDuracion;
+    private TableColumn<Itinerario, String> tblvDuracion;
     @FXML
-    private TableColumn<Itinerario, ?> tblvActividades;
+    private TableColumn<Itinerario, String> tblvActividades;
 
     ItinerarioDto itinerario;
     TourDto tour;
@@ -211,9 +211,16 @@ public class TourController extends Controller implements Initializable {
         txtDuracionGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
         txtActividadesGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(150));
 
+        tblvID.setCellValueFactory(new PropertyValueFactory<>("intId"));
+        tblvCodigoTourItinerarios.setCellValueFactory(new PropertyValueFactory<>("intCodigotour"));
+        tblvLugar.setCellValueFactory(new PropertyValueFactory<>("intLugar"));
+        tblvDuracion.setCellValueFactory(new PropertyValueFactory<>("intDuracion"));
+        tblvActividades.setCellValueFactory(new PropertyValueFactory<>("intActividades"));
+
         List<Tour> Codigoslist = obtenerTourCodigoBD();
-        ObservableList<Tour> tiposObservableList = FXCollections.observableArrayList(Codigoslist);
-        choiceBCodigoTour.setItems(tiposObservableList);
+        ObservableList<Tour> ToursObservableList = FXCollections.observableArrayList(Codigoslist);
+        choiceBCodigoTour.setItems(ToursObservableList);
+
         nuevoItinerario();
         indicarRequeridosItinerario();
 
@@ -646,7 +653,7 @@ public class TourController extends Controller implements Initializable {
     public void indicarRequeridosItinerario() {
         requeridos.clear();
         requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios,
-                choiceBCodigoTour,txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
+                choiceBCodigoTour, txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
     }
 
     private void nuevoItinerario() {
@@ -692,7 +699,7 @@ public class TourController extends Controller implements Initializable {
                 bindTour(false);
                 new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar itinerario", getStage(), "Itinerario guardado correctamente.");
             }
-           // activarListenerGenerarCodigo();
+            // activarListenerGenerarCodigo();
         } catch (Exception ex) {
             System.out.println(itinerario.toString());
             Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error guardando el itinerario.", ex);
@@ -716,7 +723,7 @@ public class TourController extends Controller implements Initializable {
                     // mediaPlayer.play();
                 }
             }
-           // activarListenerGenerarCodigo();
+            // activarListenerGenerarCodigo();
         } catch (Exception ex) {
             Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Tour.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar Tour", getStage(), "Ocurrio un error eliminando el Tour.");
@@ -732,7 +739,6 @@ public class TourController extends Controller implements Initializable {
         txtDuracionGuardarItinerarios.setText(null);
         txtActividadesGuardarItinerarios.setText(null);
 
-        tblvInformacionItinerarios.getItems().clear();
         // activarListenerGenerarCodigo();
         txtIdGuardarItinerarios.setText(null);
     }
@@ -761,8 +767,8 @@ public class TourController extends Controller implements Initializable {
         }
 
     }
-    
-     public static List<Tour> obtenerTourCodigoBD() {
+
+    public static List<Tour> obtenerTourCodigoBD() {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> tipoToursList = new ArrayList<>();
         try {
@@ -775,9 +781,57 @@ public class TourController extends Controller implements Initializable {
         }
         return tipoToursList;
     }
-    
+
+//      public static List<Tour> TourCodigoBD()(String filtroNombre) {
+//        EntityManager em = EntityManagerHelper.getManager();
+//        List<Tour> tourList = new ArrayList<>();
+//        try {
+//            String consulta = "SELECT t FROM Tour t";
+//            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+//                consulta += " WHERE t.trsNombre LIKE :filtroNombre";
+//            }
+//            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
+//            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+//                query.setParameter("filtroNombre", "%" + filtroNombre + "%");
+//            }
+//            tourList = query.getResultList();
+//        } catch (Exception e) {
+//            System.out.println("Error al obtener todas las tours de la base de datos");
+//            e.printStackTrace();
+//        } finally {
+//            em.close();
+//        }
+//        return tourList;
+//    }
+    public static List<Itinerario> obtenerItinerariosBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Itinerario> itinerarioList = new ArrayList<>();
+        try {
+            itinerarioList = em.createQuery("SELECT i FROM Itinerario i", Itinerario.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return itinerarioList;
+    }
+
     @FXML
     private void onSelectionGuardarItinerariosTabPane(Event event) {
+        if (tabPaneGuardarItinerarios.isSelected()) {
+            tblvID.setCellValueFactory(new PropertyValueFactory<>("intId"));
+            tblvCodigoTourItinerarios.setCellValueFactory(new PropertyValueFactory<>("intCodigotour"));
+            tblvLugar.setCellValueFactory(new PropertyValueFactory<>("intLugar"));
+            tblvDuracion.setCellValueFactory(new PropertyValueFactory<>("intDuracion"));
+            tblvActividades.setCellValueFactory(new PropertyValueFactory<>("intActividades"));
+
+            List<Itinerario> list = obtenerItinerariosBD();
+            ObservableList<Itinerario> itinearariosList = FXCollections.observableArrayList(list);
+
+            // Asigna los nuevos datos a la TableView
+            tblvInformacionItinerarios.setItems(itinearariosList);
+        }
     }
 
     //AMBOS

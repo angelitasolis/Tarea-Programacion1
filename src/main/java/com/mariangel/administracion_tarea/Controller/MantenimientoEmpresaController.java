@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.mariangel.administracion_tarea.Model.Empresa;
 import com.mariangel.administracion_tarea.Model.EmpresaDto;
+import com.mariangel.administracion_tarea.Model.Tour;
 import com.mariangel.administracion_tarea.Service.EmpresaService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -17,6 +18,7 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -274,6 +277,7 @@ public class MantenimientoEmpresaController extends Controller implements Initia
 
             // Asigna los nuevos datos a la TableView
             tblvInformacionEmpresas.setItems(observableList);
+            obtenerFechaFundacion();
         }
 
         txtNombreEmpresaInformacion.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -391,7 +395,30 @@ public class MantenimientoEmpresaController extends Controller implements Initia
             return "Campos requeridos o con problemas de formato [" + invalidos + "].";
         }
     }
+     
+    
+     void obtenerFechaFundacion() {
+        tblvAnnoFundacion.setCellFactory(column -> {
+            return new TableCell<Empresa, Date>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
 
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Establecer el formato de fecha medio
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(item);
+
+                        setText(formattedDate);
+                    }
+                }
+            };
+        });
+    }
+     
+     
     @FXML
     private void onActionretroceder(ActionEvent event) {
         Stage currentStage = (Stage) btn_retroceder.getScene().getWindow();

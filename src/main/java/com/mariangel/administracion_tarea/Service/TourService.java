@@ -68,6 +68,9 @@ public class TourService {
             et.rollback();
             Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar el tour.", ex);
             return new Respuesta(false, "Ocurrio un error al guardar el tour.", "guardarTour " + ex.getMessage());
+            
+            
+            
         }
     }
 

@@ -92,7 +92,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
                      <children>
-                        <Label layoutX="85.0" layoutY="53.0" text="TOUR " />
+                        <Label layoutX="85.0" layoutY="53.0" text="ID ITINERARIO" />
                         <Label layoutX="99.0" layoutY="163.0" text="LUGAR " />
                         <Label layoutX="87.0" layoutY="283.0" text=" DURACIÓN" />
                         <TextField fx:id="txtLugarGuardarItinerarios" layoutX="195.0" layoutY="159.0" prefHeight="25.0" prefWidth="174.0" promptText="Digite el lugar" />

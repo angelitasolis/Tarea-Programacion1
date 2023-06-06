@@ -46,29 +46,28 @@ public class ItinerarioService {
     }
  
     public Respuesta guardarItinerario(ItinerarioDto itinerarioDto) {
-          try {
+            try {
             et = em.getTransaction();
             et.begin();
             Itinerario itinerario;
-            if (itinerarioDto.getItinerarioId() == null) {
+            if(itinerarioDto.getItinerarioId() != null &&  itinerarioDto.getItinerarioId() > 0){
                 itinerario = em.find(Itinerario.class, itinerarioDto.getItinerarioId());
-                if (itinerario == null) {
+                if (itinerario == null){
                     et.rollback();
-                    return new Respuesta(false, "No se encrontró el itinerario a modificar.", "guardar Itinerario NoResultException");
+                    return new Respuesta(false, "No se encrontrÃ³ el itinerario a modificar.", "guardarItinerario NoResultException");
                 }
                 itinerario.actualizar(itinerarioDto);
                 itinerario = em.merge(itinerario);
             } else {
-                itinerario = new Itinerario(itinerarioDto);
-                em.persist(itinerario);
+              itinerario = new Itinerario(itinerarioDto);
+              em.persist(itinerario);
             }
-
             et.commit();
             return new Respuesta(true, "", "", "Itinerario", new ItinerarioDto(itinerario));
         } catch (Exception ex) {
             et.rollback();
-            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar el itinerario.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar el itinerario.", "guardarTour " + ex.getMessage());
+            Logger.getLogger(ItinerarioService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el itinerario.", ex);
+            return new Respuesta(false, "Ocurrio un error al guardar el itinerario.", "guardarItinerario " + ex.getMessage());
         }
        
     }
@@ -101,7 +100,7 @@ public class ItinerarioService {
         }
     }
     
-     public Respuesta modificarTour(ItinerarioDto itinerarioDto, String id) {
+     public Respuesta modificarTour(ItinerarioDto itinerarioDto, Long id) {
         try {
             et = em.getTransaction();
             et.begin();

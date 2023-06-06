@@ -14,6 +14,7 @@ import com.mariangel.administracion_tarea.Model.ItinerarioDto;
 import com.mariangel.administracion_tarea.Model.Tipotour;
 import com.mariangel.administracion_tarea.Model.Tour;
 import com.mariangel.administracion_tarea.Model.TourDto;
+import com.mariangel.administracion_tarea.Service.ItinerarioService;
 import com.mariangel.administracion_tarea.Service.TourService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -215,7 +216,7 @@ public class TourController extends Controller implements Initializable {
         txtDuracionGuardarItinerarios.setTextFormatter(Formato.getInstance().integerFormat());
         txtActividadesGuardarItinerarios.setTextFormatter(Formato.getInstance().letrasFormat(150));
         nuevoItinerario();
-        indicarRequeridosItinerarios();
+        indicarRequeridosItinerario();
 
     }
 
@@ -677,14 +678,65 @@ public class TourController extends Controller implements Initializable {
         datePickerFecSalidaGuardarItinerarios.valueProperty().unbindBidirectional(tour.trsFechasalida);
         txtDuracionGuardarItinerarios.textProperty().unbindBidirectional(tour.trsCantidadclientes);
         txtActividadesGuardarItinerarios.textProperty().unbindBidirectional(tour.trsCantidadclientes);
-        
     }
+    
+      public void indicarRequeridosItinerario() {
+        requeridos.clear();
+        requeridos.addAll(Arrays.asList(txtIdGuardarItinerarios, txtLugarGuardarItinerarios, 
+                datePickerFecLlegadaGuardarItinerarios, datePickerFecSalidaGuardarItinerarios, 
+                txtDuracionGuardarItinerarios, txtActividadesGuardarItinerarios));
+    }
+
+    private void nuevoItinerario() {
+        System.out.println(" ENTRO AL Nuevo paciente  de cargar paciente");
+        unbindItinerarios();
+        itinerario = new ItinerarioDto();
+        bindItinerarios(true);
+        txtIdGuardarItinerarios.clear();
+        txtIdGuardarItinerarios.requestFocus();
+    }
+    
+    
+    private void cargarItinerario(Long pcedula) {
+        ItinerarioService service = new ItinerarioService();
+        Respuesta respuesta = service.getItinerario(pcedula);
+        if (respuesta.getEstado()) {
+            unbindItinerarios();
+            itinerario = (ItinerarioDto) respuesta.getResultado("Itinerario");
+            bindItinerarios(false);
+            validarRequeridos();
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Itinerario", getStage(), respuesta.getMensaje());
+        }
+    }
+    
     @FXML
     private void onActionBuscarItinerario(ActionEvent event) {
     }
 
     @FXML
     private void onAnctionBtnGuardarItinerario(ActionEvent event) {
+         try {
+
+            ItinerarioService itinerarioService = new ItinerarioService();
+            Respuesta respuesta = itinerarioService.guardarItinerario(itinerario);
+
+            if (!respuesta.getEstado()) {
+                System.out.println("else" + itinerario.toString());
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar itinerario", getStage(), respuesta.getMensaje());
+            } else {
+                System.out.println("else" + itinerario.toString());
+                unbindTour();
+                itinerario = (ItinerarioDto) respuesta.getResultado("Itinerario");
+                bindTour(false);
+                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar itinerario", getStage(), "Itinerario guardado correctamente.");
+            }
+            activarListenerGenerarCodigo();
+        } catch (Exception ex) {
+            System.out.println(itinerario.toString());
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error guardando el itinerario.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar itinerario", getStage(), "Ocurrio un error guardando el itinerario.");
+        }
     }
 
     @FXML

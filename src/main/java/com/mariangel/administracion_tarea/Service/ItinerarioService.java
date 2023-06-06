@@ -6,6 +6,8 @@ package com.mariangel.administracion_tarea.Service;
 
 import com.mariangel.administracion_tarea.Model.Itinerario;
 import com.mariangel.administracion_tarea.Model.ItinerarioDto;
+import com.mariangel.administracion_tarea.Model.Tour;
+import com.mariangel.administracion_tarea.Model.TourDto;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -44,15 +46,15 @@ public class ItinerarioService {
     }
  
     public Respuesta guardarItinerario(ItinerarioDto itinerarioDto) {
-        try {
+          try {
             et = em.getTransaction();
             et.begin();
             Itinerario itinerario;
-            if (itinerarioDto.getItinerarioId() != null && itinerarioDto.getItinerarioId() > 0) {
+            if (itinerarioDto.getItinerarioId() == null) {
                 itinerario = em.find(Itinerario.class, itinerarioDto.getItinerarioId());
                 if (itinerario == null) {
                     et.rollback();
-                    return new Respuesta(false, "No se encrontró el itinerario a modificar.", "guardarItinerario NoResultException");
+                    return new Respuesta(false, "No se encrontró el itinerario a modificar.", "guardar Itinerario NoResultException");
                 }
                 itinerario.actualizar(itinerarioDto);
                 itinerario = em.merge(itinerario);
@@ -60,16 +62,16 @@ public class ItinerarioService {
                 itinerario = new Itinerario(itinerarioDto);
                 em.persist(itinerario);
             }
+
             et.commit();
             return new Respuesta(true, "", "", "Itinerario", new ItinerarioDto(itinerario));
         } catch (Exception ex) {
             et.rollback();
-            Logger.getLogger(ItinerarioService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el itinerario.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar el itinerario.", "guardar itinerario " + ex.getMessage());
+            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar el itinerario.", ex);
+            return new Respuesta(false, "Ocurrio un error al guardar el itinerario.", "guardarTour " + ex.getMessage());
         }
+       
     }
-    
-    
     
     public Respuesta eliminarItinerario(Long id) {
         try {

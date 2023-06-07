@@ -284,12 +284,14 @@ public class TipoTourController extends Controller implements Initializable {
     @FXML
     private void onActionBuscarCodigo(ActionEvent event) {
         String codigoText = txtCodigo.getText();
+         desactivarListenerGenerarCodigo();
         try {
             Long codigoLong = Long.parseLong(codigoText);
             cargarCodigo(codigoLong);
         } catch (NumberFormatException e) {
             System.out.println("Invalido formato.");
         }
+        
     }
 
     @FXML

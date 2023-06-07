@@ -2,6 +2,60 @@
  * Empty Stylesheet file.
  */
 
-.mainFxmlClass {
+.root {
+    -fx-background-color:  rgb(240, 248, 255); /* AliceBlue */
+}
 
+.label {
+    -fx-font-family: "Arial";
+    -fx-text-fill: rgb(0, 0, 128); /* Navy */
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-color: rgb(70, 130, 180); /* SteelBlue */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: rgb(100, 149, 237); /* CornflowerBlue */
+}
+
+.button:pressed {
+    -fx-background-color: rgb(25, 25, 112); /* MidnightBlue */
+}
+
+.text-field, .text-area, .date-picker {
+    -fx-background-color: white;
+    -fx-border-color: rgb(70, 130, 180); /* SteelBlue */
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.tab-pane {
+    -fx-background-color: rgb(240, 248, 255); /* AliceBlue */
+}
+
+.tab {
+    -fx-background-color: rgb(70, 130, 180); /* SteelBlue */
+    -fx-text-fill: white;
+}
+
+.tab:selected {
+    -fx-background-color: rgb(100, 149, 237); /* CornflowerBlue */
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: rgb(70, 130, 180); /* SteelBlue */
+}
+
+.table-column {
+    -fx-background-color: rgb(70, 130, 180); /* SteelBlue */
+    -fx-text-fill: white;
 }

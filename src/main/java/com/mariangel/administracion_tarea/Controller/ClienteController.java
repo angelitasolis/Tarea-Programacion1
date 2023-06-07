@@ -384,6 +384,7 @@ public class ClienteController extends Controller implements Initializable {
         txtPApellido.setText(null);
         txtTelefono.setText(null);
         tblvInformacionCliente.getItems().clear();
+        
 
     }
 

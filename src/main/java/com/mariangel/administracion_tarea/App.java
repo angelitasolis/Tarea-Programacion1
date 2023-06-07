@@ -19,7 +19,7 @@ public class App extends Application {
      @Override
     public void start(Stage stage) throws IOException {
         FlowController.getInstance().InitializeFlow(stage,null);                                        
-        //stage.getIcons().add(new Image("com/jumaikel/lab3/images/Icono.png"));
+        stage.getIcons().add(new Image("/com/mariangel/administracion_tarea/Imagenes/pngegg.png"));
         stage.setTitle("Administración Tours");
         //FlowController.getInstance().goViewInWindow("Personas");
         FlowController.getInstance().goMain();

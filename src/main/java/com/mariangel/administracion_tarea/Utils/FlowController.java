@@ -138,7 +138,7 @@ public class FlowController {
         Controller controller = loader.getController();
         controller.initialize();
         Stage stage = new Stage();
-     //   stage.getIcons().add(new Image("com/jumaikel/lab3/images/Icono.png"));
+      stage.getIcons().add(new Image("/com/mariangel/administracion_tarea/Imagenes/pngegg.png"));
         stage.setTitle(controller.getNombreVista());
         stage.setOnHidden((WindowEvent event) -> {
             controller.getStage().getScene().setRoot(new Pane());
@@ -157,7 +157,7 @@ public class FlowController {
         Controller controller = loader.getController();
         controller.initialize();
         Stage stage = new Stage();
-     //   stage.getIcons().add(new Image("com/jumaikel/lab3/images/Icono.png"));
+       stage.getIcons().add(new Image("/com/mariangel/administracion_tarea/Imagenes/pngegg.png"));
         stage.setTitle(controller.getNombreVista());
         stage.setResizable(resizable);
         stage.setOnHidden((WindowEvent event) -> {

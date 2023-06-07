@@ -43,8 +43,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -176,6 +178,10 @@ public class TourController extends Controller implements Initializable {
     TourDto tour;
 
     List<Node> requeridos = new ArrayList<>();
+    @FXML
+    private CheckBox checkBoxActivarBusqueda;
+    @FXML
+    private Label lblIdItinerarios;
 
     /**
      * Initializes the controller class.
@@ -975,6 +981,19 @@ public class TourController extends Controller implements Initializable {
         List<Itinerario> list = obtenerItinerariosBD();
         ObservableList<Itinerario> itinearariosList = FXCollections.observableArrayList(list);
         tblvInformacionItinerarios.setItems(itinearariosList);
+    }
+
+    @FXML
+    private void onActionActivarBusqueda(ActionEvent event) {
+        if (checkBoxActivarBusqueda.isSelected()) {
+            btnBuscarClienteItinerarios.setVisible(true);
+            txtIdGuardarItinerarios.setVisible(true);
+            lblIdItinerarios.setVisible(true);
+        } else {
+            btnBuscarClienteItinerarios.setVisible(false);
+            txtIdGuardarItinerarios.setVisible(false);
+            lblIdItinerarios.setVisible(false);
+        }
     }
 
 }

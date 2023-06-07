@@ -131,6 +131,8 @@ public class ReservacionController extends Controller implements Initializable {
     private TableColumn<Itinerario, String> tblvActividades;
     @FXML
     private CheckBox checkBoxBusqueda;
+    @FXML
+    private Label lblIdReservacion;
 
     /**
      * Initializes the controller class.
@@ -142,6 +144,7 @@ public class ReservacionController extends Controller implements Initializable {
         mostrarNombreCliente();
         mostrarCodigoTour();
         obtenerCostoTotalDelTour();
+      
         txtMontoAbonado.setTextFormatter(Formato.getInstance().integerFormat());
         
 
@@ -555,14 +558,22 @@ public class ReservacionController extends Controller implements Initializable {
             }
         });
     }
-      private void ActivarBusqueda(){
-      if(checkBoxBusqueda.isSelected()){
+     
+
+    @FXML
+    private void onActionActivarBusqueda(ActionEvent event) {
+        if(checkBoxBusqueda.isSelected()){
       btnBuscarClienteReservas.setVisible(true);
       txtIdReservacion.setVisible(true);
-      lblIdReservacion
+      lblIdReservacion.setVisible(true);
       }
-      
-      }
+        else{
+        btnBuscarClienteReservas.setVisible(false);
+      txtIdReservacion.setVisible(false);
+      lblIdReservacion.setVisible(false);
+        
+        }
+    }
       
       
 }

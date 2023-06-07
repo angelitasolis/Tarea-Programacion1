@@ -121,7 +121,7 @@ public class ReservacionController extends Controller implements Initializable {
     @FXML
     private TableColumn<Itinerario, String> tblvLugar;
     @FXML
-    private TableColumn<Itinerario, String> tblvDuracion;
+    private TableColumn<Itinerario, Long> tblvDuracion;
     @FXML
     private TableColumn<Itinerario, String> tblvActividades;
 
@@ -149,6 +149,14 @@ public class ReservacionController extends Controller implements Initializable {
         List<Cliente> tiposlist = obtenerClienteBD();
         ObservableList<Cliente> tiposObservableList = FXCollections.observableArrayList(tiposlist);
         choiceBCliente.setItems(tiposObservableList);
+        
+          choiceBCodigoTour.setOnAction(event -> {
+            String filtroTour = choiceBCodigoTour.getValue().getTrsCodigotour();
+            List<Itinerario> list = obtenerItinerarios(filtroTour);
+            ObservableList<Itinerario> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionItinerarios.setItems(observableList);
+        }
+        );
 
     }
 
@@ -175,7 +183,7 @@ public class ReservacionController extends Controller implements Initializable {
 
     public void indicarRequeridosReserva() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txtIdReservacion,datePickerFechaReserva, txtTourCosto,
+        requeridos.addAll(Arrays.asList(txtIdReservacion, datePickerFechaReserva, txtTourCosto,
                 choiceBCodigoTour, choiceBCliente, txtMontoAbonado));
     }
 
@@ -232,6 +240,30 @@ public class ReservacionController extends Controller implements Initializable {
         }
     }
 
+     public List<Itinerario> obtenerItinerarios(String tour) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Itinerario> itinerariosList = new ArrayList<>();
+        try {
+            String consulta = "SELECT i FROM Itinerario i";
+            if (tour != null && !tour.isEmpty()) {
+                consulta += " WHERE i.intCodigotour.trsCodigotour LIKE :tour";
+            }
+            TypedQuery<Itinerario> query = em.createQuery(consulta, Itinerario.class);
+            if (tour != null && !tour.isEmpty()) {
+                query.setParameter("tour", "%" + tour + "%");
+            }
+
+            itinerariosList = query.getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return itinerariosList;
+    }
+     
     @FXML
     private void onActionBtnEliminarReservas(ActionEvent event) {
         try {
@@ -306,7 +338,8 @@ public class ReservacionController extends Controller implements Initializable {
         return clienteList;
     }
 //Consultas ChoiceBox
-      public static List<Tour> obtenerCodigoTourBD() {
+
+    public static List<Tour> obtenerCodigoTourBD() {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> toursList = new ArrayList<>();
         try {
@@ -319,8 +352,7 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return toursList;
     }
-      
-      
+
 //obtiene todas la reservas
     public static List<Reserva> obtenerReservaBD() {
         EntityManager em = EntityManagerHelper.getManager();
@@ -335,8 +367,7 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return clienteList;
     }
-  
-    
+
     //Consulta Informacion por 
     public static List<Reserva> obtenerReservaBD(String filtroNombre) {
         EntityManager em = EntityManagerHelper.getManager();
@@ -360,9 +391,8 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return reservaList;
     }
-    
-    //ajustes en la consulta
 
+    //ajustes en la consulta
     void mostrarCodigoTour() {
         choiceBCodigoTour.setConverter(new StringConverter<Tour>() {
             @Override
@@ -411,26 +441,26 @@ public class ReservacionController extends Controller implements Initializable {
             // Asigna los nuevos datos a la TableView
             tblvInformacionCliente.setItems(observableList);
         }
-        
-            
-             txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+
+        txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
             String filtroNombre = newValue;
             List<Reserva> list = obtenerReservaBD(filtroNombre);
             ObservableList<Reserva> observableList = FXCollections.observableArrayList(list);
             tblvInformacionCliente.setItems(observableList);
-            
-    });
-    
-                     }
-    
-    
-    
-    
-    
-    
+
+        });
+
+    }
 
     @FXML
     private void onSelectionReservacionesInscribir(Event event) {
+           if (tapReservacionesInscribir.isSelected()) {
+            tblvID.setCellValueFactory(new PropertyValueFactory<>("intId"));
+            tblvCodigoTourItinerarios.setCellValueFactory(new PropertyValueFactory<>("intCodigotour"));
+            tblvLugar.setCellValueFactory(new PropertyValueFactory<>("intLugar"));
+            tblvDuracion.setCellValueFactory(new PropertyValueFactory<>("intDuracion"));
+            tblvActividades.setCellValueFactory(new PropertyValueFactory<>("intActividades"));
+        }
     }
 
     @FXML

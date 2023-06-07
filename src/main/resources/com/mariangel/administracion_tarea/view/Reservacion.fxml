@@ -61,12 +61,11 @@
                         <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1150.0">
                            <columns>
                               <TableColumn fx:id="tblvIdReservaciones" minWidth="0.0" prefWidth="90.4000244140625" text="ID" />
-                              <TableColumn fx:id="tblvCodigoTour" prefWidth="147.99999696016312" text="CLIENTE" />
-                              <TableColumn fx:id="tblvEmpresa" prefWidth="195.1999969482422" text="CODIGO T" />
-                              <TableColumn fx:id="tblvNombre" prefWidth="177.5999755859375" text="FEC RESERVA" />
-                              <TableColumn fx:id="tblvTipoTour" prefWidth="185.60000610351562" text="MONTO ABONADO" />
-                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="171.199951171875" text="TOUR COSTO" />
-                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="173.60003662109375" text="CANTIDAD PERSONAS" />
+                              <TableColumn fx:id="tblvClienteReservaciones" prefWidth="147.99999696016312" text="CLIENTE" />
+                              <TableColumn fx:id="tblvCodigoTourReservaciones" prefWidth="195.1999969482422" text="CODIGO T" />
+                              <TableColumn fx:id="tblvFecReserva" prefWidth="177.5999755859375" text="FEC RESERVA" />
+                              <TableColumn fx:id="tblvMontoAbonadoReservaciones" prefWidth="185.60000610351562" text="MONTO ABONADO" />
+                              <TableColumn fx:id="tblvTourCostoReservaciones" prefWidth="171.199951171875" text="TOUR COSTO" />
                            </columns>
                         </TableView>
                         <TextField fx:id="txtFiltroBusqueda" layoutX="106.0" layoutY="44.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el cliente" />

@@ -8,12 +8,19 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import static com.mariangel.administracion_Tarea.controller.TourController.obtenerToursBD;
+import com.mariangel.administracion_tarea.Model.Cliente;
+import com.mariangel.administracion_tarea.Model.Empresa;
 import com.mariangel.administracion_tarea.Model.Itinerario;
 import com.mariangel.administracion_tarea.Model.ItinerarioDto;
+import com.mariangel.administracion_tarea.Model.Reserva;
 import com.mariangel.administracion_tarea.Model.ReservaDto;
+import com.mariangel.administracion_tarea.Model.Tipotour;
 import com.mariangel.administracion_tarea.Model.Tour;
+import com.mariangel.administracion_tarea.Model.TourDto;
 import com.mariangel.administracion_tarea.Service.ItinerarioService;
 import com.mariangel.administracion_tarea.Service.ReservaService;
+import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
 import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
@@ -21,10 +28,13 @@ import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -38,7 +48,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  * FXML Controller class
@@ -64,48 +78,36 @@ public class ReservacionController extends Controller implements Initializable {
     @FXML
     private TextField txtTourCosto;
     @FXML
-    private ChoiceBox<?> choiceBCodigoTour;
+    private ChoiceBox<Tour> choiceBCodigoTour;
     @FXML
-    private ChoiceBox<?> choiceBCliente;
+    private ChoiceBox<Cliente> choiceBCliente;
+
     @FXML
     private DatePicker datePickerFechaReserva;
     private TextField txtCantidadPersonas;
     @FXML
     private Tab tabPaneReservaciones;
     @FXML
-    private TableView<?> tblvInformacionCliente;
+    private TableView<Reserva> tblvInformacionCliente;
     @FXML
-    private TableColumn<?, ?> tblvIdReservaciones;
+    private TableColumn<Reserva, String> tblvIdReservaciones;
     @FXML
-    private TableColumn<?, ?> tblvCodigoTour;
+    private TableColumn<Reserva, Date> tblvFecReserva;
     @FXML
-    private TableColumn<?, ?> tblvEmpresa;
+    private TableColumn<Reserva, String> tblvClienteReservaciones;
     @FXML
-    private TableColumn<?, ?> tblvNombre;
+    private TableColumn<Reserva, String> tblvCodigoTourReservaciones;
     @FXML
-    private TableColumn<?, ?> tblvTipoTour;
+    private TableColumn<Reserva, String> tblvMontoAbonadoReservaciones;
     @FXML
-    private TableColumn<?, ?> tblvCantMaxClientes;
-    @FXML
-    private TableColumn<?, ?> tblvCostoPersona;
+    private TableColumn<Reserva, String> tblvTourCostoReservaciones;
+
     @FXML
     private TextField txtFiltroBusqueda;
     @FXML
     private Button btnBuscarInformacion;
 
     //Itinerarios
-    @FXML
-    private TableView<Itinerario> tblvInformacionItinerarios;
-    @FXML
-    private TableColumn<Itinerario, String> tblvID;
-    @FXML
-    private TableColumn<Itinerario, Tour> tblvCodigoTourItinerarios;
-    @FXML
-    private TableColumn<Itinerario, String> tblvLugar;
-    @FXML
-    private TableColumn<Itinerario, String> tblvDuracion;
-    @FXML
-    private TableColumn<Itinerario, String> tblvActividades;
     @FXML
     private Tab tapReservacionesInscribir;
 
@@ -115,6 +117,18 @@ public class ReservacionController extends Controller implements Initializable {
     List<Node> requeridos = new ArrayList<>();
     @FXML
     private TextField txtIdReservacion;
+    @FXML
+    private TableView<Itinerario> tblvInformacionItinerarios;
+    @FXML
+    private TableColumn<Itinerario, String> tblvID;
+    @FXML
+    private TableColumn<Itinerario, String> tblvCodigoTourItinerarios;
+    @FXML
+    private TableColumn<Itinerario, String> tblvLugar;
+    @FXML
+    private TableColumn<Itinerario, String> tblvDuracion;
+    @FXML
+    private TableColumn<Itinerario, String> tblvActividades;
 
     /**
      * Initializes the controller class.
@@ -122,6 +136,15 @@ public class ReservacionController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+         reserva = new ReservaDto();
+        mostrarNombreCliente();
+        
+        
+        
+        
+        
+        
+        
         txtMontoAbonado.setTextFormatter(Formato.getInstance().cedulaFormat(30));
         txtTourCosto.setTextFormatter(Formato.getInstance().integerFormat());
 
@@ -209,24 +232,154 @@ public class ReservacionController extends Controller implements Initializable {
 
     @FXML
     private void onActionBtnEliminarReservas(ActionEvent event) {
+        try {
+            if (reserva.rsId == null) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar reserva", getStage(), "Debe cargar el tipo de reserva que desea eliminar.");
+            } else {
+                ItinerarioService service = new ItinerarioService();
+                Respuesta respuesta = service.eliminarItinerario(reserva.getReservaId());
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar reserva", getStage(), respuesta.getMensaje());
+                } else {
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar reserva", getStage(), "reserva eliminado correctamente.");
+                    nuevaReserva();
+                    // mediaPlayer.play();
+                }
+            }
+            //  recargarItinerarios();
+            // activarListenerGenerarCodigo();
+        } catch (Exception ex) {
+            Logger.getLogger(TourController.class.getName()).log(Level.SEVERE, "Error eliminando el Reserva.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar reserva", getStage(), "Ocurrio un error eliminando  reserva.");
+        }
     }
 
     @FXML
     private void onActionBtnCancelarReservas(ActionEvent event) {
+        datePickerFechaReserva.setValue(null);
+        choiceBCodigoTour.setValue(null);
+        txtMontoAbonado.setText(null);
+        txtTourCosto.setText(null);
+        choiceBCliente.setValue(null);
+        txtIdReservacion.setText(null);
     }
 
     @FXML
     private void onActionBtnModificarReservas(ActionEvent event) {
+        try {
+            unbindReserva();
+            String idText = txtIdReservacion.getText();
+            ReservaDto reservaDto = new ReservaDto();
+
+            reservaDto.setReservaId(Long.parseLong(txtIdReservacion.getText()));
+            reservaDto.setReservaTrscosto(Long.parseLong(txtTourCosto.getText()));
+            reservaDto.setReservaMontoabonado(Long.parseLong(txtMontoAbonado.getText()));
+            reservaDto.setReservaFecnac(datePickerFechaReserva.getValue());
+            reservaDto.setCodigotour(choiceBCodigoTour.getValue());
+            reservaDto.setRsCedulaCliente(choiceBCliente.getValue());
+
+            ReservaService reservaService = new ReservaService();
+            Respuesta respuesta = reservaService.modificarReserva(reservaDto, Long.parseLong(idText));
+            new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar reserva", getStage(), "reserva actualizado correctamente.");
+            //  mediaPlayer.play();
+            // recargarreservas();
+
+        } catch (Exception ex) {
+            Logger.getLogger(ReservacionController.class.getName()).log(Level.SEVERE, "Error actualizando el reserva.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Actualizar reserva", getStage(), "Ocurrio un error al actualizar el reserva.");
+        }
     }
 
+    public static List<Reserva> obtenerReservasBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Reserva> reservaList = new ArrayList<>();
+        try {
+            reservaList = em.createQuery("SELECT r FROM Reserva r", Reserva.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los Reserva de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return reservaList;
+    }
+    
+     public static List<Tour> obtenerCodigoToursBD(String filtroCodigo) {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> tourList = new ArrayList<>();
+        try {
+            String consulta = "SELECT t FROM Tour t";
+            if (filtroCodigo != null && !filtroCodigo.isEmpty()) {
+                consulta += " WHERE t.trsCodigotour LIKE :filtroCodigo";
+            }
+            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
+            if (filtroCodigo != null && !filtroCodigo.isEmpty()) {
+                query.setParameter("filtroNombre", "%" + filtroCodigo + "%");
+            }
+            tourList = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todas las tours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return tourList;
+    }
+     //ajustes en la consulta
+    void mostrarCodigoTour() {
+        choiceBCodigoTour.setConverter(new StringConverter<Tour>() {
+            @Override
+            public String toString(Tour empresa) {
+                return empresa != null ? empresa.toString() : "";
+            }
+
+            @Override
+            public Tour fromString(String string) {
+                return null;
+            }
+        });
+    }
+
+    void mostrarNombreCliente() {
+        choiceBCliente.setConverter(new StringConverter<Cliente>() {
+            @Override
+            public String toString(Cliente tipotour) {
+                return tipotour != null ? tipotour.toString() : "";
+            }
+
+            @Override
+            public Cliente fromString(String string) {
+                return null;
+            }
+        });
+    }
+     
+     
+     
     @FXML
     private void onActionBtnBuscarPorFiltro(ActionEvent event) {
     }
 
     @FXML
     private void onSelectionReservaciones(Event event) {
+        if (tabPaneReservaciones.isSelected()) {
+            tblvIdReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsId"));
+            tblvFecReserva.setCellValueFactory(new PropertyValueFactory<>("rsFechareserva"));
+            tblvClienteReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsCedulacliente"));
+            tblvCodigoTourReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsCodigotour"));
+            tblvMontoAbonadoReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsMontoabonado"));
+            tblvTourCostoReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsTrscosto"));
+
+            // recargarItinerarios();
+            List<Reserva> list = obtenerReservasBD();
+            ObservableList<Reserva> observableList = FXCollections.observableArrayList(list);
+            // Asigna los nuevos datos a la TableView
+            tblvInformacionCliente.setItems(observableList);
+
+        }
     }
 
+    
     @FXML
     private void onSelectionReservacionesInscribir(Event event) {
     }

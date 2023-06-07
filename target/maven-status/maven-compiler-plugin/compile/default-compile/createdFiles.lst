@@ -14,7 +14,6 @@ com\mariangel\administracion_tarea\controller\PantallaPrincipalController.class
 com\mariangel\administracion_tarea\Model\Tour_.class
 com\mariangel\administracion_tarea\Service\TipotourService.class
 com\mariangel\administracion_tarea\Utils\AppContext.class
-com\mariangel\administracion_tarea\controller\ReservacionController.class
 com\mariangel\administracion_tarea\Model\Itinerario.class
 com\mariangel\administracion_tarea\Model\Empresa.class
 com\mariangel\administracion_tarea\Service\ReservaService.class

@@ -182,7 +182,7 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "Cliente{" + "cltCedula=" + cltCedula + ", cltNombre=" + cltNombre + ", cltPapellido=" + cltPapellido + ", cltSapellido=" + cltSapellido + ", cltTelefono=" + cltTelefono + ", cltCorreo=" + cltCorreo + ", cltFechanac=" + cltFechanac + ", reservaCollection=" + reservaCollection + '}';
+        return "Nombre: "  + cltNombre +  cltPapellido + ", Cedula: " + cltCedula;
     }
 
    

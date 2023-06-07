@@ -8,6 +8,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import static com.mariangel.administracion_Tarea.controller.TourController.obtenerEmpresaBD;
+import static com.mariangel.administracion_Tarea.controller.TourController.obtenerTipoTourBD;
 import static com.mariangel.administracion_Tarea.controller.TourController.obtenerToursBD;
 import com.mariangel.administracion_tarea.Model.Cliente;
 import com.mariangel.administracion_tarea.Model.Empresa;
@@ -136,20 +138,25 @@ public class ReservacionController extends Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-         reserva = new ReservaDto();
+        reserva = new ReservaDto();
         mostrarNombreCliente();
-        
-        
-        
-        
-        
-        
-        
-        txtMontoAbonado.setTextFormatter(Formato.getInstance().cedulaFormat(30));
+        mostrarCodigoTour();
+
+        txtMontoAbonado.setTextFormatter(Formato.getInstance().integerFormat());
         txtTourCosto.setTextFormatter(Formato.getInstance().integerFormat());
 
         nuevaReserva();
         indicarRequeridosReserva();
+
+        List<Tour> empresasList = obtenerCodigoTourBD();
+        // Asignar la lista de empresas al ChoiceBox
+        ObservableList<Tour> empresaObservableList = FXCollections.observableArrayList(empresasList);
+        choiceBCodigoTour.setItems(empresaObservableList);
+
+        List<Cliente> tiposlist = obtenerNombreClienteBD();
+        ObservableList<Cliente> tiposObservableList = FXCollections.observableArrayList(tiposlist);
+        choiceBCliente.setItems(tiposObservableList);
+
     }
 
     private void bindReserva(Boolean nuevo) {
@@ -303,8 +310,38 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return reservaList;
     }
-    
-     public static List<Tour> obtenerCodigoToursBD(String filtroCodigo) {
+
+      public static List<Tour> obtenerCodigoTourBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Tour> toursList = new ArrayList<>();
+        try {
+            toursList = em.createQuery("SELECT t FROM Tour t", Tour.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos las tour de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return toursList;
+    }
+      
+      //Consultas ChoiceBox
+
+    public static List<Cliente> obtenerNombreClienteBD() {
+        EntityManager em = EntityManagerHelper.getManager();
+        List<Cliente> clienteList = new ArrayList<>();
+        try {
+            clienteList = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+        } catch (Exception e) {
+            System.out.println("Error al obtener todos los tipoTours de la base de datos");
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+        return clienteList;
+    }
+  
+    public static List<Tour> obtenerCodigoToursBD(String filtroCodigo) {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> tourList = new ArrayList<>();
         try {
@@ -325,12 +362,14 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return tourList;
     }
-     //ajustes en la consulta
+    
+    //ajustes en la consulta
+
     void mostrarCodigoTour() {
         choiceBCodigoTour.setConverter(new StringConverter<Tour>() {
             @Override
-            public String toString(Tour empresa) {
-                return empresa != null ? empresa.toString() : "";
+            public String toString(Tour tour) {
+                return tour != null ? tour.toString() : "";
             }
 
             @Override
@@ -343,8 +382,8 @@ public class ReservacionController extends Controller implements Initializable {
     void mostrarNombreCliente() {
         choiceBCliente.setConverter(new StringConverter<Cliente>() {
             @Override
-            public String toString(Cliente tipotour) {
-                return tipotour != null ? tipotour.toString() : "";
+            public String toString(Cliente cliente) {
+                return cliente != null ? cliente.toString() : "";
             }
 
             @Override
@@ -353,9 +392,7 @@ public class ReservacionController extends Controller implements Initializable {
             }
         });
     }
-     
-     
-     
+
     @FXML
     private void onActionBtnBuscarPorFiltro(ActionEvent event) {
     }
@@ -379,7 +416,6 @@ public class ReservacionController extends Controller implements Initializable {
         }
     }
 
-    
     @FXML
     private void onSelectionReservacionesInscribir(Event event) {
     }

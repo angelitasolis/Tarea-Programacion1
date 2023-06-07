@@ -20,12 +20,16 @@ public class ReservaDto {
     public SimpleStringProperty rsMontoabonado;
     public ObjectProperty<LocalDate> rsFechareserva;
     public SimpleStringProperty rsTrscosto;
+    public ObjectProperty<Tour> rsCodigotour;
+    public ObjectProperty<Cliente> rsCedulacliente;
 
     public ReservaDto() {
         this.rsId = new SimpleStringProperty();
         this.rsMontoabonado = new SimpleStringProperty();
         this.rsFechareserva = new SimpleObjectProperty();
         this.rsTrscosto = new SimpleStringProperty();
+        this.rsCodigotour = new SimpleObjectProperty();
+        this.rsCedulacliente = new SimpleObjectProperty();
     }
 
     public ReservaDto(Reserva reserva) {
@@ -34,6 +38,24 @@ public class ReservaDto {
         this.rsMontoabonado.set(reserva.getRsMontoabonado().toString());
         this.rsFechareserva.set(reserva.getRsFechareserva().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.rsTrscosto.set(reserva.getRsMontoabonado().toString());
+        this.rsCodigotour.set(reserva.getRsCodigotour());
+        this.rsCedulacliente.set(reserva.getRsCedulacliente());
+    }
+
+    public Tour getCodigotour() {
+        return rsCodigotour.get();
+    }
+
+    public void setCodigotour(Tour rsCodigotour) {
+        this.rsCodigotour.set(rsCodigotour);
+    }
+
+    public Cliente getRsCedulaCliente() {
+        return rsCedulacliente.get();
+    }
+
+    public void setRsCedulaCliente(Cliente rsCedulacliente) {
+        this.rsCedulacliente.set(rsCedulacliente);
     }
 
     public Long getReservaTrscosto() {

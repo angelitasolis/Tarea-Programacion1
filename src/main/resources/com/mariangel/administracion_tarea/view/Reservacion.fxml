@@ -2,22 +2,79 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ReservacionController">
+<AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="1150.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ReservacionController">
     <stylesheets>
         <URL value="@/com/mariangel/administracion_tarea/styles/reservacion.css" />
     </stylesheets>
    <children>
       <Label layoutX="417.0" layoutY="14.0" text="RESERVACIONES" />
       <Button fx:id="btn_retroceder" layoutX="858.0" layoutY="599.0" mnemonicParsing="false" onAction="#onActionretroceder" text="Atrás" />
-      <TabPane layoutY="33.0" prefHeight="565.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutY="33.0" prefHeight="566.0" prefWidth="1143.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Incribir" />
-          <Tab fx:id="tabPaneReservaciones" onSelectionChanged="#onSelectionReservaciones" text="Mostrar" />
+          <Tab fx:id="tapReservacionesInscribir" onSelectionChanged="#onSelectionReservacionesInscribir" text="Incribir">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="364.0" prefWidth="1060.0">
+                     <children>
+                        <Label layoutX="101.0" layoutY="112.0" text="CLIENTE" />
+                        <Label layoutX="79.0" layoutY="163.0" text="FECHA RESERVA" />
+                        <Label layoutX="87.0" layoutY="283.0" text="TOUR COSTO" />
+                        <Button fx:id="btnBuscarClienteReservas" layoutX="391.0" layoutY="15.0" mnemonicParsing="false" onAction="#onActionBuscarReservas" text="BUSCAR" />
+                        <Button fx:id="btnGuardarReservas" layoutX="334.0" layoutY="404.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarReservas" text="GUARDAR" />
+                        <Button fx:id="btnEliminarReservas" layoutX="230.0" layoutY="404.0" mnemonicParsing="false" onAction="#onActionBtnEliminarReservas" text="ELIMINAR" />
+                        <Button fx:id="btnCancelarIReservas" layoutX="391.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionBtnCancelarReservas" text="CANCELAR" />
+                        <Button fx:id="btnModificarReservas" layoutX="123.0" layoutY="404.0" mnemonicParsing="false" onAction="#onActionBtnModificarReservas" text="MODIFICAR" />
+                        <TextField fx:id="txtMontoAbonado" layoutX="194.0" layoutY="222.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite monto abonado" />
+                        <Label layoutX="70.0" layoutY="226.0" text="MONTO ABONADO" />
+                        <TextField fx:id="txtTourCosto" layoutX="194.0" layoutY="279.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el costo del tour" />
+                        <TableView fx:id="tblvInformacionItinerarios" layoutX="524.0" layoutY="28.0" prefHeight="444.0" prefWidth="567.0">
+                           <columns>
+                              <TableColumn fx:id="tblvID" prefWidth="116.79998779296875" text="ID" />
+                              <TableColumn fx:id="tblvCodigoTourItinerarios" prefWidth="116.800048828125" text="CODIGO TOUR" />
+                              <TableColumn fx:id="tblvLugar" prefWidth="95.19998168945312" text="LUGAR" />
+                              <TableColumn fx:id="tblvDuracion" prefWidth="116.0" text="DURACION" />
+                              <TableColumn fx:id="tblvActividades" prefWidth="116.7999267578125" text="ACTIVIDADES" />
+                           </columns>
+                        </TableView>
+                        <Label layoutX="83.0" layoutY="61.0" text="CÓDIGO TOUR" />
+                        <ChoiceBox fx:id="choiceBCodigoTour" layoutX="196.0" layoutY="57.0" prefHeight="26.0" prefWidth="166.0" />
+                        <ChoiceBox fx:id="choiceBCliente" layoutX="195.0" layoutY="108.0" prefHeight="26.0" prefWidth="168.0" />
+                        <DatePicker fx:id="datePickerFechaReserva" layoutX="193.0" layoutY="159.0" prefHeight="26.0" prefWidth="172.0" />
+                        <TextField fx:id="txtIdReservacion" layoutX="198.0" layoutY="15.0" prefHeight="26.0" prefWidth="164.0" />
+                        <Label layoutX="79.0" layoutY="19.0" prefHeight="18.0" prefWidth="113.0" text="ID RESERVACION" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+          <Tab fx:id="tabPaneReservaciones" onSelectionChanged="#onSelectionReservaciones" text="Mostrar">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="510.0" prefWidth="1027.0">
+                     <children>
+                        <TableView fx:id="tblvInformacionCliente" layoutY="83.0" prefHeight="551.0" prefWidth="1150.0">
+                           <columns>
+                              <TableColumn fx:id="tblvIdReservaciones" minWidth="0.0" prefWidth="90.4000244140625" text="ID" />
+                              <TableColumn fx:id="tblvCodigoTour" prefWidth="147.99999696016312" text="CLIENTE" />
+                              <TableColumn fx:id="tblvEmpresa" prefWidth="195.1999969482422" text="CODIGO T" />
+                              <TableColumn fx:id="tblvNombre" prefWidth="177.5999755859375" text="FEC RESERVA" />
+                              <TableColumn fx:id="tblvTipoTour" prefWidth="185.60000610351562" text="MONTO ABONADO" />
+                              <TableColumn fx:id="tblvCantMaxClientes" prefWidth="171.199951171875" text="TOUR COSTO" />
+                              <TableColumn fx:id="tblvCostoPersona" minWidth="0.0" prefWidth="173.60003662109375" text="CANTIDAD PERSONAS" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="txtFiltroBusqueda" layoutX="106.0" layoutY="44.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el cliente" />
+                        <Label layoutX="38.0" layoutY="47.0" prefHeight="18.0" prefWidth="110.0" text="Cliente" />
+                        <Button fx:id="btnBuscarInformacion" layoutX="318.0" layoutY="44.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorFiltro" text="Buscar" />
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
         </tabs>
       </TabPane>
    </children>

@@ -61,7 +61,7 @@ import javax.persistence.TypedQuery;
 /**
  * FXML Controller class
  *
- * @author jumac
+ * @author Mari
  */
 public class TourController extends Controller implements Initializable {
 
@@ -183,7 +183,6 @@ public class TourController extends Controller implements Initializable {
     @Override
 
     public void initialize(URL url, ResourceBundle rb) {
-      
 
         tour = new TourDto();
         mostrarNombreDelTipo();
@@ -385,10 +384,9 @@ public class TourController extends Controller implements Initializable {
         try {
             unbindTour();
             unbindItinerarios();
-        String idText = txtIdGuardarItinerarios.getText();
-        ItinerarioDto itinerarioDto = new ItinerarioDto();
-            
-            
+            String idText = txtIdGuardarItinerarios.getText();
+            ItinerarioDto itinerarioDto = new ItinerarioDto();
+
             String cedulaText = txtCodigoTourGuardarTour.getText();
             TourDto tourDto = new TourDto();
             tourDto.setTrsNombre(txtNombreTourGuardar.getText());
@@ -724,7 +722,7 @@ public class TourController extends Controller implements Initializable {
         String idText = txtIdGuardarItinerarios.getText();
         Long id = Long.parseLong(idText);
         cargarItinerario(id);
-        
+
     }
 
     @FXML
@@ -797,7 +795,7 @@ public class TourController extends Controller implements Initializable {
     private void onActionBtnModificarItinerario(ActionEvent event) {
         try {
             unbindItinerarios();
-            
+
             String idText = txtIdGuardarItinerarios.getText();
             ItinerarioDto itinerarioDto = new ItinerarioDto();
 
@@ -811,7 +809,7 @@ public class TourController extends Controller implements Initializable {
             Respuesta respuesta = itinerarioService.modificarTour(itinerarioDto, Long.parseLong(idText));
             new Mensaje().showModal(Alert.AlertType.INFORMATION, "Actualizar Itinerario", getStage(), "Itinerario actualizado correctamente.");
             //  mediaPlayer.play();
-            
+
             recargarItinerarios();
 
         } catch (Exception ex) {

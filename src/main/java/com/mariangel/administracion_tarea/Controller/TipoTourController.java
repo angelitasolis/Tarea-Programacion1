@@ -51,7 +51,7 @@ import javax.persistence.TypedQuery;
 /**
  * FXML Controller class
  *
- * @author jumac
+ * @author Mari
  */
 public class TipoTourController extends Controller implements Initializable {
 

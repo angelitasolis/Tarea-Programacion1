@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 /**
  * FXML Controller class
  *
- * @author jumac
+ * @author Mari
  */
 public class PantallaPrincipalController extends Controller implements Initializable {
 

@@ -10,11 +10,14 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,6 +40,8 @@ public class Reserva implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "RS_ID")
+    @SequenceGenerator(name = "SEC_RESERVA", sequenceName = "SEC_RESERVA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEC_RESERVA")
     private Long rsId;
     @Basic(optional = false)
     @Column(name = "RS_FECHARESERVA")
@@ -62,13 +67,16 @@ public class Reserva implements Serializable {
         this.rsId = rsId;
     }
 
-    public Reserva(Long rsId, Date rsFechareserva, Long rsMontoabonado, Long rsTrscosto) {
+    public Reserva(Long rsId, Date rsFechareserva, Long rsMontoabonado, Long rsTrscosto,Cliente rsCedulacliente, Tour rsCodigotour) {
         this.rsId = rsId;
         this.rsFechareserva = rsFechareserva;
         this.rsMontoabonado = rsMontoabonado;
         this.rsTrscosto = rsTrscosto;
+        this.rsCodigotour = rsCodigotour;
+        this.rsCedulacliente = rsCedulacliente;
     }
- public Reserva(ReservaDto reservacionDto) {
+
+    public Reserva(ReservaDto reservacionDto) {
         this.rsId = reservacionDto.getReservaId();
         actualizar(reservacionDto);
     }
@@ -78,7 +86,26 @@ public class Reserva implements Serializable {
         this.rsFechareserva = Date.from(reservacionDto.getReservaFecnac().atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.rsMontoabonado = reservacionDto.getReservaMontoabonado();
         this.rsTrscosto = reservacionDto.getReservaId();
+        this.rsCodigotour = reservacionDto.getCodigotour();
+        this.rsCedulacliente = reservacionDto.getRsCedulaCliente();
     }
+
+    public Tour getRsTourCodigo() {
+        return rsCodigotour;
+    }
+
+    public void setRsTourCodigo(Tour rsCodigotour) {
+        this.rsCodigotour = rsCodigotour;
+    }
+
+        public Cliente getRsCliente() {
+        return rsCedulacliente;
+    }
+
+    public void setRsCliente(Cliente rsCedulacliente) {
+        this.rsCedulacliente = rsCedulacliente;
+    }
+    
     public Long getRsId() {
         return rsId;
     }
@@ -151,5 +178,5 @@ public class Reserva implements Serializable {
     public String toString() {
         return "com.mariangel.administracion_tarea.Model.Reserva[ rsId=" + rsId + " ]";
     }
-    
+
 }

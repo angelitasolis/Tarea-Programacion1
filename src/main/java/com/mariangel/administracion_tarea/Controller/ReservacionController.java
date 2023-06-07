@@ -8,19 +8,29 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.mariangel.administracion_tarea.Model.Itinerario;
 import com.mariangel.administracion_tarea.Model.ItinerarioDto;
 import com.mariangel.administracion_tarea.Model.ReservaDto;
+import com.mariangel.administracion_tarea.Model.Tour;
+import com.mariangel.administracion_tarea.Service.ItinerarioService;
+import com.mariangel.administracion_tarea.Service.ReservaService;
 import com.mariangel.administracion_tarea.Utils.FlowController;
 import com.mariangel.administracion_tarea.Utils.Formato;
+import com.mariangel.administracion_tarea.Utils.Mensaje;
+import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -85,17 +95,17 @@ public class ReservacionController extends Controller implements Initializable {
 
     //Itinerarios
     @FXML
-    private TableView<?> tblvInformacionItinerarios;
+    private TableView<Itinerario> tblvInformacionItinerarios;
     @FXML
-    private TableColumn<?, ?> tblvID;
+    private TableColumn<Itinerario, String> tblvID;
     @FXML
-    private TableColumn<?, ?> tblvCodigoTourItinerarios;
+    private TableColumn<Itinerario, Tour> tblvCodigoTourItinerarios;
     @FXML
-    private TableColumn<?, ?> tblvLugar;
+    private TableColumn<Itinerario, String> tblvLugar;
     @FXML
-    private TableColumn<?, ?> tblvDuracion;
+    private TableColumn<Itinerario, String> tblvDuracion;
     @FXML
-    private TableColumn<?, ?> tblvActividades;
+    private TableColumn<Itinerario, String> tblvActividades;
     @FXML
     private Tab tapReservacionesInscribir;
 
@@ -114,16 +124,16 @@ public class ReservacionController extends Controller implements Initializable {
         // TODO
         txtMontoAbonado.setTextFormatter(Formato.getInstance().cedulaFormat(30));
         txtTourCosto.setTextFormatter(Formato.getInstance().integerFormat());
-        
+
         nuevaReserva();
         indicarRequeridosReserva();
     }
-    
-        private void bindReserva(Boolean nuevo) {
+
+    private void bindReserva(Boolean nuevo) {
         if (!nuevo) {
             txtIdReservacion.textProperty().bind(reserva.rsId);
         }
-        
+
         choiceBCodigoTour.valueProperty().bindBidirectional(reserva.rsCodigotour);
         choiceBCliente.valueProperty().bindBidirectional(reserva.rsCedulacliente);
         datePickerFechaReserva.valueProperty().bindBidirectional(reserva.rsFechareserva);
@@ -132,24 +142,69 @@ public class ReservacionController extends Controller implements Initializable {
     }
 
     private void unbindReserva() {
-        txtIdGuardarItinerarios.textProperty().unbind();
-        txtLugarGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intLugar);
-        choiceBCodigoTour.valueProperty().unbindBidirectional(itinerario.intCodigotour);
-        txtDuracionGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intDuracion);
-        txtActividadesGuardarItinerarios.textProperty().unbindBidirectional(itinerario.intActividades);
+        choiceBCliente.valueProperty().unbindBidirectional(reserva.rsCedulacliente);
+        choiceBCodigoTour.valueProperty().unbindBidirectional(reserva.rsCodigotour);
+        txtMontoAbonado.textProperty().unbindBidirectional(reserva.rsMontoabonado);
+        txtTourCosto.textProperty().unbindBidirectional(reserva.rsTrscosto);
+        datePickerFechaReserva.valueProperty().unbindBidirectional(reserva.rsFechareserva);
     }
-    
-    
-    
-    
-    
-    
+
+    public void indicarRequeridosReserva() {
+        requeridos.clear();
+        requeridos.addAll(Arrays.asList(datePickerFechaReserva, txtTourCosto,
+                choiceBCodigoTour, choiceBCliente, txtMontoAbonado));
+    }
+
+    private void nuevaReserva() {
+        unbindReserva();
+        reserva = new ReservaDto();
+        bindReserva(true);
+        txtIdReservacion.clear();
+        txtIdReservacion.requestFocus();
+    }
+
+    private void cargarReserva(Long pcedula) {
+        ItinerarioService service = new ItinerarioService();
+        Respuesta respuesta = service.getItinerario(pcedula);
+        if (respuesta.getEstado()) {
+            unbindReserva();
+            reserva = (ReservaDto) respuesta.getResultado("Reserva");
+            bindReserva(false);
+            validarRequeridos();
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Reserva", getStage(), respuesta.getMensaje());
+        }
+    }
+
     @FXML
     private void onActionBuscarReservas(ActionEvent event) {
+        String idText = txtIdReservacion.getText();
+        Long id = Long.parseLong(idText);
+        cargarReserva(id);
     }
 
     @FXML
     private void onAnctionBtnGuardarReservas(ActionEvent event) {
+
+        try {
+            ReservaService reservaService = new ReservaService();
+            Respuesta respuesta = reservaService.guardarReserva(reserva);
+
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar reserva", getStage(), respuesta.getMensaje());
+            } else {
+                unbindReserva();
+                reserva = (ReservaDto) respuesta.getResultado("Reserva");
+                bindReserva(false);
+                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar reserva", getStage(), "Reserva guardado correctamente.");
+            }
+            //recargarItinerarios();
+            // activarListenerGenerarCodigo();
+        } catch (Exception ex) {
+            System.out.println(reserva.toString());
+            Logger.getLogger(ReservacionController.class.getName()).log(Level.SEVERE, "Error guardando reserva.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar reserva", getStage(), "Ocurrio un error guardando el reserva.");
+        }
     }
 
     @FXML

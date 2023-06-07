@@ -6,6 +6,8 @@ package com.mariangel.administracion_tarea.Service;
 
 import com.mariangel.administracion_tarea.Model.Cliente;
 import com.mariangel.administracion_tarea.Model.ClienteDto;
+import com.mariangel.administracion_tarea.Model.Itinerario;
+import com.mariangel.administracion_tarea.Model.ItinerarioDto;
 import com.mariangel.administracion_tarea.Model.Reserva;
 import com.mariangel.administracion_tarea.Model.ReservaDto;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
@@ -46,29 +48,28 @@ EntityManager em = EntityManagerHelper.getInstance().getManager();
     }
 
     public Respuesta guardarReserva(ReservaDto reservacionDto) {
-        try {
+           try {
             et = em.getTransaction();
             et.begin();
-            Reserva reservacion;
-            if (reservacionDto.getReservaId() == null) {
-                reservacion = em.find(Reserva.class, reservacionDto.getReservaId());
-                if (reservacion == null) {
+            Reserva reserva;
+            if(reservacionDto.getReservaId() != null &&  reservacionDto.getReservaId() > 0){
+                reserva = em.find(Reserva.class, reservacionDto.getReservaId());
+                if (reserva == null){
                     et.rollback();
-                    return new Respuesta(false, "No se encrontró la reservacion a modificar.", "guardarReserva NoResultException");
+                    return new Respuesta(false, "No se encrontro el reserva a modificar.", "guardarReserva NoResultException");
                 }
-                reservacion.actualizar(reservacionDto);
-                reservacion = em.merge(reservacion);
+                reserva.actualizar(reservacionDto);
+                reserva = em.merge(reserva);
             } else {
-                reservacion = new Reserva(reservacionDto);
-                em.persist(reservacion);
+              reserva = new Reserva(reservacionDto);
+              em.persist(reserva);
             }
-
             et.commit();
-            return new Respuesta(true, "", "", "Reserva", new ReservaDto(reservacion));
+            return new Respuesta(true, "", "", "Reserva", new ReservaDto(reserva));
         } catch (Exception ex) {
             et.rollback();
-            Logger.getLogger(ReservaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar la reservacion.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar la reservacion.", "guardarReserva " + ex.getMessage());
+            Logger.getLogger(ReservaService.class.getName()).log(Level.SEVERE, "Ocurrio un error al guardar el reserva.", ex);
+            return new Respuesta(false, "Ocurrio un error al guardar el reserva.", "guardarItinerario " + ex.getMessage());
         }
     }
 
@@ -99,30 +100,36 @@ EntityManager em = EntityManagerHelper.getInstance().getManager();
             return new Respuesta(false, "Ocurrio un error al eliminar la reservacion.", "eliminarReserva " + ex.getMessage());
         }
     }
-    /*
-    public Respuesta modificarReserva(ReservaDto reservacionDto) {
+   
+    public Respuesta modificarReserva(ReservaDto reservaDto, Long id) {
         try {
             et = em.getTransaction();
             et.begin();
-            Reserva reservacion;
-            if (reservacionDto.getRsvId() != null) {
-                reservacion = em.find(Reserva.class, reservacionDto.getRsvId());
-                if (reservacion == null) {
+            if (reservaDto!= null) {
+                Query query = em.createNamedQuery("Reserva.findByRsId");
+                query.setParameter("rsId", id);
+                Reserva reserva = (Reserva) query.getSingleResult();
+                System.out.println("Cédula del reserva a buscar: " + reservaDto.getReservaId());
+                if (reserva == null) {
                     et.rollback();
-                    return new Respuesta(false, "No se encrontró la reservacion a modificar.", "guardarReserva NoResultException");
+                    return new Respuesta(false, "No se encontró el reserva a actualizar.", "actualizarPaciente NoResultException");
                 }
-                reservacion.actualizar(reservacionDto);
-                reservacion = em.merge(reservacion);
+
+                reserva.actualizar(reservaDto);
+                reserva = em.merge(reserva);
+                et.commit();
+                em.refresh(reserva);
+                reserva = em.find(Reserva.class, reserva.getRsId());
+                return new Respuesta(true, "", "", "Reserva", new ReservaDto(reserva));
             } else {
-                reservacion = new Reserva(reservacionDto);
-                em.persist(reservacion);
+                et.rollback();
+                return new Respuesta(false, "No se proporcionó un codigo válida para actualizar el reserva.", "actualizarPaciente InvalidParameterException");
             }
-            et.commit();
-            return new Respuesta(true, "", "", "Reservas", new ReservaDto(reservacion));
-        } catch (Exception ex) {
+        } catch (NoResultException ex) {
             et.rollback();
-            Logger.getLogger(ReservaService.class.getName()).log(Level.SEVERE, "Ocurrió un error al guardar la reservacion.", ex);
-            return new Respuesta(false, "Ocurrio un error al guardar la reservacion.", "guardarReserva " + ex.getMessage());
+            Logger.getLogger(TourService.class.getName()).log(Level.SEVERE, "Ocurrió un error al actualizar el reserva.", ex);
+            return new Respuesta(false, "Ocurrió un error al actualizar el reserva.", "actualizarPaciente " + ex.getMessage());
         }
-    }*/
+    
+    }
 }

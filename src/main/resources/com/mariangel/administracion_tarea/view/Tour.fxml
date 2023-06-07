@@ -12,6 +12,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="1150.0" styleClass="mainFxmlClass" stylesheets="@../styles/tours.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.TourController">
@@ -24,6 +26,11 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1050.0">
                      <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="386.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                         <Label layoutX="75.0" layoutY="226.0" text="TOUR EMPRESA" />
                         <Label layoutX="81.0" layoutY="61.0" text="TOUR CODIGO" />
                         <Label layoutX="515.0" layoutY="248.0" text="FECHA DE SALIDA" />
@@ -89,6 +96,11 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="260.0" prefWidth="417.0">
                      <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="409.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                         <Label fx:id="lblIdItinerarios" layoutX="85.0" layoutY="53.0" text="ID ITINERARIO" visible="false" />
                         <Label layoutX="99.0" layoutY="163.0" text="LUGAR " />
                         <Label layoutX="87.0" layoutY="283.0" text=" DURACIÓN" />

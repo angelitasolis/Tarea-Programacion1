@@ -8,6 +8,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" stylesheets="@../styles/cliente.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ClienteController">
@@ -39,6 +41,11 @@
                         <TextField fx:id="txtPApellido" layoutX="248.0" layoutY="124.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el primer apellido" />
                         <Label layoutX="72.0" layoutY="191.0" text="SEGUNDO APELLIDO" />
                         <TextField fx:id="txtSApellido" layoutX="248.0" layoutY="184.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el segundo apellido" />
+                        <ImageView fitHeight="166.0" fitWidth="165.0" layoutX="512.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </content>
@@ -59,8 +66,13 @@
                            </columns>
                         </TableView>
                         <TextField fx:id="txtNombreClienteInformacion" layoutX="265.0" layoutY="31.0" prefHeight="26.0" prefWidth="190.0" promptText="Digite el nombre " />
-                        <Label layoutX="26.0" layoutY="37.0" prefHeight="18.0" prefWidth="214.0" text="NOMBRE CLIENTE" />
+                        <Label layoutX="120.0" layoutY="37.0" prefHeight="18.0" prefWidth="138.0" text="NOMBRE CLIENTE" />
                         <Button fx:id="btnBuscarInformacion" layoutX="475.0" layoutY="28.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorNombre" text="Buscar" />
+                        <ImageView fitHeight="65.0" fitWidth="84.0" layoutX="52.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </content>

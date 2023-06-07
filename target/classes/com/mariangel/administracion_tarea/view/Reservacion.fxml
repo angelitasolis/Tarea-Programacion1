@@ -10,6 +10,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="1150.0" styleClass="mainFxmlClass" stylesheets="@../styles/reservacion.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.ReservacionController">
@@ -22,6 +24,11 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="364.0" prefWidth="1060.0">
                      <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="376.0" layoutY="203.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                         <Label layoutX="101.0" layoutY="112.0" text="CLIENTE" />
                         <Label layoutX="53.0" layoutY="159.0" text="FECHA RESERVA" />
                         <Label layoutX="87.0" layoutY="340.0" text="TOUR COSTO" />
@@ -68,9 +75,14 @@
                               <TableColumn fx:id="tblvTourCostoReservaciones" prefWidth="245.60003662109375" text="TOUR COSTO" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txtFiltroBusqueda" layoutX="107.0" layoutY="32.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite el cliente" />
-                        <Label layoutX="38.0" layoutY="38.0" prefHeight="18.0" prefWidth="52.0" text="Cliente" />
-                        <Button fx:id="btnBuscarInformacion" layoutX="338.0" layoutY="27.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorFiltro" prefHeight="41.0" prefWidth="96.0" text="Buscar" />
+                        <TextField fx:id="txtFiltroBusqueda" layoutX="209.0" layoutY="31.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite el cliente" />
+                        <Label layoutX="143.0" layoutY="37.0" prefHeight="18.0" prefWidth="52.0" text="Cliente" />
+                        <Button fx:id="btnBuscarInformacion" layoutX="449.0" layoutY="26.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorFiltro" prefHeight="41.0" prefWidth="96.0" text="Buscar" />
+                        <ImageView fitHeight="72.0" fitWidth="93.0" layoutX="70.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </content></Tab>

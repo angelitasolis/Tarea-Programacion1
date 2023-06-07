@@ -8,6 +8,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" stylesheets="@../styles/mantenimientoempresa.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.MantenimientoEmpresaController">
@@ -35,6 +37,11 @@
                         <Button fx:id="btnCancelar" layoutX="641.0" layoutY="76.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
                         <Button fx:id="btnModificar" layoutX="108.0" layoutY="435.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" visible="false" />
                         <TextField fx:id="txtCalificacion" layoutX="256.0" layoutY="366.0" prefHeight="26.0" prefWidth="175.0" promptText="Digite una calificación 1-5" />
+                        <ImageView fitHeight="204.0" fitWidth="261.0" layoutX="512.0" layoutY="169.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
             </content>
@@ -56,6 +63,11 @@
                         <TextField fx:id="txtNombreEmpresaInformacion" layoutX="205.0" layoutY="11.0" prefHeight="26.0" prefWidth="175.0" promptText="Digite el nombre " />
                         <Label layoutX="19.0" layoutY="17.0" prefHeight="18.0" prefWidth="186.0" text="NOMBRE EMPRESA" />
                         <Button fx:id="btnBuscarInformacion" layoutX="410.0" layoutY="6.0" mnemonicParsing="false" onAction="#onActionBtnBuscarPorNombre" prefHeight="0.0" prefWidth="81.0" text="Buscar" />
+                        <ImageView fitHeight="65.0" fitWidth="84.0" layoutX="517.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
             </content>

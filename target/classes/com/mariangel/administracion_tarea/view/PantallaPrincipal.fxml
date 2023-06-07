@@ -8,11 +8,11 @@
 
 <AnchorPane id="AnchorPane" prefHeight="646.0" prefWidth="758.0" styleClass="mainFxmlClass" stylesheets="@../styles/pantallaprincipal.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.PantallaPrincipalController">
    <children>
-      <Button fx:id="btnPEmpMantenimiento" layoutX="268.0" layoutY="171.0" mnemonicParsing="false" onAction="#mostrarPMantenimientoDeEmpresas" text="MANTENIMIENTO DE EMPRESAS" />
-      <Button fx:id="btnPReservaciones" layoutX="62.0" layoutY="238.0" mnemonicParsing="false" onAction="#mostrarPReservaciones" text="RESERVACIONES" />
-      <Button fx:id="btnPTiposTours" layoutX="234.0" layoutY="244.0" mnemonicParsing="false" onAction="#mostrarPTiposDeTours" text="TIPOS DE TOURS" />
-      <Button fx:id="btnPTours" layoutX="419.0" layoutY="244.0" mnemonicParsing="false" onAction="#mostrarPTours" text="TOURS" />
-      <Button fx:id="btnPClientes" layoutX="553.0" layoutY="244.0" mnemonicParsing="false" onAction="#mostrarPClientes" text="CLIENTES" />
+      <Button fx:id="btnPEmpMantenimiento" layoutX="59.0" layoutY="269.0" mnemonicParsing="false" onAction="#mostrarPMantenimientoDeEmpresas" text="MANTENIMIENTO DE EMPRESAS" />
+      <Button fx:id="btnPReservaciones" layoutX="62.0" layoutY="203.0" mnemonicParsing="false" onAction="#mostrarPReservaciones" text="RESERVACIONES" />
+      <Button fx:id="btnPTiposTours" layoutX="234.0" layoutY="203.0" mnemonicParsing="false" onAction="#mostrarPTiposDeTours" text="TIPOS DE TOURS" />
+      <Button fx:id="btnPTours" layoutX="407.0" layoutY="203.0" mnemonicParsing="false" onAction="#mostrarPTours" text="TOURS" />
+      <Button fx:id="btnPClientes" layoutX="538.0" layoutY="203.0" mnemonicParsing="false" onAction="#mostrarPClientes" text="CLIENTES" />
       <Label layoutX="255.0" layoutY="34.0" prefHeight="18.0" prefWidth="216.0" text="Sistema de Administración" />
       <Label layoutX="224.0" layoutY="90.0" text="S E L C C I O N E   A L G U N A  O P C I Ó N " />
       <ImageView fx:id="imagenes" fitHeight="203.0" fitWidth="145.0" layoutX="195.0" layoutY="384.0" pickOnBounds="true" preserveRatio="true">

@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="650.0" prefWidth="950.0" styleClass="mainFxmlClass" stylesheets="@../styles/tipotour.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mariangel.administracion_Tarea.controller.TipoTourController">
@@ -24,10 +26,10 @@
                         <Label layoutX="76.0" layoutY="82.0" text="TIPO TOUR CÓDIGO" />
                         <Label layoutX="125.0" layoutY="150.0" text="TIPO TOUR" />
                         <TextField fx:id="txtCodigo" layoutX="239.0" layoutY="75.0" prefHeight="26.0" prefWidth="207.0" promptText="Código generado automáticamente" />
-                        <Button fx:id="btnBuscarTipoTour" layoutX="499.0" layoutY="90.0" mnemonicParsing="false" onAction="#onActionBuscarCodigo" text="BUSCAR" />
-                        <Button fx:id="btnGuardar" layoutX="423.0" layoutY="360.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
-                        <Button fx:id="btnEliminar" layoutX="254.0" layoutY="360.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
-                        <Button fx:id="btnCancelar" layoutX="617.0" layoutY="90.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
+                        <Button fx:id="btnBuscarTipoTour" layoutX="495.0" layoutY="70.0" mnemonicParsing="false" onAction="#onActionBuscarCodigo" text="BUSCAR" />
+                        <Button fx:id="btnGuardar" layoutX="324.0" layoutY="360.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardar" text="GUARDAR" />
+                        <Button fx:id="btnEliminar" layoutX="178.0" layoutY="360.0" mnemonicParsing="false" onAction="#onActionBtnEliminar" text="ELIMINAR" />
+                        <Button fx:id="btnCancelar" layoutX="620.0" layoutY="70.0" mnemonicParsing="false" onAction="#onActionBtnCancelar" text="CANCELAR" />
                         <Button fx:id="btnModificar" layoutX="182.0" layoutY="330.0" mnemonicParsing="false" onAction="#onActionBtnModificar" text="MODIFICAR" visible="false" />
                         <Label layoutX="132.0" layoutY="215.0" text="NOMBRE" />
                         <TextField fx:id="ttNombre" layoutX="236.0" layoutY="208.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el nombre del tour" />
@@ -39,6 +41,11 @@
                             <MenuItem id="INTERNACIONAL" fx:id="menuBtnInternacional" mnemonicParsing="false" onAction="#onActionmenuBtnInternacional" text="INTERNACIONAL" />
                           </items>
                         </MenuButton>
+                        <ImageView fitHeight="244.0" fitWidth="231.0" layoutX="527.0" layoutY="144.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </content>
@@ -47,7 +54,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tblvInformacionTipoTour" layoutY="83.0" prefHeight="551.0" prefWidth="1110.0">
+                        <TableView fx:id="tblvInformacionTipoTour" layoutY="66.0" prefHeight="568.0" prefWidth="1110.0">
                            <columns>
                               <TableColumn fx:id="tblvCodigo" prefWidth="243.20000916719437" text="CÓDIGO" />
                               <TableColumn fx:id="tblvTipoTour" prefWidth="233.6000518798828" text="TIPO TOUR" />
@@ -55,8 +62,13 @@
                               <TableColumn fx:id="tblvPais" prefWidth="215.99993896484375" text="PAÍS" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txtCodigoInformacion" layoutX="163.0" layoutY="31.0" prefHeight="30.0" prefWidth="232.0" promptText="Digite el nombre " />
-                        <Label layoutX="73.0" layoutY="37.0" prefHeight="18.0" prefWidth="90.0" text="NOMBRE" />
+                        <TextField fx:id="txtCodigoInformacion" layoutX="251.0" layoutY="22.0" prefHeight="30.0" prefWidth="232.0" promptText="Digite el nombre " />
+                        <Label layoutX="148.0" layoutY="28.0" prefHeight="18.0" prefWidth="90.0" text="NOMBRE" />
+                        <ImageView fitHeight="65.0" fitWidth="84.0" layoutX="68.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Imagenes/pngegg.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                </content>

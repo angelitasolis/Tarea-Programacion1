@@ -21,6 +21,7 @@ import com.mariangel.administracion_tarea.Utils.Formato;
 import com.mariangel.administracion_tarea.Utils.Mensaje;
 import com.mariangel.administracion_tarea.Utils.Respuesta;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -37,9 +38,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -71,14 +75,15 @@ public class ReservacionController extends Controller implements Initializable {
     @FXML
     private TextField txtMontoAbonado;
     @FXML
-    private TextField txtTourCosto;
-    @FXML
     private ChoiceBox<Tour> choiceBCodigoTour;
     @FXML
     private ChoiceBox<Cliente> choiceBCliente;
+    @FXML
+    private Label txtCostoTour;
 
     @FXML
     private DatePicker datePickerFechaReserva;
+    @FXML
     private TextField txtCantidadPersonas;
     @FXML
     private Tab tabPaneReservaciones;
@@ -124,6 +129,8 @@ public class ReservacionController extends Controller implements Initializable {
     private TableColumn<Itinerario, Long> tblvDuracion;
     @FXML
     private TableColumn<Itinerario, String> tblvActividades;
+    @FXML
+    private CheckBox checkBoxBusqueda;
 
     /**
      * Initializes the controller class.
@@ -134,9 +141,9 @@ public class ReservacionController extends Controller implements Initializable {
         reserva = new ReservaDto();
         mostrarNombreCliente();
         mostrarCodigoTour();
-
+        obtenerCostoTotalDelTour();
         txtMontoAbonado.setTextFormatter(Formato.getInstance().integerFormat());
-        txtTourCosto.setTextFormatter(Formato.getInstance().integerFormat());
+        
 
         nuevaReserva();
         indicarRequeridosReserva();
@@ -149,8 +156,8 @@ public class ReservacionController extends Controller implements Initializable {
         List<Cliente> tiposlist = obtenerClienteBD();
         ObservableList<Cliente> tiposObservableList = FXCollections.observableArrayList(tiposlist);
         choiceBCliente.setItems(tiposObservableList);
-        
-          choiceBCodigoTour.setOnAction(event -> {
+
+        choiceBCodigoTour.setOnAction(event -> {
             String filtroTour = choiceBCodigoTour.getValue().getTrsCodigotour();
             List<Itinerario> list = obtenerItinerarios(filtroTour);
             ObservableList<Itinerario> observableList = FXCollections.observableArrayList(list);
@@ -169,7 +176,7 @@ public class ReservacionController extends Controller implements Initializable {
         choiceBCliente.valueProperty().bindBidirectional(reserva.rsCedulacliente);
         datePickerFechaReserva.valueProperty().bindBidirectional(reserva.rsFechareserva);
         txtMontoAbonado.textProperty().bindBidirectional(reserva.rsMontoabonado);
-        txtTourCosto.textProperty().bindBidirectional(reserva.rsTrscosto);
+        txtCostoTour.textProperty().bindBidirectional(reserva.rsTrscosto);
     }
 
     private void unbindReserva() {
@@ -177,13 +184,13 @@ public class ReservacionController extends Controller implements Initializable {
         choiceBCliente.valueProperty().unbindBidirectional(reserva.rsCedulacliente);
         choiceBCodigoTour.valueProperty().unbindBidirectional(reserva.rsCodigotour);
         txtMontoAbonado.textProperty().unbindBidirectional(reserva.rsMontoabonado);
-        txtTourCosto.textProperty().unbindBidirectional(reserva.rsTrscosto);
+        txtCostoTour.textProperty().unbindBidirectional(reserva.rsTrscosto);
         datePickerFechaReserva.valueProperty().unbindBidirectional(reserva.rsFechareserva);
     }
 
     public void indicarRequeridosReserva() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txtIdReservacion, datePickerFechaReserva, txtTourCosto,
+        requeridos.addAll(Arrays.asList(txtIdReservacion, datePickerFechaReserva, txtCostoTour,
                 choiceBCodigoTour, choiceBCliente, txtMontoAbonado));
     }
 
@@ -207,7 +214,7 @@ public class ReservacionController extends Controller implements Initializable {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Reserva", getStage(), respuesta.getMensaje());
         }
     }
-
+    
     @FXML
     private void onActionBuscarReservas(ActionEvent event) {
         String idText = txtIdReservacion.getText();
@@ -240,7 +247,7 @@ public class ReservacionController extends Controller implements Initializable {
         }
     }
 
-     public List<Itinerario> obtenerItinerarios(String tour) {
+    public List<Itinerario> obtenerItinerarios(String tour) {
         EntityManager em = EntityManagerHelper.getManager();
         List<Itinerario> itinerariosList = new ArrayList<>();
         try {
@@ -263,7 +270,7 @@ public class ReservacionController extends Controller implements Initializable {
         }
         return itinerariosList;
     }
-     
+
     @FXML
     private void onActionBtnEliminarReservas(ActionEvent event) {
         try {
@@ -293,7 +300,7 @@ public class ReservacionController extends Controller implements Initializable {
         datePickerFechaReserva.setValue(null);
         choiceBCodigoTour.setValue(null);
         txtMontoAbonado.setText(null);
-        txtTourCosto.setText(null);
+        txtCostoTour.setText(null);
         choiceBCliente.setValue(null);
         txtIdReservacion.setText(null);
     }
@@ -306,7 +313,7 @@ public class ReservacionController extends Controller implements Initializable {
             ReservaDto reservaDto = new ReservaDto();
 
             reservaDto.setReservaId(Long.parseLong(txtIdReservacion.getText()));
-            reservaDto.setReservaTrscosto(Long.parseLong(txtTourCosto.getText()));
+            reservaDto.setReservaTrscosto(Long.parseLong(txtCostoTour.getText()));
             reservaDto.setReservaMontoabonado(Long.parseLong(txtMontoAbonado.getText()));
             reservaDto.setReservaFecnac(datePickerFechaReserva.getValue());
             reservaDto.setCodigotour(choiceBCodigoTour.getValue());
@@ -434,6 +441,7 @@ public class ReservacionController extends Controller implements Initializable {
             tblvCodigoTourReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsCodigotour"));
             tblvMontoAbonadoReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsMontoabonado"));
             tblvTourCostoReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsTrscosto"));
+            obtenerFechaLlegada();
 
             // recargarItinerarios();
             List<Reserva> list = obtenerReservaBD();
@@ -454,12 +462,13 @@ public class ReservacionController extends Controller implements Initializable {
 
     @FXML
     private void onSelectionReservacionesInscribir(Event event) {
-           if (tapReservacionesInscribir.isSelected()) {
+        if (tapReservacionesInscribir.isSelected()) {
             tblvID.setCellValueFactory(new PropertyValueFactory<>("intId"));
             tblvCodigoTourItinerarios.setCellValueFactory(new PropertyValueFactory<>("intCodigotour"));
             tblvLugar.setCellValueFactory(new PropertyValueFactory<>("intLugar"));
             tblvDuracion.setCellValueFactory(new PropertyValueFactory<>("intDuracion"));
             tblvActividades.setCellValueFactory(new PropertyValueFactory<>("intActividades"));
+
         }
     }
 
@@ -516,4 +525,44 @@ public class ReservacionController extends Controller implements Initializable {
         }
     }
 
+    void obtenerFechaLlegada() {
+        tblvFecReserva.setCellFactory(column -> {
+            return new TableCell<Reserva, Date>() {
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        // Establecer el formato de fecha medio
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(item);
+
+                        setText(formattedDate);
+                    }
+                }
+            };
+        });
+    }
+      void obtenerCostoTotalDelTour(){
+        txtCantidadPersonas.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                Long cantidadPersonas = Long.parseLong(newValue);
+                Long costoPorPersona = choiceBCodigoTour.getValue().getTrsCostotour();
+                Long costoTotal = cantidadPersonas * costoPorPersona;
+                txtCostoTour.setText(String.valueOf(costoTotal));
+            }
+        });
+    }
+      private void ActivarBusqueda(){
+      if(checkBoxBusqueda.isSelected()){
+      btnBuscarClienteReservas.setVisible(true);
+      txtIdReservacion.setVisible(true);
+      lblIdReservacion
+      }
+      
+      }
+      
+      
 }

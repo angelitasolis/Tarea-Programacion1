@@ -27,7 +27,7 @@
                      <children>
                         <Label layoutX="101.0" layoutY="112.0" text="CLIENTE" />
                         <Label layoutX="79.0" layoutY="163.0" text="FECHA RESERVA" />
-                        <Label layoutX="87.0" layoutY="283.0" text="TOUR COSTO" />
+                        <Label layoutX="87.0" layoutY="340.0" text="TOUR COSTO" />
                         <Button fx:id="btnBuscarClienteReservas" layoutX="391.0" layoutY="15.0" mnemonicParsing="false" onAction="#onActionBuscarReservas" text="BUSCAR" />
                         <Button fx:id="btnGuardarReservas" layoutX="334.0" layoutY="404.0" mnemonicParsing="false" onAction="#onAnctionBtnGuardarReservas" text="GUARDAR" />
                         <Button fx:id="btnEliminarReservas" layoutX="230.0" layoutY="404.0" mnemonicParsing="false" onAction="#onActionBtnEliminarReservas" text="ELIMINAR" />
@@ -35,7 +35,7 @@
                         <Button fx:id="btnModificarReservas" layoutX="123.0" layoutY="404.0" mnemonicParsing="false" onAction="#onActionBtnModificarReservas" text="MODIFICAR" />
                         <TextField fx:id="txtMontoAbonado" layoutX="194.0" layoutY="222.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite monto abonado" />
                         <Label layoutX="70.0" layoutY="226.0" text="MONTO ABONADO" />
-                        <TextField fx:id="txtTourCosto" layoutX="194.0" layoutY="279.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el costo del tour" />
+                        <TextField fx:id="txtCantidadPersonas" layoutX="194.0" layoutY="278.0" prefHeight="26.0" prefWidth="176.0" promptText="Digite el costo del tour" />
                         <TableView fx:id="tblvInformacionItinerarios" layoutX="524.0" layoutY="28.0" prefHeight="444.0" prefWidth="567.0">
                            <columns>
                               <TableColumn fx:id="tblvID" prefWidth="116.79998779296875" text="ID" />
@@ -51,6 +51,8 @@
                         <DatePicker fx:id="datePickerFechaReserva" layoutX="193.0" layoutY="159.0" prefHeight="26.0" prefWidth="172.0" />
                         <TextField fx:id="txtIdReservacion" layoutX="198.0" layoutY="15.0" prefHeight="26.0" prefWidth="164.0" />
                         <Label layoutX="79.0" layoutY="19.0" prefHeight="18.0" prefWidth="113.0" text="ID RESERVACION" />
+                        <Label layoutX="63.0" layoutY="283.0" text="CANTIDAD PERSONAS" />
+                        <Label fx:id="txtCostoTour" layoutX="202.0" layoutY="340.0" text="COSTO TOUR" />
                      </children>
                   </AnchorPane>
                </content></Tab>

@@ -337,7 +337,7 @@ public class TipoTourController extends Controller implements Initializable {
             tipoTourList = em.createQuery("SELECT t FROM Tipotour t", Tipotour.class).getResultList();
 
         } catch (Exception e) {
-            System.out.println("Error al obtener todos las empresas de la base de datos");
+            System.out.println("Error al obtener todos las tipos de tour de la base de datos");
             e.printStackTrace();
         } finally {
             em.close();

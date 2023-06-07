@@ -8,19 +8,12 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import static com.mariangel.administracion_Tarea.controller.TourController.obtenerEmpresaBD;
-import static com.mariangel.administracion_Tarea.controller.TourController.obtenerTipoTourBD;
-import static com.mariangel.administracion_Tarea.controller.TourController.obtenerToursBD;
 import com.mariangel.administracion_tarea.Model.Cliente;
-import com.mariangel.administracion_tarea.Model.Empresa;
 import com.mariangel.administracion_tarea.Model.Itinerario;
 import com.mariangel.administracion_tarea.Model.ItinerarioDto;
 import com.mariangel.administracion_tarea.Model.Reserva;
 import com.mariangel.administracion_tarea.Model.ReservaDto;
-import com.mariangel.administracion_tarea.Model.Tipotour;
 import com.mariangel.administracion_tarea.Model.Tour;
-import com.mariangel.administracion_tarea.Model.TourDto;
-import com.mariangel.administracion_tarea.Service.ItinerarioService;
 import com.mariangel.administracion_tarea.Service.ReservaService;
 import com.mariangel.administracion_tarea.Utils.EntityManagerHelper;
 import com.mariangel.administracion_tarea.Utils.FlowController;
@@ -153,7 +146,7 @@ public class ReservacionController extends Controller implements Initializable {
         ObservableList<Tour> empresaObservableList = FXCollections.observableArrayList(empresasList);
         choiceBCodigoTour.setItems(empresaObservableList);
 
-        List<Cliente> tiposlist = obtenerNombreClienteBD();
+        List<Cliente> tiposlist = obtenerClienteBD();
         ObservableList<Cliente> tiposObservableList = FXCollections.observableArrayList(tiposlist);
         choiceBCliente.setItems(tiposObservableList);
 
@@ -172,6 +165,7 @@ public class ReservacionController extends Controller implements Initializable {
     }
 
     private void unbindReserva() {
+        txtIdReservacion.textProperty().unbind();
         choiceBCliente.valueProperty().unbindBidirectional(reserva.rsCedulacliente);
         choiceBCodigoTour.valueProperty().unbindBidirectional(reserva.rsCodigotour);
         txtMontoAbonado.textProperty().unbindBidirectional(reserva.rsMontoabonado);
@@ -181,7 +175,7 @@ public class ReservacionController extends Controller implements Initializable {
 
     public void indicarRequeridosReserva() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(datePickerFechaReserva, txtTourCosto,
+        requeridos.addAll(Arrays.asList(txtIdReservacion,datePickerFechaReserva, txtTourCosto,
                 choiceBCodigoTour, choiceBCliente, txtMontoAbonado));
     }
 
@@ -194,8 +188,8 @@ public class ReservacionController extends Controller implements Initializable {
     }
 
     private void cargarReserva(Long pcedula) {
-        ItinerarioService service = new ItinerarioService();
-        Respuesta respuesta = service.getItinerario(pcedula);
+        ReservaService service = new ReservaService();
+        Respuesta respuesta = service.getReserva(pcedula);
         if (respuesta.getEstado()) {
             unbindReserva();
             reserva = (ReservaDto) respuesta.getResultado("Reserva");
@@ -217,6 +211,7 @@ public class ReservacionController extends Controller implements Initializable {
     private void onAnctionBtnGuardarReservas(ActionEvent event) {
 
         try {
+            System.out.println(reserva.toString());
             ReservaService reservaService = new ReservaService();
             Respuesta respuesta = reservaService.guardarReserva(reserva);
 
@@ -243,8 +238,8 @@ public class ReservacionController extends Controller implements Initializable {
             if (reserva.rsId == null) {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar reserva", getStage(), "Debe cargar el tipo de reserva que desea eliminar.");
             } else {
-                ItinerarioService service = new ItinerarioService();
-                Respuesta respuesta = service.eliminarItinerario(reserva.getReservaId());
+                ReservaService service = new ReservaService();
+                Respuesta respuesta = service.eliminarReserva(reserva.getReservaId());
                 if (!respuesta.getEstado()) {
                     new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar reserva", getStage(), respuesta.getMensaje());
                 } else {
@@ -297,20 +292,20 @@ public class ReservacionController extends Controller implements Initializable {
         }
     }
 
-    public static List<Reserva> obtenerReservasBD() {
+    public static List<Cliente> obtenerClienteBD() {
         EntityManager em = EntityManagerHelper.getManager();
-        List<Reserva> reservaList = new ArrayList<>();
+        List<Cliente> clienteList = new ArrayList<>();
         try {
-            reservaList = em.createQuery("SELECT r FROM Reserva r", Reserva.class).getResultList();
+            clienteList = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
         } catch (Exception e) {
             System.out.println("Error al obtener todos los Reserva de la base de datos");
             e.printStackTrace();
         } finally {
             em.close();
         }
-        return reservaList;
+        return clienteList;
     }
-
+//Consultas ChoiceBox
       public static List<Tour> obtenerCodigoTourBD() {
         EntityManager em = EntityManagerHelper.getManager();
         List<Tour> toursList = new ArrayList<>();
@@ -325,15 +320,15 @@ public class ReservacionController extends Controller implements Initializable {
         return toursList;
     }
       
-      //Consultas ChoiceBox
-
-    public static List<Cliente> obtenerNombreClienteBD() {
+      
+//obtiene todas la reservas
+    public static List<Reserva> obtenerReservaBD() {
         EntityManager em = EntityManagerHelper.getManager();
-        List<Cliente> clienteList = new ArrayList<>();
+        List<Reserva> clienteList = new ArrayList<>();
         try {
-            clienteList = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+            clienteList = em.createQuery("SELECT r FROM Reserva r", Reserva.class).getResultList();
         } catch (Exception e) {
-            System.out.println("Error al obtener todos los tipoTours de la base de datos");
+            System.out.println("Error al obtener todos las reservas de la base de datos");
             e.printStackTrace();
         } finally {
             em.close();
@@ -341,26 +336,29 @@ public class ReservacionController extends Controller implements Initializable {
         return clienteList;
     }
   
-    public static List<Tour> obtenerCodigoToursBD(String filtroCodigo) {
+    
+    //Consulta Informacion por 
+    public static List<Reserva> obtenerReservaBD(String filtroNombre) {
         EntityManager em = EntityManagerHelper.getManager();
-        List<Tour> tourList = new ArrayList<>();
+        List<Reserva> reservaList = new ArrayList<>();
         try {
-            String consulta = "SELECT t FROM Tour t";
-            if (filtroCodigo != null && !filtroCodigo.isEmpty()) {
-                consulta += " WHERE t.trsCodigotour LIKE :filtroCodigo";
+            String consulta = "SELECT r FROM Reserva r";
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                consulta += " WHERE t.rsCedulacliente LIKE :filtroNombre";
+
             }
-            TypedQuery<Tour> query = em.createQuery(consulta, Tour.class);
-            if (filtroCodigo != null && !filtroCodigo.isEmpty()) {
-                query.setParameter("filtroNombre", "%" + filtroCodigo + "%");
+            TypedQuery<Reserva> query = em.createQuery(consulta, Reserva.class);
+            if (filtroNombre != null && !filtroNombre.isEmpty()) {
+                query.setParameter("filtroNombre", "%" + filtroNombre + "%");
             }
-            tourList = query.getResultList();
+            reservaList = query.getResultList();
         } catch (Exception e) {
-            System.out.println("Error al obtener todas las tours de la base de datos");
+            System.out.println("Error al obtener todas las empresas de la base de datos");
             e.printStackTrace();
         } finally {
             em.close();
         }
-        return tourList;
+        return reservaList;
     }
     
     //ajustes en la consulta
@@ -408,13 +406,28 @@ public class ReservacionController extends Controller implements Initializable {
             tblvTourCostoReservaciones.setCellValueFactory(new PropertyValueFactory<>("rsTrscosto"));
 
             // recargarItinerarios();
-            List<Reserva> list = obtenerReservasBD();
+            List<Reserva> list = obtenerReservaBD();
             ObservableList<Reserva> observableList = FXCollections.observableArrayList(list);
             // Asigna los nuevos datos a la TableView
             tblvInformacionCliente.setItems(observableList);
-
         }
-    }
+        
+            
+             txtFiltroBusqueda.textProperty().addListener((observable, oldValue, newValue) -> {
+            String filtroNombre = newValue;
+            List<Reserva> list = obtenerReservaBD(filtroNombre);
+            ObservableList<Reserva> observableList = FXCollections.observableArrayList(list);
+            tblvInformacionCliente.setItems(observableList);
+            
+    });
+    
+                     }
+    
+    
+    
+    
+    
+    
 
     @FXML
     private void onSelectionReservacionesInscribir(Event event) {

@@ -40,8 +40,8 @@ public class Reserva implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "RS_ID")
-    @SequenceGenerator(name = "SEC_RESERVA", sequenceName = "SEC_RESERVA", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEC_RESERVA")
+    @SequenceGenerator(name = "SEC_RESERVAS", sequenceName = "SEC_RESERVAS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEC_RESERVAS")
     private Long rsId;
     @Basic(optional = false)
     @Column(name = "RS_FECHARESERVA")
@@ -85,9 +85,10 @@ public class Reserva implements Serializable {
         this.rsId = reservacionDto.getReservaId();
         this.rsFechareserva = Date.from(reservacionDto.getReservaFecnac().atStartOfDay(ZoneId.systemDefault()).toInstant());
         this.rsMontoabonado = reservacionDto.getReservaMontoabonado();
-        this.rsTrscosto = reservacionDto.getReservaId();
+        this.rsTrscosto = reservacionDto.getReservaTrscosto();
         this.rsCodigotour = reservacionDto.getCodigotour();
         this.rsCedulacliente = reservacionDto.getRsCedulaCliente();
+        
     }
 
     public Tour getRsTourCodigo() {
